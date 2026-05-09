@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-09T00:00:00Z",
+  "title": "Design System: Hulabe",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Yard Black",
+        "canonical": "#0A0A0A",
+        "tonalRamp": ["#050505", "#0A0A0A", "#141414", "#1C1C1C", "#262626", "#3F3F46", "#71717A", "#A1A1AA"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Steel Surface",
+        "canonical": "#141414",
+        "tonalRamp": ["#0A0A0A", "#141414", "#1C1C1C", "#262626", "#3F3F46", "#52525B", "#71717A", "#A1A1AA"]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Inner Steel",
+        "canonical": "#1C1C1C",
+        "tonalRamp": ["#0A0A0A", "#141414", "#1C1C1C", "#262626", "#3F3F46", "#52525B", "#71717A", "#A1A1AA"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline Border",
+        "canonical": "#262626",
+        "tonalRamp": ["#141414", "#1C1C1C", "#262626", "#3F3F46", "#52525B", "#71717A", "#A1A1AA", "#D4D4D8"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Floodlight White",
+        "canonical": "#FAFAFA",
+        "tonalRamp": ["#52525B", "#71717A", "#A1A1AA", "#D4D4D8", "#E4E4E7", "#F4F4F5", "#FAFAFA", "#FFFFFF"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Workshop Mute",
+        "canonical": "#A1A1AA",
+        "tonalRamp": ["#3F3F46", "#52525B", "#71717A", "#A1A1AA", "#D4D4D8", "#E4E4E7", "#F4F4F5", "#FAFAFA"]
+      },
+      "muted-2": {
+        "role": "neutral",
+        "displayName": "Deep Mute",
+        "canonical": "#71717A",
+        "tonalRamp": ["#27272A", "#3F3F46", "#52525B", "#71717A", "#A1A1AA", "#D4D4D8", "#E4E4E7", "#F4F4F5"]
+      },
+      "voltage-lime": {
+        "role": "primary",
+        "displayName": "Voltage Lime",
+        "canonical": "oklch(86% 0.21 128)",
+        "tonalRamp": ["#365314", "#4D7C0F", "#65A30D", "#84CC16", "#A3E635", "#BEF264", "#D9F99D", "#ECFCCB"]
+      },
+      "voltage-lime-deep": {
+        "role": "primary",
+        "displayName": "Voltage Lime Deep",
+        "canonical": "oklch(78% 0.21 128)",
+        "tonalRamp": ["#1A2E0A", "#365314", "#4D7C0F", "#65A30D", "#84CC16", "#A3E635", "#BEF264", "#D9F99D"]
+      },
+      "signal-red": {
+        "role": "tertiary",
+        "displayName": "Signal Red",
+        "canonical": "#EF4444",
+        "tonalRamp": ["#7F1D1D", "#991B1B", "#B91C1C", "#DC2626", "#EF4444", "#F87171", "#FCA5A5", "#FECACA"]
+      },
+      "signal-amber": {
+        "role": "tertiary",
+        "displayName": "Signal Amber",
+        "canonical": "#F59E0B",
+        "tonalRamp": ["#78350F", "#92400E", "#B45309", "#D97706", "#F59E0B", "#FBBF24", "#FCD34D", "#FDE68A"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero H1 and major section titles. Compressed, confident, weight 800." },
+      "headline": { "displayName": "Headline", "purpose": "Section H2s below the display layer." },
+      "title": { "displayName": "Title", "purpose": "Card titles, FAQ questions, process step titles." },
+      "body": { "displayName": "Body", "purpose": "Default paragraph copy. Max 65–75ch line length." },
+      "body-large": { "displayName": "Body Large", "purpose": "Hero subtitle and section subtitles. The page's second voice." },
+      "label-mono": { "displayName": "Label Mono", "purpose": "Section kickers (SERVICES, PROCESS), trust strip, badges. Uppercase, tracked." },
+      "numeric-mono": { "displayName": "Numeric Mono", "purpose": "Prices, durations, simulator result. Numbers as data." }
+    },
+    "shadows": [
+      {
+        "name": "hero-halo",
+        "value": "radial-gradient(circle, #A3E635 0%, transparent 70%)",
+        "purpose": "Single radial Voltage Lime wash behind the hero H1. Page's only ambient glow."
+      },
+      {
+        "name": "result-halo",
+        "value": "0 0 0 1px rgba(163,230,53,0.4), 0 0 40px -8px rgba(163,230,53,0.25)",
+        "purpose": "Glow on the simulator success card only. Conditional, never default."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 2px #A3E635, 0 0 0 4px #0A0A0A",
+        "purpose": "Universal focus ring on every interactive element. Voltage Lime + Yard Black offset."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state and color transitions."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Color, border, background-color transitions."
+      },
+      {
+        "name": "duration-step",
+        "value": "200ms",
+        "purpose": "Simulator step transitions (framer-motion x/opacity)."
+      },
+      {
+        "name": "duration-fade",
+        "value": "300ms",
+        "purpose": "Section entrance fades on scroll. Maximum allowed duration on the landing."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single 'next action' button per viewport. Voltage Lime fill, Yard Black text.",
+      "html": "<button class=\"ds-btn-primary\">Calculer mon devis<svg class=\"ds-btn-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; background: #A3E635; color: #0A0A0A; font-family: 'Geist Sans', system-ui, sans-serif; font-weight: 600; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; transition: background 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: #84CC16; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #A3E635, 0 0 0 4px #0A0A0A; } .ds-btn-icon { width: 16px; height: 16px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The 'other option' button. Inner Steel fill, Floodlight text, hairline border.",
+      "html": "<button class=\"ds-btn-secondary\">Voir les services</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; background: #1C1C1C; color: #FAFAFA; font-family: 'Geist Sans', system-ui, sans-serif; font-weight: 500; font-size: 14px; border: 1px solid #262626; border-radius: 10px; cursor: pointer; transition: background 150ms, border-color 150ms; } .ds-btn-secondary:hover { background: #262626; border-color: #3F3F46; } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 2px #A3E635, 0 0 0 4px #0A0A0A; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary action like simulator 'Retour'. No fill, no border by default.",
+      "html": "<button class=\"ds-btn-ghost\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 12H5M11 18l-6-6 6-6\"/></svg>Retour</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; background: transparent; color: #FAFAFA; font-family: 'Geist Sans', system-ui, sans-serif; font-weight: 500; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; transition: background 150ms; } .ds-btn-ghost svg { width: 16px; height: 16px; } .ds-btn-ghost:hover { background: #1C1C1C; } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 2px #A3E635, 0 0 0 4px #0A0A0A; }"
+    },
+    {
+      "name": "Service Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Service or case card. Steel Surface, hairline border, 16px radius. Border glows lime on hover.",
+      "html": "<article class=\"ds-card\"><header class=\"ds-card-head\"><div class=\"ds-card-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z\"/></svg></div><span class=\"ds-card-meta\">1-2 SEMAINES</span></header><h3 class=\"ds-card-title\">Site vitrine</h3><p class=\"ds-card-body\">Site pro qui convertit. Pas un template Wix.</p><div class=\"ds-card-tags\"><span class=\"ds-tag\">Next.js</span><span class=\"ds-tag\">SEO</span><span class=\"ds-tag\">CMS</span></div><footer class=\"ds-card-foot\"><span class=\"ds-card-price\">800 – 2 500€</span></footer></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; padding: 24px; background: #141414; color: #FAFAFA; border: 1px solid #262626; border-radius: 16px; transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Geist Sans', system-ui, sans-serif; } .ds-card:hover { border-color: rgba(163, 230, 53, 0.4); } .ds-card-head { display: flex; align-items: flex-start; justify-content: space-between; } .ds-card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #1C1C1C; border: 1px solid #262626; border-radius: 10px; color: #A3E635; } .ds-card-icon svg { width: 20px; height: 20px; } .ds-card-meta { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #A1A1AA; } .ds-card-title { margin: 20px 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; } .ds-card-body { margin: 0 0 24px; font-size: 14px; line-height: 1.6; color: #A1A1AA; } .ds-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; } .ds-tag { padding: 2px 8px; background: #1C1C1C; border: 1px solid #262626; border-radius: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: #FAFAFA; } .ds-card-foot { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #262626; } .ds-card-price { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 16px; font-weight: 600; color: #FAFAFA; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Text field on Steel Surface, hairline border, lime focus ring.",
+      "html": "<label class=\"ds-input-wrap\"><span class=\"ds-input-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"hugo@hulabe.com\"/></label>",
+      "css": ".ds-input-wrap { display: flex; flex-direction: column; gap: 8px; font-family: 'Geist Sans', system-ui, sans-serif; } .ds-input-label { font-size: 14px; font-weight: 500; color: #FAFAFA; } .ds-input { height: 44px; padding: 0 12px; background: #141414; color: #FAFAFA; font-family: inherit; font-size: 14px; border: 1px solid #262626; border-radius: 10px; outline: none; transition: border-color 150ms, box-shadow 150ms; } .ds-input::placeholder { color: #A1A1AA; } .ds-input:focus-visible { box-shadow: 0 0 0 2px #A3E635, 0 0 0 4px #0A0A0A; }"
+    },
+    {
+      "name": "Mono Badge",
+      "kind": "chip",
+      "refersTo": "badge-mono",
+      "description": "Stack tag or category chip. Inner Steel background, mono uppercase.",
+      "html": "<span class=\"ds-badge\">Next.js</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 2px 8px; background: #1C1C1C; color: #FAFAFA; border: 1px solid #262626; border-radius: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Section Kicker",
+      "kind": "custom",
+      "refersTo": "label-mono",
+      "description": "Mono uppercase label that opens every section (SERVICES, PROCESS, FAQ). Carries Voltage Lime.",
+      "html": "<span class=\"ds-kicker\">SERVICES</span>",
+      "css": ".ds-kicker { display: inline-block; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #A3E635; }"
+    },
+    {
+      "name": "Display Title",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "Hero or major-section title. Compressed display weight 800, tracking -0.03em, with optional Voltage Lime period.",
+      "html": "<h1 class=\"ds-display\">Build fast.<br/>Ship faster<span class=\"ds-period\">.</span></h1>",
+      "css": ".ds-display { margin: 0; font-family: 'Geist Sans', system-ui, sans-serif; font-weight: 800; font-size: clamp(2.75rem, 7vw, 5rem); line-height: 0.95; letter-spacing: -0.03em; color: #FAFAFA; } .ds-period { color: #A3E635; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Builder's Shipyard",
+    "overview": "Hulabe's surface is a working shipyard at night. Sections are quays where projects are sized, scoped, and pushed out — the visitor walks past them in order: services, process, simulator, cases, FAQ, contact. Everything is dark steel and concrete (the layered neutrals from #0A0A0A to #262626), and the lime is the work-light overhead — visible exactly where the action is, never as decoration. Mono type runs alongside prose like the labels stenciled on a hull: prices, durations, stack stamps. Numbers are visible from across the dock.\n\nThe system rejects the showroom posture entirely. There are no glossy hero photos, no testimonial carousels, no 'Trusted by 500+ teams' trust strips, no Wix-template hero hierarchy. It also rejects the agency-awards posture: no oversized horizontal type pretending to be a poster, no custom cursor, no scroll-jacking. Hulabe looks coded because it is — and the design's only job is to make that legible in 5 seconds. Density is a feature: a builder reads density as competence, not clutter.",
+    "keyCharacteristics": [
+      "Layered neutrals (4-step ramp from #0A0A0A to #262626) carry depth; shadows are forbidden as ambience.",
+      "Voltage Lime (#A3E635) is rationed — accent, accent dot, primary CTA, focus rings; never a fill on more than ~10% of any viewport.",
+      "Mono is reserved: prices, durations, stack badges, kicker labels (SERVICES, PROCESS, …). Never body copy.",
+      "Display type is tracked tight (-0.03em) and weighted heavy (800) — confident, not decorative.",
+      "One signature glow only: a single radial Voltage Lime wash behind the hero. No other ambient lighting on the page.",
+      "Motion is choreographed but cheap: framer-motion entrances, scroll-driven fades, the simulator's step transitions. Always under 300ms, always with a reduced-motion fallback."
+    ],
+    "rules": [
+      { "name": "The 10 Percent Rule", "body": "Voltage Lime occupies no more than ~10% of any viewport. Audit by squinting: if lime is the first thing you see, you've used too much. The lime should land on what the user must do next, never on what they're reading.", "section": "colors" },
+      { "name": "The Black-On-Black Rule", "body": "Depth is built from the four-layer neutral ramp (Yard Black → Steel Surface → Inner Steel → Hairline Border). Never use a shadow to imply depth on the surface plane. Borders, contrast, and tonal step are the only legal depth tools.", "section": "colors" },
+      { "name": "The No-Pure-Black, No-Pure-White Rule", "body": "#000 and #fff are both forbidden. The system's neutrals are tinted toward warm-cool zero. Pure values look harsh against the lime and break the industrial-not-sterile feel.", "section": "colors" },
+      { "name": "The Mono Marks Data Rule", "body": "Geist Mono only ever wears one of three hats: a label (uppercase kicker), a price/duration (numeric), or a tech tag (stack badge). Never used for body copy. If it's a sentence, it's Sans.", "section": "typography" },
+      { "name": "The Tight Display Rule", "body": "Display weight is 800, not 700, and tracking is -0.03em, not -0.02em. The two values are non-negotiable; together they make the hero feel 'compressed and confident' instead of 'soft and big'.", "section": "typography" },
+      { "name": "The Lime Period Rule", "body": "When the brand voice closes with '.', that period is Voltage Lime. Used after 'hulabe', after 'Ship faster', and after any title where the page wants the user to feel 'this is the punchline'. Used at most twice per viewport; never on body text.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Cards, inputs, popovers, dropdowns, and dialogs are flat at rest. They sit at their tonal layer (Steel Surface for cards, Inner Steel for nested) and are bounded by a 1px Hairline Border. Never add box-shadow to convey 'this is a thing' — the border and tonal step already do that work.", "section": "elevation" },
+      { "name": "The One Glow Rule", "body": "Voltage Lime glow appears at most twice on any single page, and never as ambient page lighting. The hero halo is the canonical instance; the simulator success halo is the conditional one. No third glow is permitted.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do layer surfaces with the four-step neutral ramp (#0A0A0A → #141414 → #1C1C1C → #262626). That ramp is the system's depth language.",
+      "Do keep Voltage Lime under ~10% of any viewport. It is the signal, not the surface.",
+      "Do mono-set every price, duration, and stack tag. If it's a number or a tech name, it's mono.",
+      "Do color the trailing '.' after 'hulabe' and after 'Ship faster' in Voltage Lime. The Lime Period is the brand's signature.",
+      "Do keep display tracking at -0.03em and weight at 800. Loosening either breaks the 'compressed and confident' feel the hero is built around.",
+      "Do show price ranges and durations on every service card. The strategic principle from PRODUCT.md is 'honesty as a feature' — the visual system enforces it.",
+      "Do ensure every interactive surface has a visible Voltage Lime focus ring. The accessibility commitment is met through this single rule."
+    ],
+    "donts": [
+      "Don't use #000 or #fff anywhere. Pure values are harsh and break the industrial-not-sterile register.",
+      "Don't drop ambient box-shadows on cards, inputs, or popovers. The system is flat-by-default — borders and tonal step carry depth.",
+      "Don't add a third glow. The hero halo and the simulator success halo are the only Voltage Lime glows in the system.",
+      "Don't mono-set body copy. Mono is a label tag, not a paragraph voice.",
+      "Don't ship the page with a stock-photo hero, 'Trusted by' logo strip, or testimonial carousel. PRODUCT.md names 'Templates Wix / Squarespace / Webflow génériques' as an anti-reference — those patterns are forbidden by the visual spec too.",
+      "Don't do scroll-jacking, custom cursors, or oversized horizontal display type. PRODUCT.md names 'Agences digitales tape-à-l'œil (BIG TYPE + cursor custom)' as an anti-reference. Awwwards-bait is out.",
+      "Don't use corporate blue, gradient mesh, glass morphism, or 3D blob renders. The page is a shipyard, not a SaaS hype site.",
+      "Don't put more than one primary button in a single viewport. If two CTAs feel necessary, the second is Secondary or Ghost.",
+      "Don't animate scroll content for longer than 300ms or without a prefers-reduced-motion fallback. Ship-fast applies to the page itself."
+    ]
+  }
+}

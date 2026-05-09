@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hulabe — Brand Guidelines</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32'%3E
+  %3Crect width='32' height='32' rx='7.0' fill='%23A3E635'/%3E
+  %3Cpath d='M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z' fill='%230A0A0A' transform='translate(7.20,19.12) scale(0.004758,-0.004758)'/%3E
+  %3Cpath d='M899 1493H1120L334 -190H113Z' fill='%230A0A0A' transform='translate(13.07,19.12) scale(0.004758,-0.004758)'/%3E
+  %3Cpath d='M88 926V1176L1145 760V524L88 109V358L883 641Z' fill='%230A0A0A' transform='translate(18.93,19.12) scale(0.004758,-0.004758)'/%3E
+%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --surface: #141414;
+    --surface-2: #1C1C1C;
+    --border: #262626;
+    --text: #FAFAFA;
+    --muted: #A1A1AA;
+    --muted-2: #71717A;
+    --lime: #A3E635;
+    --lime-dark: #84CC16;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    padding: 60px 24px 100px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  
+  /* Header */
+  .doc-header {
+    margin-bottom: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-logo {
+    margin-bottom: 32px;
+    width: 200px;
+  }
+  .doc-title {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .doc-subtitle {
+    color: var(--muted);
+    font-size: 18px;
+  }
+  .doc-version {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--lime);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-weight: 600;
+    margin-left: 12px;
+    vertical-align: middle;
+  }
+  
+  /* Sections */
+  section { margin-bottom: 80px; }
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-num {
+    background: var(--lime);
+    color: #0A0A0A;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-weight: 800;
+  }
+  .section-desc {
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-size: 16px;
+    margin-left: 52px;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 32px 0 16px;
+  }
+  
+  /* Grids */
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-5 { grid-template-columns: repeat(5, 1fr); }
+  .grid-6 { grid-template-columns: repeat(6, 1fr); }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4, .grid-5, .grid-6 { grid-template-columns: 1fr 1fr; }
+    .doc-title { font-size: 40px; }
+    h2 { font-size: 26px; }
+    .section-desc { margin-left: 0; }
+  }
+  
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .card-light {
+    background: #FAFAFA;
+    border: 1px solid #E5E5E5;
+    color: #0A0A0A;
+  }
+  .card-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+  
+  /* Logo display */
+  .logo-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px;
+    border-radius: 16px;
+    min-height: 200px;
+  }
+  .logo-frame.dark { background: var(--surface); border: 1px solid var(--border); }
+  .logo-frame.light { background: #FAFAFA; border: 1px solid #E5E5E5; }
+  .logo-frame svg { max-width: 100%; height: auto; }
+  .logo-frame.icon-frame svg { max-width: 140px; }
+  
+  /* Color swatches */
+  .swatch {
+    border-radius: 12px;
+    padding: 24px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.15s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch.bordered { border: 1px solid var(--border); }
+  .swatch-name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .swatch-hex { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; opacity: 0.75; }
+  
+  /* Typography samples */
+  .typo-sample {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .typo-sample:last-child { border-bottom: none; }
+  .typo-meta {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 12px;
+    color: var(--muted-2);
+    margin-top: 10px;
+  }
+  
+  /* Buttons */
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--lime);
+    color: #0A0A0A;
+  }
+  .btn-primary:hover { background: var(--lime-dark); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--surface); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+  }
+  .btn-ghost:hover { background: var(--surface); }
+  
+  /* Code */
+  code {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: 'SF Mono', Menlo, monospace;
+  }
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  pre code .comment { color: var(--muted-2); }
+  pre code .keyword { color: var(--lime); }
+  
+  /* Lists */
+  ul { color: var(--muted); padding-left: 24px; margin-top: 12px; }
+  ul li { margin-bottom: 10px; }
+  ul li strong { color: var(--text); }
+  
+  /* Tone examples */
+  .tone-card {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .tone-good { background: rgba(163, 230, 53, 0.08); border: 1px solid rgba(163, 230, 53, 0.3); }
+  .tone-bad { background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.25); }
+  .tone-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  
+  /* Recommendation badge */
+  .badge {
+    display: inline-block;
+    background: var(--lime);
+    color: #0A0A0A;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-left: 8px;
+  }
+  
+  /* Download links */
+  .download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .download-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13px;
+  }
+  .download-item .filename {
+    font-family: 'SF Mono', Menlo, monospace;
+    color: var(--lime);
+    font-size: 12px;
+  }
+  .download-item .desc {
+    color: var(--muted);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="doc-header">
+  <div class="doc-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 217 80" width="100%" height="auto">
+  <rect x="0" y="18" width="44" height="44" rx="10" fill="#A3E635"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#0A0A0A" transform="translate(9.90,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#0A0A0A" transform="translate(17.97,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#0A0A0A" transform="translate(26.03,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M464 638C464 768 541 845 655 845C769 845 837 770 837 644V0H1186V712C1186 965 1033 1132 799 1132C625 1132 517 1040 457 896V1490H115V0H464Z" fill="#FAFAFA" transform="translate(60.00,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M503 -14C683 -14 793 86 853 242L858 0H1186V1118H837V480C837 350 760 273 646 273C532 273 464 348 464 474V1118H115V406C115 153 268 -14 503 -14Z" fill="#FAFAFA" transform="translate(85.41,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M464 1490H115V0H464Z" fill="#FAFAFA" transform="translate(110.82,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M428 -20C583 -20 691 42 752 157H761V0H1089V759C1089 999 870 1132 592 1132C312 1132 136 1001 92 810L408 769C427 839 492 884 589 884C684 884 741 840 741 763V759C741 690 665 676 476 660C250 641 60 558 60 310C60 89 213 -20 428 -20ZM534 211C450 211 390 251 390 326C390 400 448 444 551 459C616 469 704 484 744 505V398C744 288 651 211 534 211Z" fill="#FAFAFA" transform="translate(122.15,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M786 -16C1034 -16 1234 179 1234 558C1234 950 1023 1132 788 1132C610 1132 514 1027 472 926H464V1490H115V0H460V181H472C516 80 615 -16 786 -16ZM667 256C534 256 456 375 456 558C456 743 534 859 667 859C802 859 875 740 875 558C875 376 801 256 667 256Z" fill="#FAFAFA" transform="translate(145.68,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M636 -21C907 -21 1090 102 1146 296L835 347C807 272 736 232 642 232C510 232 421 312 415 474H1162V562C1162 931 937 1132 623 1132C287 1132 72 900 72 555C72 197 285 -21 636 -21ZM417 677C430 800 503 879 626 879C748 879 817 804 831 677Z" fill="#FAFAFA" transform="translate(171.19,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M361 -21C468 -21 550 59 550 165C550 271 468 352 361 352C254 352 172 271 172 165C172 59 254 -21 361 -21Z" fill="#A3E635" transform="translate(195.21,53.00) scale(0.019531,-0.019531)"/>
+</svg></div>
+  <div class="doc-title">Brand Guidelines<span class="doc-version">v1.0</span></div>
+  <div class="doc-subtitle">L'identité visuelle complète d'Hulabe — agence de dev volume.</div>
+</div>
+
+<!-- 1. Logo -->
+<section>
+  <h2><span class="section-num">01</span>Logo</h2>
+  <p class="section-desc">Le logo combine un symbole code <code>&lt;/&gt;</code> dans un carré lime (signe immédiat de "tech / dev") avec le wordmark "hulabe" et un point lime final qui sert de signature.</p>
+  
+  <h3>Logo principal</h3>
+  <div class="grid grid-2">
+    <div>
+      <div class="logo-frame dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 217 80" width="100%" height="auto">
+  <rect x="0" y="18" width="44" height="44" rx="10" fill="#A3E635"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#0A0A0A" transform="translate(9.90,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#0A0A0A" transform="translate(17.97,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#0A0A0A" transform="translate(26.03,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M464 638C464 768 541 845 655 845C769 845 837 770 837 644V0H1186V712C1186 965 1033 1132 799 1132C625 1132 517 1040 457 896V1490H115V0H464Z" fill="#FAFAFA" transform="translate(60.00,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M503 -14C683 -14 793 86 853 242L858 0H1186V1118H837V480C837 350 760 273 646 273C532 273 464 348 464 474V1118H115V406C115 153 268 -14 503 -14Z" fill="#FAFAFA" transform="translate(85.41,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M464 1490H115V0H464Z" fill="#FAFAFA" transform="translate(110.82,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M428 -20C583 -20 691 42 752 157H761V0H1089V759C1089 999 870 1132 592 1132C312 1132 136 1001 92 810L408 769C427 839 492 884 589 884C684 884 741 840 741 763V759C741 690 665 676 476 660C250 641 60 558 60 310C60 89 213 -20 428 -20ZM534 211C450 211 390 251 390 326C390 400 448 444 551 459C616 469 704 484 744 505V398C744 288 651 211 534 211Z" fill="#FAFAFA" transform="translate(122.15,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M786 -16C1034 -16 1234 179 1234 558C1234 950 1023 1132 788 1132C610 1132 514 1027 472 926H464V1490H115V0H460V181H472C516 80 615 -16 786 -16ZM667 256C534 256 456 375 456 558C456 743 534 859 667 859C802 859 875 740 875 558C875 376 801 256 667 256Z" fill="#FAFAFA" transform="translate(145.68,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M636 -21C907 -21 1090 102 1146 296L835 347C807 272 736 232 642 232C510 232 421 312 415 474H1162V562C1162 931 937 1132 623 1132C287 1132 72 900 72 555C72 197 285 -21 636 -21ZM417 677C430 800 503 879 626 879C748 879 817 804 831 677Z" fill="#FAFAFA" transform="translate(171.19,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M361 -21C468 -21 550 59 550 165C550 271 468 352 361 352C254 352 172 271 172 165C172 59 254 -21 361 -21Z" fill="#A3E635" transform="translate(195.21,53.00) scale(0.019531,-0.019531)"/>
+</svg></div>
+      <p class="card-label">Sur fond sombre <span class="badge">PRINCIPAL</span></p>
+    </div>
+    <div>
+      <div class="logo-frame light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 217 80" width="100%" height="auto">
+  <rect x="0" y="18" width="44" height="44" rx="10" fill="#A3E635"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#0A0A0A" transform="translate(9.90,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#0A0A0A" transform="translate(17.97,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#0A0A0A" transform="translate(26.03,44.29) scale(0.006542,-0.006542)"/>
+  <path d="M464 638C464 768 541 845 655 845C769 845 837 770 837 644V0H1186V712C1186 965 1033 1132 799 1132C625 1132 517 1040 457 896V1490H115V0H464Z" fill="#0A0A0A" transform="translate(60.00,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M503 -14C683 -14 793 86 853 242L858 0H1186V1118H837V480C837 350 760 273 646 273C532 273 464 348 464 474V1118H115V406C115 153 268 -14 503 -14Z" fill="#0A0A0A" transform="translate(85.41,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M464 1490H115V0H464Z" fill="#0A0A0A" transform="translate(110.82,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M428 -20C583 -20 691 42 752 157H761V0H1089V759C1089 999 870 1132 592 1132C312 1132 136 1001 92 810L408 769C427 839 492 884 589 884C684 884 741 840 741 763V759C741 690 665 676 476 660C250 641 60 558 60 310C60 89 213 -20 428 -20ZM534 211C450 211 390 251 390 326C390 400 448 444 551 459C616 469 704 484 744 505V398C744 288 651 211 534 211Z" fill="#0A0A0A" transform="translate(122.15,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M786 -16C1034 -16 1234 179 1234 558C1234 950 1023 1132 788 1132C610 1132 514 1027 472 926H464V1490H115V0H460V181H472C516 80 615 -16 786 -16ZM667 256C534 256 456 375 456 558C456 743 534 859 667 859C802 859 875 740 875 558C875 376 801 256 667 256Z" fill="#0A0A0A" transform="translate(145.68,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M636 -21C907 -21 1090 102 1146 296L835 347C807 272 736 232 642 232C510 232 421 312 415 474H1162V562C1162 931 937 1132 623 1132C287 1132 72 900 72 555C72 197 285 -21 636 -21ZM417 677C430 800 503 879 626 879C748 879 817 804 831 677Z" fill="#0A0A0A" transform="translate(171.19,53.00) scale(0.019531,-0.019531)"/>
+  <path d="M361 -21C468 -21 550 59 550 165C550 271 468 352 361 352C254 352 172 271 172 165C172 59 254 -21 361 -21Z" fill="#A3E635" transform="translate(195.21,53.00) scale(0.019531,-0.019531)"/>
+</svg></div>
+      <p class="card-label">Sur fond clair</p>
+    </div>
+  </div>
+  
+  <h3>Icône seule</h3>
+  <p style="color: var(--muted); margin-bottom: 20px;">Pour favicon, app icon, avatar social, et tout contexte où le logo complet serait trop large.</p>
+  <div class="grid grid-3">
+    <div>
+      <div class="logo-frame dark icon-frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="auto">
+  <rect width="100%" height="auto" rx="56.3" fill="#A3E635"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#0A0A0A" transform="translate(57.60,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#0A0A0A" transform="translate(104.53,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#0A0A0A" transform="translate(151.47,152.95) scale(0.038064,-0.038064)"/>
+</svg></div>
+      <p class="card-label">Lime <span class="badge">PRINCIPAL</span></p>
+    </div>
+    <div>
+      <div class="logo-frame light icon-frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="auto">
+  <rect width="100%" height="auto" rx="56.3" fill="#A3E635"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#0A0A0A" transform="translate(57.60,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#0A0A0A" transform="translate(104.53,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#0A0A0A" transform="translate(151.47,152.95) scale(0.038064,-0.038064)"/>
+</svg></div>
+      <p class="card-label">Lime sur fond clair</p>
+    </div>
+    <div>
+      <div class="logo-frame light icon-frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="auto">
+  <rect width="100%" height="auto" rx="56.3" fill="#0A0A0A"/>
+  <path d="M1145 926 350 641 1145 358V109L88 524V760L1145 1176Z" fill="#A3E635" transform="translate(57.60,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M899 1493H1120L334 -190H113Z" fill="#A3E635" transform="translate(104.53,152.95) scale(0.038064,-0.038064)"/>
+  <path d="M88 926V1176L1145 760V524L88 109V358L883 641Z" fill="#A3E635" transform="translate(151.47,152.95) scale(0.038064,-0.038064)"/>
+</svg></div>
+      <p class="card-label">Sombre (alternative)</p>
+    </div>
+  </div>
+  
+  <h3>Règles d'usage</h3>
+  <ul>
+    <li><strong>Espacement minimum</strong> autour du logo = hauteur du symbole carré (44px = 44px de marge minimum)</li>
+    <li><strong>Taille minimum</strong> : 24px de hauteur pour l'icône seule, 100px de largeur pour le logo complet</li>
+    <li><strong>Ne jamais</strong> étirer, faire pivoter, modifier les couleurs du symbole, ajouter ombre/gradient au wordmark</li>
+    <li><strong>Le point lime</strong> "." final fait partie de l'identité — toujours présent, toujours en lime</li>
+  </ul>
+</section>
+
+<!-- 2. Couleurs -->
+<section>
+  <h2><span class="section-num">02</span>Couleurs</h2>
+  <p class="section-desc">Palette minimale et affirmée. Le lime est l'accent signature — utilisé avec parcimonie pour maximiser l'impact.</p>
+  
+  <h3>Couleurs principales</h3>
+  <div class="grid grid-3">
+    <div class="swatch" style="background: #A3E635; color: #0A0A0A;">
+      <div>
+        <div class="swatch-name">Lime</div>
+        <div class="swatch-hex">#A3E635 · rgb(163, 230, 53)</div>
+      </div>
+    </div>
+    <div class="swatch bordered" style="background: #0A0A0A;">
+      <div>
+        <div class="swatch-name">Black</div>
+        <div class="swatch-hex">#0A0A0A · rgb(10, 10, 10)</div>
+      </div>
+    </div>
+    <div class="swatch" style="background: #FAFAFA; color: #0A0A0A;">
+      <div>
+        <div class="swatch-name">White</div>
+        <div class="swatch-hex">#FAFAFA · rgb(250, 250, 250)</div>
+      </div>
+    </div>
+  </div>
+  
+  <h3>Niveaux de gris (UI)</h3>
+  <div class="grid grid-3">
+    <div class="swatch bordered" style="background: #141414;">
+      <div>
+        <div class="swatch-name">Surface</div>
+        <div class="swatch-hex">#141414</div>
+      </div>
+    </div>
+    <div class="swatch bordered" style="background: #262626;">
+      <div>
+        <div class="swatch-name">Border</div>
+        <div class="swatch-hex">#262626</div>
+      </div>
+    </div>
+    <div class="swatch" style="background: #A1A1AA; color: #0A0A0A;">
+      <div>
+        <div class="swatch-name">Muted</div>
+        <div class="swatch-hex">#A1A1AA</div>
+      </div>
+    </div>
+  </div>
+  
+  <h3>Sémantique</h3>
+  <div class="grid grid-3">
+    <div class="swatch" style="background: #84CC16; color: #0A0A0A;">
+      <div>
+        <div class="swatch-name">Lime Dark (hover)</div>
+        <div class="swatch-hex">#84CC16</div>
+      </div>
+    </div>
+    <div class="swatch" style="background: #EF4444;">
+      <div>
+        <div class="swatch-name">Error</div>
+        <div class="swatch-hex">#EF4444</div>
+      </div>
+    </div>
+    <div class="swatch" style="background: #F59E0B; color: #0A0A0A;">
+      <div>
+        <div class="swatch-name">Warning</div>
+        <div class="swatch-hex">#F59E0B</div>
+      </div>
+    </div>
+  </div>
+  
+  <h3>Règle d'usage du lime</h3>
+  <p style="color: var(--muted);">Le lime ne dépasse <strong style="color: var(--text);">jamais 10-15% de la surface visible</strong>. C'est un accent, pas un fond. Usages valides : CTAs principaux, ponctuation typographique (le ".", les badges), highlights, hover states, illustrations clés.</p>
+</section>
+
+<!-- 3. Typographie -->
+<section>
+  <h2><span class="section-num">03</span>Typographie</h2>
+  <p class="section-desc">Une seule famille pour tout : <strong>Geist</strong> (gratuit, open-source, Vercel). Geist Mono pour les éléments techniques (prix, code, métriques).</p>
+  
+  <div class="card">
+    <div class="typo-sample">
+      <div style="font-size: 64px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;">Build fast.<br>Ship faster.</div>
+      <div class="typo-meta">Display · 64px / weight 800 / tracking -3%</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-size: 36px; font-weight: 700; letter-spacing: -0.02em;">Section title</div>
+      <div class="typo-meta">H1 · 36px / weight 700</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-size: 24px; font-weight: 600;">Subsection heading</div>
+      <div class="typo-meta">H2 · 24px / weight 600</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-size: 18px; font-weight: 500;">Card title or service name</div>
+      <div class="typo-meta">H3 · 18px / weight 500</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-size: 16px;">Body text — utilisé pour les descriptions, paragraphes, labels longs. Reste lisible à 1.6 line-height.</div>
+      <div class="typo-meta">Body · 16px / weight 400 / line 1.6</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-size: 13px; color: var(--muted);">Caption or small label</div>
+      <div class="typo-meta">Caption · 13px / weight 400</div>
+    </div>
+    <div class="typo-sample">
+      <div style="font-family: 'SF Mono', Menlo, monospace; font-size: 14px; color: var(--lime);">$2,499 / project</div>
+      <div class="typo-meta">Mono · 14px / pour prix, code, métriques</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Composants -->
+<section>
+  <h2><span class="section-num">04</span>Composants UI</h2>
+  <p class="section-desc">Système basé sur shadcn/ui customisé avec les tokens Hulabe.</p>
+  
+  <h3>Boutons</h3>
+  <div class="card">
+    <div class="btn-row">
+      <button class="btn btn-primary">Demander un devis</button>
+      <button class="btn btn-secondary">Voir les services</button>
+      <button class="btn btn-ghost">En savoir plus →</button>
+    </div>
+  </div>
+  
+  <h3>Espacements</h3>
+  <p style="color: var(--muted);">Système basé sur 4px : <code>4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128</code></p>
+  
+  <h3>Border radius</h3>
+  <p style="color: var(--muted);"><code>6px</code> small · <code>10px</code> default · <code>16px</code> cards · <code>24px</code> sections</p>
+</section>
+
+<!-- 5. Ton -->
+<section>
+  <h2><span class="section-num">05</span>Ton & voix</h2>
+  <p class="section-desc">Direct, concret, confiant sans être arrogant. Toujours un délai, un prix, un livrable.</p>
+  
+  <h3>Principes</h3>
+  <ul>
+    <li><strong>Direct.</strong> Pas de jargon corporate. "On code votre app" pas "Nous concevons des solutions digitales sur-mesure".</li>
+    <li><strong>Confiant.</strong> On affirme ce qu'on fait, on ne sur-vend pas.</li>
+    <li><strong>Concret.</strong> Toujours un chiffre. Pas de "boost de productivité".</li>
+    <li><strong>Personnel.</strong> Tutoiement en FR, "you" direct en EN, tuteo en ES.</li>
+  </ul>
+  
+  <h3>Exemples</h3>
+  <div style="margin-top: 16px;">
+    <div class="tone-card tone-good">
+      <span class="tone-icon">✓</span>
+      <span>"Site vitrine pro en 7 jours. À partir de 800€."</span>
+    </div>
+    <div class="tone-card tone-bad">
+      <span class="tone-icon">✗</span>
+      <span>"Nous accompagnons votre transformation digitale avec excellence."</span>
+    </div>
+    <div class="tone-card tone-good">
+      <span class="tone-icon">✓</span>
+      <span>"Ton MVP Lovable rame ? On le passe en code propre."</span>
+    </div>
+    <div class="tone-card tone-bad">
+      <span class="tone-icon">✗</span>
+      <span>"Optimisation de vos solutions no-code pour une scalabilité accrue."</span>
+    </div>
+    <div class="tone-card tone-good">
+      <span class="tone-icon">✓</span>
+      <span>"Devis sous 24h, démarrage sous 7 jours."</span>
+    </div>
+    <div class="tone-card tone-bad">
+      <span class="tone-icon">✗</span>
+      <span>"Nous vous proposons un accompagnement réactif et sur-mesure."</span>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Tokens -->
+<section>
+  <h2><span class="section-num">06</span>Design tokens</h2>
+  <p class="section-desc">À copier-coller dans le projet Next.js (Tailwind config + CSS variables).</p>
+  
+  <h3>CSS Variables</h3>
+  <pre><code>:root {
+  /* Couleurs */
+  --bg: #0A0A0A;
+  --surface: #141414;
+  --surface-2: #1C1C1C;
+  --border: #262626;
+  --text: #FAFAFA;
+  --muted: #A1A1AA;
+  --muted-2: #71717A;
+  
+  --lime: #A3E635;
+  --lime-dark: #84CC16;
+  --error: #EF4444;
+  --warning: #F59E0B;
+  
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* Fonts */
+  --font-sans: 'Geist', -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', 'SF Mono', monospace;
+}</code></pre>
+  
+  <h3>Tailwind config</h3>
+  <pre><code>// tailwind.config.ts
+export default {
+  theme: {
+    extend: {
+      colors: {
+        bg: '#0A0A0A',
+        surface: '#141414',
+        'surface-2': '#1C1C1C',
+        border: '#262626',
+        text: '#FAFAFA',
+        muted: '#A1A1AA',
+        'muted-2': '#71717A',
+        lime: {
+          DEFAULT: '#A3E635',
+          dark: '#84CC16',
+        },
+      },
+      fontFamily: {
+        sans: ['Geist', 'sans-serif'],
+        mono: ['Geist Mono', 'monospace'],
+      },
+      borderRadius: {
+        sm: '6px', md: '10px', lg: '16px', xl: '24px',
+      },
+    },
+  },
+}</code></pre>
+</section>
+
+<!-- 7. Assets -->
+<section>
+  <h2><span class="section-num">07</span>Assets téléchargeables</h2>
+  <p class="section-desc">Tous les fichiers fournis dans le ZIP.</p>
+  
+  <h3>SVG (vectoriels, à privilégier)</h3>
+  <div class="download-grid">
+    <div class="download-item">
+      <div class="filename">hulabe-logo-dark.svg</div>
+      <div class="desc">Logo complet pour fond sombre</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-logo-light.svg</div>
+      <div class="desc">Logo complet pour fond clair</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-icon.svg</div>
+      <div class="desc">Icône seule (lime)</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-icon-dark.svg</div>
+      <div class="desc">Icône seule (sombre)</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">favicon.svg</div>
+      <div class="desc">Favicon optimisé 32px</div>
+    </div>
+  </div>
+  
+  <h3>PNG (rasterisés haute qualité)</h3>
+  <div class="download-grid">
+    <div class="download-item">
+      <div class="filename">hulabe-logo-dark@1x/2x/3x.png</div>
+      <div class="desc">217 / 434 / 651px de large</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-logo-light@1x/2x/3x.png</div>
+      <div class="desc">217 / 434 / 651px de large</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-icon-256/512/1024.png</div>
+      <div class="desc">Icône lime, 3 résolutions</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">hulabe-icon-dark-256/512.png</div>
+      <div class="desc">Icône sombre, 2 résolutions</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">favicon.ico</div>
+      <div class="desc">Multi-résolution 16/32/48/64</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">favicon-16/32/48/64.png</div>
+      <div class="desc">Favicons individuels</div>
+    </div>
+    <div class="download-item">
+      <div class="filename">apple-touch-icon-180/512.png</div>
+      <div class="desc">Pour iOS / iPadOS</div>
+    </div>
+  </div>
+</section>
+
+<p style="margin-top: 80px; text-align: center; color: var(--muted-2); font-size: 13px; border-top: 1px solid var(--border); padding-top: 32px;">
+  Hulabe · Brand Guidelines v1.0 · 2026
+</p>
+
+</div>
+</body>
+</html>

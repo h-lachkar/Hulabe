@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* shadcn tokens — dark scheme by default */
+    --background: 0 0% 4%;          /* #0A0A0A */
+    --foreground: 0 0% 98%;         /* #FAFAFA */
+
+    --card: 0 0% 8%;                /* #141414 */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 11%;            /* #1C1C1C */
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 83 80% 55%;          /* #A3E635 lime */
+    --primary-foreground: 0 0% 4%;  /* #0A0A0A */
+
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 11%;
+    --muted-foreground: 240 5% 65%; /* ~#A1A1AA */
+
+    --accent: 0 0% 14%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84% 60%;       /* #EF4444 */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 15%;             /* #262626 */
+    --input: 0 0% 15%;
+    --ring: 83 80% 55%;
+
+    --radius: 10px;
+  }
+
+  /* Force dark colors regardless of system */
+  html {
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-bg text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+
+  ::selection {
+    background: #A3E635;
+    color: #0A0A0A;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .display {
+    @apply font-sans font-extrabold tracking-display;
+  }
+
+  .text-mono {
+    @apply font-mono;
+  }
+
+  .accent-dot {
+    color: #A3E635;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .ring-lime {
+    box-shadow: 0 0 0 1px rgba(163, 230, 53, 0.4), 0 0 40px -8px rgba(163, 230, 53, 0.25);
+  }
+
+  .card-hover {
+    @apply transition-colors duration-200;
+  }
+  .card-hover:hover {
+    border-color: rgba(163, 230, 53, 0.4);
+  }
+}

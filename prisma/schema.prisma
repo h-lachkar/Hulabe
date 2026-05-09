@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Lead {
+  id                String       @id @default(cuid())
+  email             String
+  name              String?
+  phone             String?
+  source            LeadSource
+  serviceType       ServiceType?
+  budget            String?
+  timeline          String?
+  message           String?      @db.Text
+  features          String[]     @default([])
+  estimatedPriceMin Int?
+  estimatedPriceMax Int?
+  locale            String
+  status            LeadStatus   @default(NEW)
+  ipHash            String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([email])
+}
+
+enum LeadSource {
+  CONTACT_FORM
+  SIMULATOR
+}
+
+enum ServiceType {
+  VITRINE
+  ECOMMERCE
+  SHOPIFY
+  LOVABLE_TO_APP
+  SAAS_MVP
+  MOBILE_APP
+  OTHER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  WON
+  LOST
+}

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hulabe — Roadmap</title>
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --surface: #141414;
+    --surface-2: #1C1C1C;
+    --border: #262626;
+    --text: #FAFAFA;
+    --muted: #A1A1AA;
+    --muted-2: #71717A;
+    --lime: #A3E635;
+    --lime-dark: #84CC16;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px 80px;
+    min-height: 100vh;
+  }
+  .container { max-width: 980px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--lime);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A0A0A;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.05em;
+  }
+  .logo-text {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .logo-text .dot { color: var(--lime); }
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 32px 0 8px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 17px;
+    margin-bottom: 32px;
+  }
+
+  /* Progress bar */
+  .progress-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .progress-label {
+    font-size: 14px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .progress-stats {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 14px;
+    color: var(--lime);
+    font-weight: 600;
+  }
+  .progress-bar {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--lime);
+    transition: width 0.4s ease;
+    border-radius: 4px;
+  }
+
+  /* Phases */
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .phase.completed { border-color: var(--lime); opacity: 0.7; }
+  .phase-header {
+    padding: 24px 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .phase-header:hover { background: var(--surface-2); }
+  .phase-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+  .phase-number {
+    width: 36px;
+    height: 36px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .phase.completed .phase-number {
+    background: var(--lime);
+    color: #0A0A0A;
+    border-color: var(--lime);
+  }
+  .phase-info { flex: 1; min-width: 0; }
+  .phase-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .phase-meta {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .phase-meta span { display: inline-flex; align-items: center; gap: 4px; }
+  .phase-progress {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 13px;
+    color: var(--muted-2);
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .phase-progress.done { color: var(--lime); }
+  .chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .phase.open .chevron { transform: rotate(180deg); }
+
+  .phase-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .phase.open .phase-body { max-height: 2000px; }
+  .phase-content { padding: 0 28px 24px; border-top: 1px solid var(--border); padding-top: 20px; }
+
+  /* Tasks */
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .task:hover .task-text { color: var(--text); }
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    background: var(--surface-2);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .task.checked .checkbox {
+    background: var(--lime);
+    border-color: var(--lime);
+  }
+  .task.checked .checkbox::after {
+    content: '';
+    width: 11px;
+    height: 6px;
+    border-left: 2px solid #0A0A0A;
+    border-bottom: 2px solid #0A0A0A;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .task-text {
+    color: var(--muted);
+    font-size: 15px;
+    transition: color 0.15s;
+  }
+  .task.checked .task-text {
+    color: var(--muted-2);
+    text-decoration: line-through;
+  }
+
+  /* Budget table */
+  .budget-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 40px;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    text-align: left;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  td { color: var(--text); }
+  td.amount {
+    font-family: 'SF Mono', Menlo, monospace;
+    text-align: right;
+    color: var(--lime);
+  }
+  tr.total td { font-weight: 700; border-bottom: none; padding-top: 18px; }
+  tr.total td.amount { font-size: 18px; }
+
+  /* Reset button */
+  .actions {
+    margin-top: 32px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--surface-2); }
+  .btn-primary {
+    background: var(--lime);
+    color: #0A0A0A;
+    border-color: var(--lime);
+  }
+  .btn-primary:hover { background: var(--lime-dark); border-color: var(--lime-dark); }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 32px; }
+    .phase-header { padding: 18px 20px; }
+    .phase-content { padding: 16px 20px 20px; }
+    .budget-section { padding: 20px; }
+    .phase-meta { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">&lt;/&gt;</div>
+      <div class="logo-text">hulabe<span class="dot">.</span></div>
+    </div>
+  </div>
+
+  <h1>Roadmap de lancement</h1>
+  <p class="subtitle">De zéro à premier lead payant — 8 semaines</p>
+
+  <!-- Progress global -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-label">Progression globale</div>
+      <div class="progress-stats" id="globalStats">0 / 0</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="globalProgress" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Phases -->
+  <div id="phases"></div>
+
+  <!-- Budget -->
+  <div class="budget-section">
+    <div class="section-title">💰 Budget mois 1</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Poste</th>
+          <th style="text-align: right;">Coût</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Domaine hulabe.com (1 an)</td><td class="amount">12€</td></tr>
+        <tr><td>Mail pro (Zoho gratuit)</td><td class="amount">0€</td></tr>
+        <tr><td>Hébergement Vercel</td><td class="amount">0€</td></tr>
+        <tr><td>Supabase (free tier)</td><td class="amount">0€</td></tr>
+        <tr><td>Resend emails (free 3000/mois)</td><td class="amount">0€</td></tr>
+        <tr><td>Meta Ads test (10€/j × 2 camp × 14j)</td><td class="amount">280€</td></tr>
+        <tr><td>Réserve / outils imprévus</td><td class="amount">200€</td></tr>
+        <tr class="total"><td>Total lancement</td><td class="amount">~492€</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="expandAll()">Tout déplier</button>
+    <button class="btn" onclick="collapseAll()">Tout replier</button>
+    <button class="btn" onclick="resetAll()">Réinitialiser</button>
+  </div>
+
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 0,
+    title: "Setup",
+    duration: "Week-end · 2h",
+    icon: "🚀",
+    tasks: [
+      "Acheter le domaine hulabe.com (Namecheap ~12€/an)",
+      "Réserver le handle @hulabe sur X / Twitter",
+      "Réserver le handle @hulabe sur Instagram",
+      "Créer la page entreprise Hulabe sur LinkedIn",
+      "Setup mail pro hugo@hulabe.com (Zoho gratuit)",
+      "Créer repo GitHub hulabe-landing",
+      "Setup Figma (gratuit) pour assets"
+    ]
+  },
+  {
+    id: 1,
+    title: "Identité visuelle",
+    duration: "Jours 1-3",
+    icon: "🎨",
+    tasks: [
+      "Finaliser logo Concept A (bracket) en SVG propre",
+      "Créer variantes : light, dark, icône seule, favicon",
+      "Exporter assets (PNG, SVG, ICO)",
+      "Créer og:image (1200x630) pour partage social",
+      "Créer banner LinkedIn + X",
+      "Créer avatar carré pour réseaux sociaux"
+    ]
+  },
+  {
+    id: 2,
+    title: "Landing technique",
+    duration: "Semaine 1",
+    icon: "⚙️",
+    tasks: [
+      "Init projet Next.js 14 + TypeScript",
+      "Setup Tailwind CSS + shadcn/ui",
+      "Setup next-intl pour FR / EN / ES",
+      "Configurer routing /[locale]/...",
+      "Setup Prisma + Supabase",
+      "Créer composants de base (Button, Card, Input, Container)",
+      "Layout global (header avec switch langue + footer)",
+      "Setup tokens CSS de la charte graphique"
+    ]
+  },
+  {
+    id: 3,
+    title: "Contenu landing",
+    duration: "Semaine 2",
+    icon: "✏️",
+    tasks: [
+      "Hero : titre + sous-titre + CTA simulateur + CTA contact",
+      "Section services : 5 cards (vitrine, e-commerce, Shopify, Lovable→app, SaaS, mobile)",
+      "Simulateur multi-étapes (type → features → délai → budget → email)",
+      "Output simulateur : fourchette + promesse de rappel 24h",
+      "Section process (4 étapes : brief → devis → dev → livraison)",
+      "Case studies (RektAds + CRM Notion + 1 projet à faire)",
+      "Section FAQ (10 questions)",
+      "Formulaire contact direct (alternative au simulateur)"
+    ]
+  },
+  {
+    id: 4,
+    title: "Backend & intégrations",
+    duration: "Semaine 2-3",
+    icon: "🔌",
+    tasks: [
+      "API route POST /api/lead pour soumission simulateur",
+      "Schéma Supabase : table leads (email, type, budget, etc.)",
+      "Email auto via Resend (confirmation lead + notif à toi)",
+      "Webhook Telegram ou Slack pour notif lead instantanée",
+      "Page admin simple ou Supabase dashboard pour leads",
+      "Validation côté serveur (Zod) pour anti-spam"
+    ]
+  },
+  {
+    id: 5,
+    title: "Traductions",
+    duration: "Semaine 3",
+    icon: "🌍",
+    tasks: [
+      "Rédiger copy FR (priorité, le plus soigné)",
+      "Traduire en EN",
+      "Traduire en ES",
+      "Vérif manuelle des nuances + ton (tutoiement / tuteo / you)",
+      "Tester switch de langue sur toutes les pages"
+    ]
+  },
+  {
+    id: 6,
+    title: "SEO & tracking",
+    duration: "Semaine 3",
+    icon: "📊",
+    tasks: [
+      "Meta tags + Open Graph dynamiques par langue",
+      "Sitemap.xml + robots.txt",
+      "Schema.org (LocalBusiness + Service)",
+      "Setup Google Analytics 4",
+      "Setup Meta Pixel + Conversions API",
+      "Setup Microsoft Clarity (heatmaps gratuit)",
+      "Vérification Google Search Console",
+      "Tests Lighthouse (objectif 90+ partout)"
+    ]
+  },
+  {
+    id: 7,
+    title: "Lancement soft",
+    duration: "Semaine 4",
+    icon: "🚢",
+    tasks: [
+      "Déploiement Vercel + connexion domaine hulabe.com",
+      "Tests cross-browser (Chrome, Safari, Firefox)",
+      "Tests mobile (iOS + Android)",
+      "Test simulateur de bout en bout",
+      "Post LinkedIn d'annonce (FR + EN)",
+      "Post X / Twitter d'annonce",
+      "Liste 30 prospects ciblés (founders, e-commerçants)",
+      "Envoi 30 messages outbound personnalisés"
+    ]
+  },
+  {
+    id: 8,
+    title: "Acquisition payante Meta",
+    duration: "Semaines 5-8",
+    icon: "💸",
+    tasks: [
+      "Setup compte Meta Business Manager + pixel vérifié",
+      "Création campagne 1 : Shopify (3 créas différentes)",
+      "Création campagne 2 : Lovable → App prod (3 créas)",
+      "Budget : 10€/j par campagne pendant 7 jours",
+      "Audience : intérêts (Shopify, Bubble, Lovable, no-code)",
+      "Analyse résultats à J+7 (CPL + qualité leads)",
+      "Kill créas perdantes, scale gagnantes",
+      "Itération créa hebdomadaire"
+    ]
+  },
+  {
+    id: 9,
+    title: "Itération & growth",
+    duration: "Mois 2+",
+    icon: "📈",
+    tasks: [
+      "Ajouter case studies clients réels au fil des projets",
+      "Lancer blog SEO (1 article/semaine)",
+      "A/B test sur le simulateur (titres, étapes)",
+      "Ajouter vidéos / Loom dans les case studies",
+      "Programme de parrainage (10% au filleul)",
+      "Étendre Meta Ads aux 3 autres services",
+      "Tester LinkedIn Ads pour SaaS MVP (ticket élevé)"
+    ]
+  }
+];
+
+const STORAGE_KEY = 'hulabe-roadmap-v1';
+
+let state = {};
+
+async function loadState() {
+  try {
+    const result = await window.storage.get(STORAGE_KEY);
+    if (result && result.value) {
+      state = JSON.parse(result.value);
+    }
+  } catch (e) {
+    state = {};
+  }
+}
+
+async function saveState() {
+  try {
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('Save failed', e);
+  }
+}
+
+function isTaskChecked(phaseId, taskIdx) {
+  return state[`${phaseId}-${taskIdx}`] === true;
+}
+
+function toggleTask(phaseId, taskIdx) {
+  const key = `${phaseId}-${taskIdx}`;
+  state[key] = !state[key];
+  saveState();
+  render();
+}
+
+function render() {
+  const container = document.getElementById('phases');
+  let totalTasks = 0;
+  let totalDone = 0;
+
+  container.innerHTML = PHASES.map(phase => {
+    const done = phase.tasks.filter((_, i) => isTaskChecked(phase.id, i)).length;
+    const total = phase.tasks.length;
+    totalTasks += total;
+    totalDone += done;
+    const completed = done === total && total > 0;
+    const isOpen = state[`open-${phase.id}`] !== false;
+
+    return `
+      <div class="phase ${completed ? 'completed' : ''} ${isOpen ? 'open' : ''}" data-phase="${phase.id}">
+        <div class="phase-header" onclick="togglePhase(${phase.id})">
+          <div class="phase-header-left">
+            <div class="phase-number">${String(phase.id).padStart(2, '0')}</div>
+            <div class="phase-info">
+              <div class="phase-title">${phase.icon} ${phase.title}</div>
+              <div class="phase-meta">
+                <span>⏱ ${phase.duration}</span>
+                <span>📋 ${total} tâche${total > 1 ? 's' : ''}</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-progress ${done === total ? 'done' : ''}">${done}/${total}</div>
+          <svg class="chevron" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+          </svg>
+        </div>
+        <div class="phase-body">
+          <div class="phase-content">
+            ${phase.tasks.map((task, i) => `
+              <div class="task ${isTaskChecked(phase.id, i) ? 'checked' : ''}" onclick="toggleTask(${phase.id}, ${i})">
+                <div class="checkbox"></div>
+                <div class="task-text">${task}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('globalStats').textContent = `${totalDone} / ${totalTasks}`;
+  const pct = totalTasks > 0 ? (totalDone / totalTasks) * 100 : 0;
+  document.getElementById('globalProgress').style.width = pct + '%';
+}
+
+function togglePhase(phaseId) {
+  state[`open-${phaseId}`] = state[`open-${phaseId}`] === false ? true : false;
+  saveState();
+  render();
+}
+
+function expandAll() {
+  PHASES.forEach(p => state[`open-${p.id}`] = true);
+  saveState();
+  render();
+}
+
+function collapseAll() {
+  PHASES.forEach(p => state[`open-${p.id}`] = false);
+  saveState();
+  render();
+}
+
+async function resetAll() {
+  if (!confirm('Réinitialiser toute la progression ?')) return;
+  state = {};
+  try { await window.storage.delete(STORAGE_KEY); } catch (e) {}
+  render();
+}
+
+(async () => {
+  await loadState();
+  render();
+})();
+</script>
+</body>
+</html>

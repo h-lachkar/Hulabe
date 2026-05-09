@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "title": "Hulabe — Marketing sites, e-commerce, SaaS and apps. Fast and clean.",
+    "description": "Dev studio. 5 packaged services. Quote in 24h, kickoff in 7 days, clean code. Marketing sites from €800."
+  },
+  "nav": {
+    "services": "Services",
+    "process": "Process",
+    "cases": "Work",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "cta": "Get a quote"
+  },
+  "hero": {
+    "kicker": "Dev studio",
+    "titleLine1": "Build fast.",
+    "titleLine2": "Ship faster",
+    "subtitle": "Marketing sites, e-commerce, SaaS, mobile apps. Designed, coded, shipped. No committees, no fluff.",
+    "ctaPrimary": "Get my quote",
+    "ctaSecondary": "See services",
+    "trust": "Quote in 24h · Kickoff in 7 days · Clean code"
+  },
+  "services": {
+    "kicker": "Services",
+    "title": "Six packages,",
+    "titleAccent": "clear pricing.",
+    "subtitle": "Each service has a price range, a timeline and concrete deliverables. No surprises.",
+    "ctaSimulator": "Get your quote",
+    "disclaimer": "Indicative prices and timelines. Final pricing depends on exact scope — we lock that during the 30-min brief.",
+    "items": {
+      "vitrine": {
+        "title": "Marketing site",
+        "tagline": "A pro site that converts. Not a Wix template.",
+        "price": "€800 – 2,500",
+        "duration": "1-2 weeks",
+        "tags": ["Next.js", "SEO", "CMS", "Animations"]
+      },
+      "ecommerce": {
+        "title": "E-commerce store",
+        "tagline": "Shopify or custom store that actually sells.",
+        "price": "€1,500 – 5,000",
+        "duration": "2-3 weeks",
+        "tags": ["Shopify", "Stripe", "Inventory", "Analytics"]
+      },
+      "shopify": {
+        "title": "Shopify dev",
+        "tagline": "Custom Shopify apps, themes, integrations.",
+        "price": "€500 – 3,000",
+        "duration": "1-3 weeks",
+        "tags": ["Liquid", "Apps", "API", "Theme"]
+      },
+      "lovable": {
+        "title": "Lovable to production",
+        "tagline": "Your no-code MVP turned into clean, scalable code.",
+        "price": "€2,000 – 8,000",
+        "duration": "2-4 weeks",
+        "tags": ["Next.js", "Supabase", "Auth", "Migration"]
+      },
+      "saas": {
+        "title": "SaaS MVP",
+        "tagline": "From idea to live product in 8 weeks max.",
+        "price": "€5,000 – 15,000",
+        "duration": "4-8 weeks",
+        "tags": ["Next.js", "Stripe", "Auth", "Dashboard"]
+      },
+      "mobile": {
+        "title": "Mobile app",
+        "tagline": "iOS + Android in React Native. One codebase.",
+        "price": "€4,000 – 12,000",
+        "duration": "4-8 weeks",
+        "tags": ["React Native", "Expo", "Push", "Stores"]
+      }
+    }
+  },
+  "process": {
+    "kicker": "Process",
+    "title": "How we work.",
+    "subtitle": "Four steps. No useless meetings, no slideware.",
+    "steps": {
+      "1": { "title": "30-min brief", "body": "We get your project, deadline, budget. You leave with a clear plan." },
+      "2": { "title": "Fixed quote", "body": "Within 24 working hours. Scope, timeline, price. No hidden costs." },
+      "3": { "title": "Build", "body": "Kickoff within 7 days. Regular demos, direct access on Slack or WhatsApp." },
+      "4": { "title": "Ship", "body": "Go live, training, docs. 14 days of support included for tweaks." }
+    }
+  },
+  "cases": {
+    "kicker": "Selected work",
+    "title": "Recent projects.",
+    "subtitle": "What we've built. More cases coming.",
+    "viewProject": "View project",
+    "comingSoon": "Coming soon",
+    "soon": "More cases coming"
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "What people ask us most.",
+    "items": {
+      "q1": { "q": "How long does it take to ship?", "a": "1 to 8 weeks depending on the project. Kickoff within 7 days of sign-off, regular demos along the way." },
+      "q2": { "q": "Do you handle copy, content, and design?", "a": "Yes on demand. We can take care of copywriting and design, or work alongside your team and existing partners." },
+      "q3": { "q": "Do I own the code?", "a": "Always. You get the Git repo, hosting account, service credentials. No lock-in." },
+      "q4": { "q": "What's the stack?", "a": "Web: Next.js, TypeScript, Tailwind, Supabase, Stripe, Vercel. Mobile: React Native + Expo. Shopify: Liquid + Hydrogen." },
+      "q5": { "q": "How do we collaborate during the project?", "a": "Direct Slack or WhatsApp, regular demos, a preview environment that's always live. No committees, no 12-layer Gantt charts." },
+      "q6": { "q": "What happens after launch?", "a": "We stay reachable for 14 days for tweaks. After that you can sign a maintenance contract, or take over — it's your code." }
+    }
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title": "Let's talk.",
+    "subtitle": "30-min brief, free, no commitment. We'll tell you honestly if we're the right fit.",
+    "name": "First name",
+    "email": "Email",
+    "message": "Your project in 2-3 lines",
+    "submit": "Send",
+    "submitting": "Sending…",
+    "success": "Message received. We'll get back to you within 24 working hours.",
+    "error": "Something went wrong. Try again or email support@hulabe.com.",
+    "or": "or",
+    "bookCall": "Book a slot",
+    "directEmail": "support@hulabe.com"
+  },
+  "simulator": {
+    "kicker": "Simulator",
+    "title": "Get your quote in 2 min.",
+    "subtitle": "Five questions. A price range at the end. No spam, no aggressive sales calls.",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Show my estimate",
+    "submitting": "Computing…",
+    "step": "Step",
+    "of": "of",
+    "step1": {
+      "title": "What kind of project?",
+      "subtitle": "Pick the closest match. We'll refine together.",
+      "options": {
+        "VITRINE": "Marketing site",
+        "ECOMMERCE": "E-commerce store",
+        "SHOPIFY": "Custom Shopify dev",
+        "LOVABLE_TO_APP": "Lovable / no-code migration",
+        "SAAS_MVP": "SaaS / web MVP",
+        "MOBILE_APP": "Mobile application",
+        "OTHER": "Other — let me describe"
+      },
+      "otherPlaceholder": "Describe your project in a few words…"
+    },
+    "step2": {
+      "title": "Main features?",
+      "subtitle": "Check everything that applies. You can refine later.",
+      "options": {
+        "auth": "Login / user accounts",
+        "payment": "Payments (Stripe)",
+        "dashboard": "Admin dashboard",
+        "blog": "Blog / CMS",
+        "multilang": "Multilingual",
+        "responsive": "Mobile-responsive",
+        "seo": "Advanced SEO",
+        "animations": "Custom animations",
+        "integrations": "Third-party API integrations",
+        "notifications": "Email / push notifications"
+      }
+    },
+    "step3": {
+      "title": "Desired timeline?",
+      "subtitle": "Tighter = pricier. Honest.",
+      "options": {
+        "asap": "ASAP — under 2 weeks",
+        "1month": "Within 1 month",
+        "3months": "2 to 3 months",
+        "flexible": "Flexible — no rush"
+      }
+    },
+    "step4": {
+      "title": "Approximate budget?",
+      "subtitle": "We'll tell you honestly if we can fit.",
+      "options": {
+        "<1k": "Under €1,000",
+        "1k-3k": "€1,000 – 3,000",
+        "3k-10k": "€3,000 – 10,000",
+        "10k+": "€10,000+",
+        "undefined": "Not defined yet"
+      }
+    },
+    "step5": {
+      "title": "Your details",
+      "subtitle": "To send you the estimate and follow up.",
+      "name": "First name",
+      "email": "Work email",
+      "phone": "Phone (optional)",
+      "message": "Details (optional)",
+      "consent": "I agree my info is used to contact me back (GDPR).",
+      "consentRequired": "You must agree to continue."
+    },
+    "result": {
+      "title": "Here's your estimate.",
+      "rangeLabel": "Indicative range",
+      "disclaimer": "Indicative estimate. Final price after a 30-min brief.",
+      "next": "We'll reach out within 24 working hours with a firm quote.",
+      "bookCall": "Book the 30-min brief",
+      "backHome": "Back to home",
+      "thanks": "Thanks"
+    },
+    "error": "Something went wrong. Try again or email support@hulabe.com."
+  },
+  "footer": {
+    "tagline": "Marketing sites, e-commerce, SaaS and apps. Fast and clean.",
+    "services": "Services",
+    "company": "Studio",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "rights": "All rights reserved.",
+    "contactCta": "Work with us"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy policy",
+      "lastUpdated": "Last updated"
+    },
+    "terms": {
+      "title": "Terms of service",
+      "lastUpdated": "Last updated"
+    }
+  },
+  "common": {
+    "language": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  }
+}

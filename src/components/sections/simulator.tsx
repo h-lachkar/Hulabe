@@ -54,7 +54,6 @@ const initialContact: ContactForm = {
 export function Simulator() {
   const t = useTranslations("simulator");
   const locale = useLocale() as Locale;
-  const calUrl = process.env.NEXT_PUBLIC_CAL_URL ?? "https://cal.com/hulabe/intro";
   const reduceMotion = useReducedMotion();
 
   /* ---------- State ---------- */
@@ -219,7 +218,6 @@ export function Simulator() {
             min={done.min}
             max={done.max}
             locale={locale}
-            calUrl={calUrl}
             onReset={reset}
           />
         </div>
@@ -625,13 +623,11 @@ function Result({
   min,
   max,
   locale,
-  calUrl,
   onReset,
 }: {
   min: number;
   max: number;
   locale: string;
-  calUrl: string;
   onReset: () => void;
 }) {
   const t = useTranslations("simulator.result");
@@ -658,13 +654,8 @@ function Result({
       </p>
       <p className="mt-4 max-w-md mx-auto text-sm text-muted-foreground">{t("disclaimer")}</p>
       <p className="mt-6 text-base text-foreground">{t("next")}</p>
-      <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-        <Button asChild size="lg">
-          <a href={calUrl} target="_blank" rel="noreferrer">
-            {t("bookCall")} <ArrowRight className="h-4 w-4" />
-          </a>
-        </Button>
-        <Button variant="ghost" size="lg" onClick={onReset}>
+      <div className="mt-8 flex justify-center">
+        <Button variant="secondary" size="lg" onClick={onReset}>
           {t("backHome")}
         </Button>
       </div>

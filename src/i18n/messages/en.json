@@ -115,7 +115,6 @@
     "success": "Message received. We'll get back to you within 24 working hours.",
     "error": "Something went wrong. Try again or email support@hulabe.com.",
     "or": "or",
-    "bookCall": "Book a slot",
     "directEmail": "support@hulabe.com"
   },
   "simulator": {
@@ -194,7 +193,6 @@
       "rangeLabel": "Indicative range",
       "disclaimer": "Indicative estimate. Final price after a 30-min brief.",
       "next": "We'll reach out within 24 working hours with a firm quote.",
-      "bookCall": "Book the 30-min brief",
       "backHome": "Back to home",
       "thanks": "Thanks"
     },

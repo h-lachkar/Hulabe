@@ -18,24 +18,18 @@ const COPY = {
     subject: "On a bien reçu ta demande",
     hello: (n?: string | null) => (n ? `Salut ${n},` : "Salut,"),
     body: "Merci d'avoir pris le temps de nous écrire. On revient vers toi sous 24h ouvrées avec une réponse claire — devis fixé, planning, et prochaine étape.",
-    booking: "Si tu veux gagner du temps, tu peux réserver un brief de 30 min directement :",
-    bookingCta: "Réserver un créneau",
     sign: "À très vite,\nHugo — Hulabe",
   },
   en: {
     subject: "We got your request",
     hello: (n?: string | null) => (n ? `Hi ${n},` : "Hi,"),
     body: "Thanks for reaching out. We'll get back to you within 24 working hours with a clear answer — a fixed quote, timeline, and next step.",
-    booking: "Want to skip ahead? Book a 30-min brief directly:",
-    bookingCta: "Book a slot",
     sign: "Talk soon,\nHugo — Hulabe",
   },
   es: {
     subject: "Hemos recibido tu solicitud",
     hello: (n?: string | null) => (n ? `Hola ${n},` : "Hola,"),
     body: "Gracias por escribirnos. Te respondemos en menos de 24h hábiles con una respuesta clara — presupuesto fijo, calendario y siguiente paso.",
-    booking: "Si quieres avanzar, reserva un brief de 30 min:",
-    bookingCta: "Reservar hueco",
     sign: "Hablamos pronto,\nHugo — Hulabe",
   },
 } as const;
@@ -65,14 +59,9 @@ function emailLayout(content: string) {
 export async function sendLeadConfirmation({ to, name, locale }: LeadConfirmationProps) {
   if (!resend) return;
   const c = COPY[locale];
-  const calUrl = process.env.NEXT_PUBLIC_CAL_URL ?? "https://cal.com/hulabe/intro";
   const html = emailLayout(`
     <p style="margin:0 0 16px;">${c.hello(name)}</p>
-    <p style="margin:0 0 16px;">${c.body}</p>
-    <p style="margin:0 0 8px;">${c.booking}</p>
-    <p style="margin:0 0 24px;">
-      <a href="${calUrl}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">${c.bookingCta}</a>
-    </p>
+    <p style="margin:0 0 24px;">${c.body}</p>
     <p style="margin:0;white-space:pre-line;color:#A1A1AA;">${c.sign}</p>
   `);
   await resend.emails.send({ from: FROM_EMAIL, to, subject: c.subject, html });

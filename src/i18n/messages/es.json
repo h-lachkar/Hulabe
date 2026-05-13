@@ -115,7 +115,6 @@
     "success": "Mensaje recibido. Te respondemos en 24h hábiles.",
     "error": "Algo salió mal. Inténtalo de nuevo o escribe a support@hulabe.com.",
     "or": "o",
-    "bookCall": "Reservar hueco",
     "directEmail": "support@hulabe.com"
   },
   "simulator": {
@@ -194,7 +193,6 @@
       "rangeLabel": "Rango indicativo",
       "disclaimer": "Estimación indicativa. Precio final tras brief de 30 min.",
       "next": "Te contactamos en 24h hábiles con un presupuesto firme.",
-      "bookCall": "Reservar el brief de 30 min",
       "backHome": "Volver al inicio",
       "thanks": "Gracias"
     },

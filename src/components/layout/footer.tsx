@@ -76,6 +76,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#cases" className="rounded text-foreground hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                  {tn("cases")}
+                </a>
+              </li>
+              <li>
                 <a href="#faq" className="rounded text-foreground hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
                   {tn("faq")}
                 </a>

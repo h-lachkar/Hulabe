@@ -39,7 +39,11 @@ RESEND_API_KEY            # API key Resend
 RESEND_FROM_EMAIL         # ex: "Hulabe <hello@hulabe.com>" (domaine vérifié)
 NOTIFICATION_EMAIL        # email qui reçoit les notifs de leads
 NEXT_PUBLIC_SITE_URL      # URL prod, ex: https://hulabe.com
-NEXT_PUBLIC_CAL_URL       # URL Cal.com / Calendly
+NEXT_PUBLIC_SUPABASE_URL  # Supabase project URL (admin auth)
+NEXT_PUBLIC_SUPABASE_ANON_KEY # Supabase public anon key
+ADMIN_EMAILS              # Comma-separated admin emails for /admin gate
+NEXT_PUBLIC_POSTHOG_KEY   # PostHog project key
+NEXT_PUBLIC_POSTHOG_HOST  # PostHog host (eu.i.posthog.com)
 ```
 
 ## Structure

@@ -45,6 +45,15 @@ export async function POST(req: Request) {
       },
     });
 
+    await prisma.activity.create({
+      data: {
+        kind: "LEAD_CREATED",
+        summary: `Contact form: ${data.email}`,
+        leadId: lead.id,
+        metadata: { source: "CONTACT_FORM" },
+      },
+    });
+
     await Promise.allSettled([
       sendLeadConfirmation({ to: data.email, name: data.name, locale: data.locale }),
       sendLeadNotification({

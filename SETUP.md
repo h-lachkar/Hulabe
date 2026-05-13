@@ -63,7 +63,38 @@ pnpm install
 
 ---
 
-## 4. PostHog (analytics + session replay) — **NOUVEAU**
+## 4. Supabase Auth (admin /admin) — **NOUVEAU**
+
+Le panneau admin à `/admin` utilise Supabase Auth (magic link). Tu utilises déjà Supabase pour la DB — c'est le même projet.
+
+1. Va sur ton projet Supabase → **Project Settings → API**.
+2. Récupère deux valeurs :
+   - **Project URL** (commence par `https://xxxx.supabase.co`)
+   - **Project anon (public) API key** (commence par `eyJhbGc...`)
+3. Mets dans `.env.local` :
+   ```
+   NEXT_PUBLIC_SUPABASE_URL="https://xxxxxxxxxxxx.supabase.co"
+   NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIs..."
+   ADMIN_EMAILS="support@hulabe.com"
+   ```
+4. Sur Supabase → **Authentication → URL Configuration** :
+   - **Site URL** : `https://hulabe.com` (en prod) ou `http://localhost:3000` (en dev)
+   - **Redirect URLs** : ajoute `https://hulabe.com/auth/callback` et `http://localhost:3000/auth/callback`
+5. Sur Supabase → **Authentication → Email Templates → Magic Link** :
+   - Personnalise si tu veux (le défaut est correct)
+   - **Important** : le `{{ .ConfirmationURL }}` doit utiliser le path `/auth/callback?...` — c'est le défaut Supabase.
+6. Pour tester en dev :
+   - Lance `pnpm dev`
+   - Va sur `http://localhost:3000/admin/login`
+   - Entre ton email (qui doit matcher `ADMIN_EMAILS`)
+   - Check le mail magic-link
+   - Clique → tu arrives sur `/admin`
+
+> **ADMIN_EMAILS** est la seule liste d'autorisation. Si quelqu'un d'autre tente de se logger avec un email non listé, il est rejeté avec `error=not_authorized`.
+
+---
+
+## 5. PostHog (analytics + session replay) — **NOUVEAU**
 
 1. Créer un compte sur [eu.posthog.com](https://eu.posthog.com) (instance EU pour RGPD).
 2. **Create new project** → nom `Hulabe`, type **Web**.
@@ -89,25 +120,13 @@ pnpm install
 
 ---
 
-## 5. Cal.com (booking)
-
-1. Crée un compte sur [cal.com](https://cal.com) (handle `hulabe` si possible).
-2. Crée un type d'événement : nom `Brief Hulabe`, durée 30 min, slot type "Round-Robin" si plusieurs personnes plus tard.
-3. Récupère l'URL publique (ex: `https://cal.com/hulabe/intro`).
-4. Mets dans `.env.local` :
-   ```
-   NEXT_PUBLIC_CAL_URL="https://cal.com/hulabe/intro"
-   ```
-
----
-
-## 6. Vercel (hosting)
+## 5. Vercel (hosting)
 
 1. Crée un compte sur [vercel.com](https://vercel.com), connecte-le à Github.
 2. Push ton repo sur Github (privé recommandé).
 3. **Import Project** → sélectionne le repo Hulabe.
 4. Framework : Next.js (auto-détecté). Install command : `pnpm install`. Build command : `pnpm build`.
-5. **Environment Variables** : ajoute toutes les vars de `.env.example` (DATABASE_URL, DIRECT_URL, RESEND_API_KEY, RESEND_FROM_EMAIL, NOTIFICATION_EMAIL, NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_CAL_URL, NEXT_PUBLIC_POSTHOG_KEY, NEXT_PUBLIC_POSTHOG_HOST).
+5. **Environment Variables** : ajoute toutes les vars de `.env.example` (DATABASE_URL, DIRECT_URL, RESEND_API_KEY, RESEND_FROM_EMAIL, NOTIFICATION_EMAIL, NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_POSTHOG_KEY, NEXT_PUBLIC_POSTHOG_HOST, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, ADMIN_EMAILS).
 6. **Deploy**.
 
 ---
@@ -176,9 +195,13 @@ NOTIFICATION_EMAIL="hugo@hulabe.com"
 
 # Public
 NEXT_PUBLIC_SITE_URL="https://hulabe.com"
-NEXT_PUBLIC_CAL_URL="https://cal.com/hulabe/intro"
 
 # PostHog (analytics + session replay)
 NEXT_PUBLIC_POSTHOG_KEY="phc_xxxxxxxxxxxxxxxxxxxxxx"
 NEXT_PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
+
+# Supabase Auth (admin)
+NEXT_PUBLIC_SUPABASE_URL="https://xxxxxxxxxxxx.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIs..."
+ADMIN_EMAILS="support@hulabe.com"
 ```

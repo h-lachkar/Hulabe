@@ -90,6 +90,15 @@ export async function POST(req: Request) {
       },
     });
 
+    await prisma.activity.create({
+      data: {
+        kind: "LEAD_CREATED",
+        summary: `Simulator: ${data.serviceType} · ${data.timeline} · ${data.budget}`,
+        leadId: lead.id,
+        metadata: { source: "SIMULATOR", estimateMin: min, estimateMax: max },
+      },
+    });
+
     await Promise.allSettled([
       sendLeadConfirmation({ to: data.email, name: data.name, locale: data.locale }),
       sendLeadNotification({

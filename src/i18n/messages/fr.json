@@ -115,7 +115,6 @@
     "success": "Message reçu. On te recontacte sous 24h ouvrées.",
     "error": "Une erreur est survenue. Réessaie ou écris à support@hulabe.com.",
     "or": "ou",
-    "bookCall": "Réserver un créneau",
     "directEmail": "support@hulabe.com"
   },
   "simulator": {
@@ -194,7 +193,6 @@
       "rangeLabel": "Fourchette indicative",
       "disclaimer": "Estimation indicative. Prix final établi après brief de 30 min.",
       "next": "On te recontacte sous 24h ouvrées avec un devis chiffré.",
-      "bookCall": "Réserver le brief de 30 min",
       "backHome": "Retour à l'accueil",
       "thanks": "Merci"
     },

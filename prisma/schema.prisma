@@ -27,9 +27,146 @@ model Lead {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
+  notes      Note[]
+  activities Activity[]
+  projects   Project[]
+
   @@index([createdAt])
   @@index([status])
   @@index([email])
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  leadId      String?
+  lead        Lead?         @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  name        String
+  serviceType ServiceType?
+  status      ProjectStatus @default(DRAFT)
+
+  // pricing in cents to avoid float issues
+  priceQuotedCents Int?
+  priceFinalCents  Int?
+
+  startedAt DateTime?
+  shippedAt DateTime?
+
+  /// Random opaque token for client-portal magic-link access.
+  /// Clients reach the portal via a link that includes this token; the API
+  /// then issues a Supabase magic-link to lead.email after verification.
+  clientPortalToken String? @unique
+
+  /// Inclusive support window end. Default = shippedAt + 14 days when shipped.
+  supportEndsAt DateTime?
+
+  notes           Note[]
+  activities      Activity[]
+  invoices        Invoice[]
+  deliverables    Deliverable[]
+  supportRequests SupportRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([leadId])
+  @@index([createdAt])
+}
+
+model Note {
+  id          String   @id @default(cuid())
+  body        String   @db.Text
+  authorId    String?
+  authorEmail String?
+  /// If true, this note is also visible in the client portal.
+  /// Default false = internal admin-only.
+  visibleToClient Boolean @default(false)
+
+  leadId    String?
+  lead      Lead?    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+/// Project deliverables exposed in the client portal
+/// (links to repos, deployment URLs, design files, docs, screenshots).
+model Deliverable {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  kind        DeliverableKind @default(LINK)
+  title       String
+  description String?  @db.Text
+  url         String?
+  fileKey     String?  // future: S3/Supabase Storage object key
+  visibleToClient Boolean @default(true)
+  deliveredAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+/// Client-initiated support / change requests (used during the 14-day window
+/// included in every project, or via a paid maintenance contract).
+model SupportRequest {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  body        String   @db.Text
+  status      SupportRequestStatus @default(OPEN)
+  createdById String?  // Supabase user UUID (admin or client)
+  createdByEmail String?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  kind        ActivityKind
+  summary     String
+  metadata    Json?
+  authorId    String?
+  authorEmail String?
+
+  leadId    String?
+  lead      Lead?    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+model Invoice {
+  id        String        @id @default(cuid())
+  projectId String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  number    String        @unique
+  status    InvoiceStatus @default(DRAFT)
+  amountCents Int
+  issuedAt  DateTime?
+  paidAt    DateTime?
+  dueAt     DateTime?
+  notes     String?       @db.Text
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([projectId])
+  @@index([status])
 }
 
 enum LeadSource {
@@ -53,4 +190,52 @@ enum LeadStatus {
   QUALIFIED
   WON
   LOST
+}
+
+enum ProjectStatus {
+  DRAFT
+  QUOTED
+  SIGNED
+  IN_PROGRESS
+  IN_REVIEW
+  SHIPPED
+  ARCHIVED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum ActivityKind {
+  LEAD_CREATED
+  LEAD_STATUS_CHANGED
+  LEAD_NOTE_ADDED
+  PROJECT_CREATED
+  PROJECT_STATUS_CHANGED
+  PROJECT_NOTE_ADDED
+  INVOICE_CREATED
+  INVOICE_STATUS_CHANGED
+  DELIVERABLE_ADDED
+  SUPPORT_REQUEST_OPENED
+  SUPPORT_REQUEST_RESOLVED
+}
+
+enum DeliverableKind {
+  LINK
+  REPO
+  DEPLOYMENT
+  DESIGN
+  DOC
+  FILE
+}
+
+enum SupportRequestStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
 }

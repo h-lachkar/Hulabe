@@ -23,7 +23,7 @@ export function SectionMarker({ number, label, title, subtitle, className }: Pro
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: reduce ? 0 : 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className={cn("mb-10 sm:mb-14", className)}
+      className={cn("mb-8 sm:mb-10", className)}
     >
       <div className="flex items-baseline gap-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:gap-3 sm:text-sm">
         <span className="text-lime">{number}</span>

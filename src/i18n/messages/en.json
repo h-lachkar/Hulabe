@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Hulabe — Marketing sites, e-commerce, SaaS and apps. Fast and clean.",
-    "description": "Dev studio. 5 packaged services. Quote in 24h, kickoff in 7 days, clean code. Marketing sites from €800."
+    "title": "Hulabe. Marketing sites, e-commerce, SaaS and apps. Fast and clean.",
+    "description": "Dev studio. 5 packaged services. Quote in 24h, fast kickoff, clean code. Marketing sites from €800."
   },
   "nav": {
     "services": "Services",
@@ -13,25 +13,57 @@
   },
   "terminal": {
     "live": "live",
-    "title": "~/hulabe — zsh",
+    "title": "~/hulabe, zsh",
     "cmd": "hulabe ship --project=mvp",
     "line1": "→ Brief received · 30 min",
     "line2": "✓ Quote in 24 working hours",
     "line3": "→ Kickoff D+7",
     "line4": "✓ Build · Next.js · TypeScript · Supabase",
     "line5": "✓ Tests · Vercel preview",
-    "line6": "→ Demo · Slack feedback",
+    "line6": "→ Demo · quick feedback",
     "line7": "✓ Deploy production",
     "footer": "shipping in 2-8 weeks."
   },
   "hero": {
     "kicker": "Dev studio",
-    "titleLine1": "Build fast.",
-    "titleLine2": "Ship faster",
-    "subtitle": "Marketing sites, e-commerce, SaaS, mobile apps. Designed, coded, shipped. No committees, no fluff.",
+    "titleLine1": "Your idea,",
+    "titleLine2": "shipped",
+    "subtitle": "Marketing sites, online stores, SaaS and mobile apps. Fixed quote in 24h, delivery in weeks, not months. You get a real product that works.",
     "ctaPrimary": "Get my quote",
     "ctaSecondary": "See services",
-    "trust": "Quote in 24h · Kickoff in 7 days · Clean code"
+    "trust": "Quote in 24h · Fast kickoff · Fixed price"
+  },
+  "included": {
+    "badge": "Included in every project",
+    "title": "What you get",
+    "quote24h": {
+      "title": "Fixed quote in 24h",
+      "body": "Exact price, committed deadline, clear scope. No surprises."
+    },
+    "fastKickoff": {
+      "title": "Fast kickoff",
+      "body": "We don't make you wait months before writing the first line of code."
+    },
+    "fixedPrice": {
+      "title": "Fixed price on the quote",
+      "body": "You know exactly what you'll pay. No hidden add-ons."
+    },
+    "directContact": {
+      "title": "Direct contact, no middlemen",
+      "body": "No project manager, no tickets. You talk to the people who code."
+    },
+    "ownsCode": {
+      "title": "The code is yours",
+      "body": "You get the Git repo and all the accounts. No lock-in."
+    },
+    "support14d": {
+      "title": "14 days of support included",
+      "body": "Tweaks, bugs, small evolutions. Included in the quote."
+    },
+    "priceLabel": "Starting from",
+    "priceValue": "€500",
+    "timelineLabel": "Delivery",
+    "timelineValue": "1-8 wks"
   },
   "services": {
     "kicker": "Services",
@@ -39,46 +71,46 @@
     "titleAccent": "clear pricing.",
     "subtitle": "Each service has a price range, a timeline and concrete deliverables. No surprises.",
     "ctaSimulator": "Get your quote",
-    "disclaimer": "Indicative prices and timelines. Final pricing depends on exact scope — we lock that during the 30-min brief.",
+    "disclaimer": "Indicative prices and timelines. Final pricing depends on exact scope, we lock that during the 30-min brief.",
     "items": {
       "vitrine": {
         "title": "Marketing site",
-        "tagline": "A pro site that converts. Not a Wix template.",
+        "tagline": "A website that turns visitors into customers.",
         "price": "€800 – 2,500",
         "duration": "1-2 weeks",
         "tags": ["Next.js", "SEO", "CMS", "Animations"]
       },
       "ecommerce": {
         "title": "E-commerce store",
-        "tagline": "Shopify or custom store that actually sells.",
+        "tagline": "An online store ready to take payments.",
         "price": "€1,500 – 5,000",
         "duration": "2-3 weeks",
         "tags": ["Shopify", "Stripe", "Inventory", "Analytics"]
       },
       "shopify": {
         "title": "Shopify dev",
-        "tagline": "Custom Shopify apps, themes, integrations.",
+        "tagline": "Custom Shopify, tailored to your store.",
         "price": "€500 – 3,000",
         "duration": "1-3 weeks",
         "tags": ["Liquid", "Apps", "API", "Theme"]
       },
       "lovable": {
         "title": "Lovable to production",
-        "tagline": "Your no-code MVP turned into clean, scalable code.",
+        "tagline": "Turn your no-code MVP into a real product.",
         "price": "€2,000 – 8,000",
         "duration": "2-4 weeks",
         "tags": ["Next.js", "Supabase", "Auth", "Migration"]
       },
       "saas": {
         "title": "SaaS MVP",
-        "tagline": "From idea to live product in 8 weeks max.",
+        "tagline": "Launch your SaaS in 8 weeks max.",
         "price": "€5,000 – 15,000",
         "duration": "4-8 weeks",
         "tags": ["Next.js", "Stripe", "Auth", "Dashboard"]
       },
       "mobile": {
         "title": "Mobile app",
-        "tagline": "iOS + Android in React Native. One codebase.",
+        "tagline": "Your app on iOS and Android, in one shot.",
         "price": "€4,000 – 12,000",
         "duration": "4-8 weeks",
         "tags": ["React Native", "Expo", "Push", "Stores"]
@@ -92,7 +124,7 @@
     "steps": {
       "1": { "title": "30-min brief", "body": "We get your project, deadline, budget. You leave with a clear plan.", "meta": "30 MIN" },
       "2": { "title": "Fixed quote", "body": "Within 24 working hours. Scope, timeline, price. No hidden costs.", "meta": "< 24H" },
-      "3": { "title": "Build", "body": "Kickoff within 7 days. Regular demos, direct access on Slack or WhatsApp.", "meta": "1-8 WEEKS" },
+      "3": { "title": "Build", "body": "Fast kickoff. Regular demos, direct contact with the team that codes.", "meta": "1-8 WEEKS" },
       "4": { "title": "Ship", "body": "Go live, training, docs. 14 days of support included for tweaks.", "meta": "GO LIVE" }
     }
   },
@@ -112,9 +144,9 @@
         "type": "MARKETING SITE",
         "pitch": "Barcelona real-estate agency. Expertise, services, client process."
       },
-      "maisonPilates": {
-        "type": "E-COMMERCE",
-        "pitch": "Online Pilates studio. Catalog, seasonal sales, polished product journey."
+      "yourProject": {
+        "type": "COMING SOON",
+        "pitch": "What if the next one was yours? Let's talk."
       }
     }
   },
@@ -122,12 +154,12 @@
     "kicker": "FAQ",
     "title": "What people ask us most.",
     "items": {
-      "q1": { "q": "How long does it take to ship?", "a": "1 to 8 weeks depending on the project. Kickoff within 7 days of sign-off, regular demos along the way." },
+      "q1": { "q": "How long does it take to ship?", "a": "1 to 8 weeks depending on the project. Fast kickoff after sign-off, regular demos along the way." },
       "q2": { "q": "Do you handle copy, content, and design?", "a": "Yes on demand. We can take care of copywriting and design, or work alongside your team and existing partners." },
       "q3": { "q": "Do I own the code?", "a": "Always. You get the Git repo, hosting account, service credentials. No lock-in." },
       "q4": { "q": "What's the stack?", "a": "Web: Next.js, TypeScript, Tailwind, Supabase, Stripe, Vercel. Mobile: React Native + Expo. Shopify: Liquid + Hydrogen." },
-      "q5": { "q": "How do we collaborate during the project?", "a": "Direct Slack or WhatsApp, regular demos, a preview environment that's always live. No committees, no 12-layer Gantt charts." },
-      "q6": { "q": "What happens after launch?", "a": "We stay reachable for 14 days for tweaks. After that you can sign a maintenance contract, or take over — it's your code." }
+      "q5": { "q": "How do we collaborate during the project?", "a": "Direct contact with the devs, regular demos, a preview environment that's always live. No committees, no 12-layer Gantt charts." },
+      "q6": { "q": "What happens after launch?", "a": "We stay reachable for 14 days for tweaks. After that you can sign a maintenance contract, or take over, it's your code." }
     }
   },
   "contact": {
@@ -164,7 +196,7 @@
         "LOVABLE_TO_APP": "Lovable / no-code migration",
         "SAAS_MVP": "SaaS / web MVP",
         "MOBILE_APP": "Mobile application",
-        "OTHER": "Other — let me describe"
+        "OTHER": "Other, let me describe"
       },
       "otherPlaceholder": "Describe your project in a few words…"
     },
@@ -188,10 +220,10 @@
       "title": "Desired timeline?",
       "subtitle": "Tighter = pricier. Honest.",
       "options": {
-        "asap": "ASAP — under 2 weeks",
+        "asap": "ASAP, under 2 weeks",
         "1month": "Within 1 month",
         "3months": "2 to 3 months",
-        "flexible": "Flexible — no rush"
+        "flexible": "Flexible, no rush"
       }
     },
     "step4": {
@@ -251,7 +283,7 @@
     "closeMenu": "Close menu"
   },
   "format": {
-    "dash": "—",
+    "dash": "–",
     "timeAgo": {
       "now": "just now",
       "minutes": "{n} min ago",
@@ -306,7 +338,7 @@
       "heading": "Sign in.",
       "subheading": "Enter your email and password. If this is your first sign-in or you forgot your password, use the link below the form.",
       "setupNeededTitle": "Setup required",
-      "setupNeededBody": "No admin has been created yet. Create the first OWNER via direct SQL on Supabase — see {file} §5. Then use \"First time?\" below to set your password.",
+      "setupNeededBody": "No admin has been created yet. Create the first OWNER via direct SQL on Supabase, see {file} §5. Then use \"First time?\" below to set your password.",
       "recoverEmailLabel": "Admin email",
       "recoverEmailPlaceholder": "admin@hulabe.com",
       "signinEmailPlaceholder": "admin@hulabe.com",
@@ -429,7 +461,7 @@
         "message": "Message",
         "simulatorAnswers": "Simulator answers",
         "notes": "Internal notes",
-        "notePlaceholder": "Internal note (never visible to the client) — e.g. called, meeting Tue 10am.",
+        "notePlaceholder": "Internal note (never visible to the client), e.g, called, meeting Tue 10am.",
         "addNote": "Add",
         "noNotes": "No notes yet.",
         "timeline": "Timeline",
@@ -447,7 +479,7 @@
       "kicker": "PIPELINE",
       "title": "Projects.",
       "subtitle": "{count} active projects · archive hidden",
-      "empty": "—",
+      "empty": "–",
       "detail": {
         "pipeline": "Pipeline",
         "leadPrefix": "Lead: ",
@@ -489,7 +521,7 @@
       "kicker": "INVOICES",
       "title": "Invoices.",
       "subtitle": "Simple tracking. Stripe / auto-billing comes later.",
-      "empty": "No invoices yet. This section becomes useful once we start issuing them — the Invoice table is already wired DB-side.",
+      "empty": "No invoices yet. This section becomes useful once we start issuing them, the Invoice table is already wired DB-side.",
       "columns": {
         "number": "No.",
         "status": "Status",
@@ -542,7 +574,7 @@
         "deactivate": "Deactivate",
         "reactivate": "Reactivate",
         "delete": "Delete",
-        "deleteConfirm": "Permanently delete {email}? This action is irreversible (Supabase Auth keeps the account — it can be re-invited later).",
+        "deleteConfirm": "Permanently delete {email}? This action is irreversible (Supabase Auth keeps the account, it can be re-invited later).",
         "roles": {
           "OWNER": "Owner",
           "ADMIN": "Admin",
@@ -643,7 +675,7 @@
       "noHistory": "Nothing to show yet.",
       "support": "Support",
       "supportActiveBody": "You have a support window included until {date}. Unlimited tickets during this period.",
-      "supportExpiredBody": "The included 14-day support window has expired. You can still open a ticket — we'll come back with a quote if it's out of scope.",
+      "supportExpiredBody": "The included 14-day support window has expired. You can still open a ticket, we'll come back with a quote if it's out of scope.",
       "supportPlaceholder": "Describe what you need. Include a URL and a screenshot if useful.",
       "send": "Send",
       "details": "Details",

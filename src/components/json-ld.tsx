@@ -116,7 +116,7 @@ const FAQS: Record<Locale, FaqItem[]> = {
   fr: [
     {
       q: "Combien de temps pour livrer ?",
-      a: "1 à 8 semaines selon le projet. Démarrage sous 7 jours après signature, demos régulières en cours de route.",
+      a: "1 à 8 semaines selon le projet. Démarrage rapide après signature, demos régulières en cours de route.",
     },
     {
       q: "Vous gérez le copy, le contenu, le design ?",
@@ -132,17 +132,17 @@ const FAQS: Record<Locale, FaqItem[]> = {
     },
     {
       q: "Comment on collabore pendant le projet ?",
-      a: "Slack ou WhatsApp en direct, demos régulières, environnement de preview en continu. Pas de comité, pas de Gantt à 12 niveaux.",
+      a: "Contact direct avec les devs, demos régulières, environnement de preview en continu. Pas de comité, pas de Gantt à 12 niveaux.",
     },
     {
       q: "Et après la mise en ligne ?",
-      a: "On reste joignable 14 jours pour les ajustements. Ensuite tu peux signer un contrat de maintenance, ou tu reprends la main — c'est ton code.",
+      a: "On reste joignable 14 jours pour les ajustements. Ensuite tu peux signer un contrat de maintenance, ou tu reprends la main, c'est ton code.",
     },
   ],
   en: [
     {
       q: "How long does it take to ship?",
-      a: "1 to 8 weeks depending on the project. Kickoff within 7 days of sign-off, regular demos along the way.",
+      a: "1 to 8 weeks depending on the project. Fast kickoff after sign-off, regular demos along the way.",
     },
     {
       q: "Do you handle copy, content, and design?",
@@ -158,17 +158,17 @@ const FAQS: Record<Locale, FaqItem[]> = {
     },
     {
       q: "How do we collaborate during the project?",
-      a: "Direct Slack or WhatsApp, regular demos, a preview environment that's always live. No committees, no 12-layer Gantt charts.",
+      a: "Direct contact with the devs, regular demos, a preview environment that's always live. No committees, no 12-layer Gantt charts.",
     },
     {
       q: "What happens after launch?",
-      a: "We stay reachable for 14 days for tweaks. After that you can sign a maintenance contract, or take over — it's your code.",
+      a: "We stay reachable for 14 days for tweaks. After that you can sign a maintenance contract, or take over, it's your code.",
     },
   ],
   es: [
     {
       q: "¿Cuánto se tarda en entregar?",
-      a: "1 a 8 semanas según el proyecto. Arranque en 7 días tras firma, demos regulares por el camino.",
+      a: "1 a 8 semanas según el proyecto. Arranque rápido tras firma, demos regulares por el camino.",
     },
     {
       q: "¿Os encargáis del copy, contenido y diseño?",
@@ -184,11 +184,11 @@ const FAQS: Record<Locale, FaqItem[]> = {
     },
     {
       q: "¿Cómo colaboramos durante el proyecto?",
-      a: "Slack o WhatsApp directo, demos regulares, entorno de preview siempre activo. Sin comités, sin Gantt de 12 niveles.",
+      a: "Contacto directo con los devs, demos regulares, entorno de preview siempre activo. Sin comités, sin Gantt de 12 niveles.",
     },
     {
       q: "¿Y después del lanzamiento?",
-      a: "Seguimos disponibles 14 días para ajustes. Luego puedes firmar mantenimiento o tomar el control tú mismo — es tu código.",
+      a: "Seguimos disponibles 14 días para ajustes. Luego puedes firmar mantenimiento o tomar el control tú mismo, es tu código.",
     },
   ],
 };
@@ -236,10 +236,10 @@ export function HomeJsonLd({ locale }: { locale: Locale }) {
     sameAs: [],
     description:
       locale === "fr"
-        ? "Studio de développement web et mobile. Sites vitrines, e-commerce, SaaS et applications mobiles livrés rapidement avec un code propre. Devis sous 24h, démarrage sous 7 jours."
+        ? "Studio de développement web et mobile. Sites vitrines, e-commerce, SaaS et applications mobiles livrés rapidement avec un code propre. Devis sous 24h, démarrage rapide."
         : locale === "es"
-          ? "Estudio de desarrollo web y móvil. Webs, e-commerce, SaaS y aplicaciones móviles entregados rápido con código limpio. Presupuesto en 24h, arranque en 7 días."
-          : "Web and mobile development studio. Marketing sites, e-commerce, SaaS and mobile apps shipped fast with clean code. Quote in 24h, kickoff in 7 days.",
+          ? "Estudio de desarrollo web y móvil. Webs, e-commerce, SaaS y aplicaciones móviles entregados rápido con código limpio. Presupuesto en 24h, arranque rápido."
+          : "Web and mobile development studio. Marketing sites, e-commerce, SaaS and mobile apps shipped fast with clean code. Quote in 24h, fast kickoff.",
   };
 
   const website = {

@@ -16,7 +16,7 @@ export function Faq() {
   const ti = useTranslations("faq.items");
 
   return (
-    <section id="faq" className="relative scroll-mt-20 border-t border-border py-20 sm:py-32">
+    <section id="faq" className="relative scroll-mt-20 border-t border-border py-14 sm:py-20">
       <div className="container-page max-w-3xl">
         <SectionMarker number="05" label={t("kicker")} title={t("title")} />
 

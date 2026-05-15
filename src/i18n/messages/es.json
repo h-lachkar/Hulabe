@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Hulabe — Webs, e-commerce, SaaS y apps. Rápido y limpio.",
-    "description": "Estudio de desarrollo. 5 servicios empaquetados. Presupuesto en 24h, arranque en 7 días, código limpio. Webs desde 800€."
+    "title": "Hulabe. Webs, e-commerce, SaaS y apps. Rápido y limpio.",
+    "description": "Estudio de desarrollo. 5 servicios empaquetados. Presupuesto en 24h, arranque rápido, código limpio. Webs desde 800€."
   },
   "nav": {
     "services": "Servicios",
@@ -13,25 +13,57 @@
   },
   "terminal": {
     "live": "live",
-    "title": "~/hulabe — zsh",
+    "title": "~/hulabe, zsh",
     "cmd": "hulabe ship --project=mvp",
     "line1": "→ Brief recibido · 30 min",
     "line2": "✓ Presupuesto en 24h hábiles",
     "line3": "→ Arranque D+7",
     "line4": "✓ Build · Next.js · TypeScript · Supabase",
     "line5": "✓ Tests · Vercel preview",
-    "line6": "→ Demo · feedback en Slack",
+    "line6": "→ Demo · feedback rápido",
     "line7": "✓ Deploy producción",
     "footer": "shipping in 2-8 weeks."
   },
   "hero": {
     "kicker": "Estudio dev",
-    "titleLine1": "Build fast.",
-    "titleLine2": "Ship faster",
-    "subtitle": "Webs, e-commerce, SaaS, apps móviles. Pensados, codeados, entregados. Sin comités, sin paja.",
+    "titleLine1": "Tu idea,",
+    "titleLine2": "en línea",
+    "subtitle": "Webs, tiendas, SaaS y apps móviles. Presupuesto fijo en 24h, entrega en semanas, no en meses. Recibes un producto real que funciona.",
     "ctaPrimary": "Calcular presupuesto",
     "ctaSecondary": "Ver servicios",
-    "trust": "Presupuesto en 24h · Arranque en 7 días · Código limpio"
+    "trust": "Presupuesto en 24h · Arranque rápido · Precio fijo"
+  },
+  "included": {
+    "badge": "Incluido en cada proyecto",
+    "title": "Lo que recibes",
+    "quote24h": {
+      "title": "Presupuesto fijo en 24h",
+      "body": "Precio exacto, plazo comprometido, alcance claro. Sin sorpresas."
+    },
+    "fastKickoff": {
+      "title": "Arranque rápido",
+      "body": "No te hacemos esperar meses antes de escribir la primera línea."
+    },
+    "fixedPrice": {
+      "title": "Precio fijo en el presupuesto",
+      "body": "Sabes exactamente lo que vas a pagar. Sin extras ocultos."
+    },
+    "directContact": {
+      "title": "Contacto directo, sin intermediarios",
+      "body": "Sin project manager, sin tickets. Hablas con quien codea."
+    },
+    "ownsCode": {
+      "title": "El código es tuyo",
+      "body": "Te llevas el repo Git y todas las cuentas. Sin lock-in."
+    },
+    "support14d": {
+      "title": "14 días de soporte incluidos",
+      "body": "Ajustes, bugs, pequeñas evoluciones. Incluido en el presupuesto."
+    },
+    "priceLabel": "Desde",
+    "priceValue": "500€",
+    "timelineLabel": "Entrega",
+    "timelineValue": "1-8 sem."
   },
   "services": {
     "kicker": "Servicios",
@@ -39,46 +71,46 @@
     "titleAccent": "precios claros.",
     "subtitle": "Cada servicio tiene rango de precios, plazo y entregables concretos. Sin sorpresas.",
     "ctaSimulator": "Calcula tu presupuesto",
-    "disclaimer": "Precios y plazos indicativos. La tarifa final depende del alcance exacto — la fijamos durante el brief de 30 min.",
+    "disclaimer": "Precios y plazos indicativos. La tarifa final depende del alcance exacto, la fijamos durante el brief de 30 min.",
     "items": {
       "vitrine": {
         "title": "Web corporativa",
-        "tagline": "Web pro que convierte. No una plantilla Wix.",
+        "tagline": "Una web que convierte visitantes en clientes.",
         "price": "800 – 2 500€",
         "duration": "1-2 semanas",
         "tags": ["Next.js", "SEO", "CMS", "Animaciones"]
       },
       "ecommerce": {
         "title": "E-commerce",
-        "tagline": "Tienda Shopify o custom que vende de verdad.",
+        "tagline": "Una tienda online lista para cobrar.",
         "price": "1 500 – 5 000€",
         "duration": "2-3 semanas",
         "tags": ["Shopify", "Stripe", "Stock", "Analítica"]
       },
       "shopify": {
         "title": "Dev Shopify custom",
-        "tagline": "Apps Shopify, themes custom, integraciones.",
+        "tagline": "Shopify a medida para tu tienda.",
         "price": "500 – 3 000€",
         "duration": "1-3 semanas",
         "tags": ["Liquid", "Apps", "API", "Theme"]
       },
       "lovable": {
         "title": "Lovable → Producción",
-        "tagline": "Tu MVP no-code en código limpio y escalable.",
+        "tagline": "Pasa tu MVP no-code a producto real.",
         "price": "2 000 – 8 000€",
         "duration": "2-4 semanas",
         "tags": ["Next.js", "Supabase", "Auth", "Migración"]
       },
       "saas": {
         "title": "SaaS MVP",
-        "tagline": "De la idea al producto en línea en 8 semanas máx.",
+        "tagline": "Lanza tu SaaS en 8 semanas máx.",
         "price": "5 000 – 15 000€",
         "duration": "4-8 semanas",
         "tags": ["Next.js", "Stripe", "Auth", "Dashboard"]
       },
       "mobile": {
         "title": "App móvil",
-        "tagline": "iOS + Android en React Native. Una codebase.",
+        "tagline": "Tu app en iOS y Android, en una.",
         "price": "4 000 – 12 000€",
         "duration": "4-8 semanas",
         "tags": ["React Native", "Expo", "Push", "Stores"]
@@ -92,7 +124,7 @@
     "steps": {
       "1": { "title": "Brief 30 min", "body": "Entendemos tu proyecto, plazo, presupuesto. Te vas con un plan claro.", "meta": "30 MIN" },
       "2": { "title": "Presupuesto fijo", "body": "En menos de 24h hábiles. Alcance, calendario, precio. Sin extras ocultos.", "meta": "< 24H" },
-      "3": { "title": "Build", "body": "Arranque en 7 días. Demos regulares, acceso directo en Slack o WhatsApp.", "meta": "1-8 SEMANAS" },
+      "3": { "title": "Build", "body": "Arranque rápido. Demos regulares, contacto directo con el equipo que codea.", "meta": "1-8 SEMANAS" },
       "4": { "title": "Ship", "body": "Puesta en línea, formación, docs. 14 días de soporte incluidos para ajustes.", "meta": "GO LIVE" }
     }
   },
@@ -112,9 +144,9 @@
         "type": "WEB",
         "pitch": "Inmobiliaria barcelonesa. Expertise, servicios, proceso cliente."
       },
-      "maisonPilates": {
-        "type": "E-COMMERCE",
-        "pitch": "Estudio de Pilates online. Catálogo, ventas de temporada, recorrido de producto cuidado."
+      "yourProject": {
+        "type": "PRÓXIMAMENTE",
+        "pitch": "¿Y si el siguiente fuera el tuyo? Hablémoslo."
       }
     }
   },
@@ -122,12 +154,12 @@
     "kicker": "FAQ",
     "title": "Las preguntas más frecuentes.",
     "items": {
-      "q1": { "q": "¿Cuánto se tarda en entregar?", "a": "1 a 8 semanas según el proyecto. Arranque en 7 días tras firma, demos regulares por el camino." },
+      "q1": { "q": "¿Cuánto se tarda en entregar?", "a": "1 a 8 semanas según el proyecto. Arranque rápido tras firma, demos regulares por el camino." },
       "q2": { "q": "¿Os encargáis del copy, contenido y diseño?", "a": "Sí, opcional. Podemos ocuparnos del copywriting y el diseño, o trabajar junto a tu equipo y partners actuales." },
       "q3": { "q": "¿El código es mío?", "a": "Siempre. Te llevas el repo Git, la cuenta de hosting, las credenciales de los servicios. Sin lock-in." },
       "q4": { "q": "¿Qué stack usáis?", "a": "Web: Next.js, TypeScript, Tailwind, Supabase, Stripe, Vercel. Móvil: React Native + Expo. Shopify: Liquid + Hydrogen." },
-      "q5": { "q": "¿Cómo colaboramos durante el proyecto?", "a": "Slack o WhatsApp directo, demos regulares, entorno de preview siempre activo. Sin comités, sin Gantt de 12 niveles." },
-      "q6": { "q": "¿Y después del lanzamiento?", "a": "Seguimos disponibles 14 días para ajustes. Luego puedes firmar mantenimiento o tomar el control tú mismo — es tu código." }
+      "q5": { "q": "¿Cómo colaboramos durante el proyecto?", "a": "Contacto directo con los devs, demos regulares, entorno de preview siempre activo. Sin comités, sin Gantt de 12 niveles." },
+      "q6": { "q": "¿Y después del lanzamiento?", "a": "Seguimos disponibles 14 días para ajustes. Luego puedes firmar mantenimiento o tomar el control tú mismo, es tu código." }
     }
   },
   "contact": {
@@ -164,7 +196,7 @@
         "LOVABLE_TO_APP": "Migración Lovable / no-code",
         "SAAS_MVP": "SaaS / MVP web",
         "MOBILE_APP": "Aplicación móvil",
-        "OTHER": "Otro — describir"
+        "OTHER": "Otro, describir"
       },
       "otherPlaceholder": "Describe tu proyecto en pocas palabras…"
     },
@@ -188,10 +220,10 @@
       "title": "¿Plazo deseado?",
       "subtitle": "Más ajustado = más caro. Honesto.",
       "options": {
-        "asap": "ASAP — menos de 2 semanas",
+        "asap": "ASAP, menos de 2 semanas",
         "1month": "En 1 mes",
         "3months": "2 a 3 meses",
-        "flexible": "Flexible — sin prisa"
+        "flexible": "Flexible, sin prisa"
       }
     },
     "step4": {
@@ -251,7 +283,7 @@
     "closeMenu": "Cerrar menú"
   },
   "format": {
-    "dash": "—",
+    "dash": "–",
     "timeAgo": {
       "now": "ahora mismo",
       "minutes": "hace {n} min",
@@ -306,7 +338,7 @@
       "heading": "Iniciar sesión.",
       "subheading": "Introduce tu email y contraseña. Si es tu primera vez o has olvidado tu contraseña, usa el enlace debajo del formulario.",
       "setupNeededTitle": "Setup necesario",
-      "setupNeededBody": "No hay ningún admin creado todavía. Crea el primer OWNER con SQL directo en Supabase — ver {file} §5. Luego usa «¿Primera vez?» abajo para definir tu contraseña.",
+      "setupNeededBody": "No hay ningún admin creado todavía. Crea el primer OWNER con SQL directo en Supabase, ver {file} §5. Luego usa «¿Primera vez?» abajo para definir tu contraseña.",
       "recoverEmailLabel": "Email admin",
       "recoverEmailPlaceholder": "admin@hulabe.com",
       "signinEmailPlaceholder": "admin@hulabe.com",
@@ -429,7 +461,7 @@
         "message": "Mensaje",
         "simulatorAnswers": "Respuestas simulator",
         "notes": "Notas internas",
-        "notePlaceholder": "Nota interna (nunca visible para el cliente) — ej: llamado, cita martes 10h.",
+        "notePlaceholder": "Nota interna (nunca visible para el cliente), ej: llamado, cita martes 10h.",
         "addNote": "Añadir",
         "noNotes": "Aún no hay notas.",
         "timeline": "Timeline",
@@ -447,7 +479,7 @@
       "kicker": "PIPELINE",
       "title": "Proyectos.",
       "subtitle": "{count} proyectos activos · archivo oculto",
-      "empty": "—",
+      "empty": "–",
       "detail": {
         "pipeline": "Pipeline",
         "leadPrefix": "Lead: ",
@@ -489,7 +521,7 @@
       "kicker": "INVOICES",
       "title": "Facturas.",
       "subtitle": "Seguimiento simple. La integración Stripe / facturación auto llegará después.",
-      "empty": "Aún no hay facturas. Esta sección será útil cuando empecemos a emitirlas — la tabla Invoice ya está lista en DB.",
+      "empty": "Aún no hay facturas. Esta sección será útil cuando empecemos a emitirlas, la tabla Invoice ya está lista en DB.",
       "columns": {
         "number": "Nº",
         "status": "Estado",
@@ -542,7 +574,7 @@
         "deactivate": "Desactivar",
         "reactivate": "Reactivar",
         "delete": "Eliminar",
-        "deleteConfirm": "¿Eliminar definitivamente {email}? Esta acción es irreversible (pero Supabase Auth conserva la cuenta — podrá ser reinvitada después).",
+        "deleteConfirm": "¿Eliminar definitivamente {email}? Esta acción es irreversible (pero Supabase Auth conserva la cuenta, podrá ser reinvitada después).",
         "roles": {
           "OWNER": "Owner",
           "ADMIN": "Admin",
@@ -643,7 +675,7 @@
       "noHistory": "Nada que mostrar por ahora.",
       "support": "Soporte",
       "supportActiveBody": "Tienes una ventana de soporte incluida hasta el {date}. Tickets ilimitados durante este periodo.",
-      "supportExpiredBody": "La ventana soporte 14 días incluida ha expirado. Puedes abrir un ticket igualmente — te respondemos con un presupuesto si está fuera de alcance.",
+      "supportExpiredBody": "La ventana soporte 14 días incluida ha expirado. Puedes abrir un ticket igualmente, te respondemos con un presupuesto si está fuera de alcance.",
       "supportPlaceholder": "Describe lo que necesitas. Incluye URL y captura de pantalla si es útil.",
       "send": "Enviar",
       "details": "Detalles",

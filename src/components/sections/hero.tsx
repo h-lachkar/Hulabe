@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Terminal } from "@/components/terminal";
+import { WhatsIncluded } from "@/components/whats-included";
 
 export function Hero() {
   const t = useTranslations("hero");
@@ -36,7 +36,7 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="container-page relative pb-20 pt-14 sm:pb-28 sm:pt-24 lg:pb-32">
+      <div className="container-page relative pb-12 pt-10 sm:pb-16 sm:pt-20 lg:pb-20">
         <div className="grid items-center gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-10">
           {/* Left: text */}
           <div className="lg:col-span-7">
@@ -94,9 +94,9 @@ export function Hero() {
             </motion.ul>
           </div>
 
-          {/* Right: terminal */}
+          {/* Right: what's included card */}
           <motion.div {...v(0.18)} className="lg:col-span-5">
-            <Terminal />
+            <WhatsIncluded />
           </motion.div>
         </div>
       </div>

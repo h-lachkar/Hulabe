@@ -211,7 +211,7 @@ export function Simulator() {
     return (
       <section
         id="simulator"
-        className="relative scroll-mt-20 border-t border-border py-24 sm:py-32"
+        className="relative scroll-mt-20 border-t border-border py-14 sm:py-20"
       >
         <div className="container-page max-w-2xl">
           <Result
@@ -240,7 +240,7 @@ export function Simulator() {
       };
 
   return (
-    <section id="simulator" className="relative scroll-mt-20 border-t border-border py-20 sm:py-32">
+    <section id="simulator" className="relative scroll-mt-20 border-t border-border py-14 sm:py-20">
       <div className="container-page max-w-3xl">
         <SectionMarker
           number="02"

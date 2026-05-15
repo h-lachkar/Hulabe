@@ -22,7 +22,7 @@ export function Services() {
   const ti = useTranslations("services.items");
 
   return (
-    <section id="services" className="relative scroll-mt-20 py-24 sm:py-32">
+    <section id="services" className="relative scroll-mt-20 border-t border-border py-14 sm:py-20">
       <div className="container-page">
         <SectionMarker
           number="01"

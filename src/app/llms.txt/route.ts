@@ -6,7 +6,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
 
 const CONTENT = `# Hulabe
 
-> Studio de développement web et mobile (Paris / remote). Sites marketing, e-commerce, SaaS MVP, applications mobiles et migrations no-code livrés rapidement avec un code propre. Devis sous 24h, démarrage sous 7 jours, code à toi.
+> Studio de développement web et mobile (Paris / remote). Sites marketing, e-commerce, SaaS MVP, applications mobiles et migrations no-code livrés rapidement avec un code propre. Devis sous 24h, démarrage rapide, code à toi.
 
 ## What we do
 
@@ -46,16 +46,16 @@ iOS + Android app in React Native + Expo (single codebase). Push notifications, 
 
 ## Process
 
-1. **30-minute brief** — Free, no commitment. We understand your project, timeline, budget. You leave with a clear plan.
-2. **Fixed quote** — Within 24 working hours. Scope, timeline, price. No hidden costs.
-3. **Build** — Kickoff within 7 days. Regular demos, direct access on Slack or WhatsApp.
-4. **Ship** — Go live, training, documentation. 14 days of support included for tweaks.
+1. **30-minute brief**. Free, no commitment. We understand your project, timeline, budget. You leave with a clear plan.
+2. **Fixed quote**. Within 24 working hours. Scope, timeline, price. No hidden costs.
+3. **Build**. Fast kickoff. Regular demos, direct contact with the team that codes.
+4. **Ship**. Go live, training, documentation. 14 days of support included for tweaks.
 
 ## Pricing & payments
 
 - 30% on signing, 30% mid-project, 40% on delivery
 - Projects > €10k can be split into monthly sprints
-- Indicative prices — final pricing locked during the 30-min brief based on exact scope
+- Indicative prices, final pricing locked during the 30-min brief based on exact scope
 
 ## Stack & technologies
 
@@ -67,22 +67,21 @@ iOS + Android app in React Native + Expo (single codebase). Push notifications, 
 
 ## Who we work with
 
-- **Founders solo / early-stage** — need an MVP fast, budget-conscious
-- **Freelancers / consultants** — want a serious portfolio site that converts
-- **SMBs / agencies** — need a reactive technical overflow partner
-- **Lovable / no-code MVPs** — niche: bringing no-code MVPs into production code
+- **Founders solo / early-stage**, need an MVP fast, budget-conscious
+- **Freelancers / consultants**, want a serious portfolio site that converts
+- **SMBs / agencies**, need a reactive technical overflow partner
+- **Lovable / no-code MVPs**, niche: bringing no-code MVPs into production code
 
 We don't work with: large corporate accounts, slow committees, projects that demand 12-layer Gantt charts.
 
 ## Selected work
 
-- **RektAds** ([rektads.com](https://rektads.com)) — Meta ads analysis platform. Next.js + TypeScript + Tailwind. Scores creatives, detects fatigue, generates next winners.
-- **BCN Immobilier** ([bcn-immobilier.com](https://bcn-immobilier.com)) — Barcelona real estate agency. Multilingual site with property listings, services, processes.
-- **Maison Pilates** ([maisonpilates.fr](https://maisonpilates.fr)) — Online Pilates studio. Shopify e-commerce with seasonal sales, polished product journey.
+- **RektAds** ([rektads.com](https://rektads.com)). Meta ads analysis platform. Next.js + TypeScript + Tailwind. Scores creatives, detects fatigue, generates next winners.
+- **BCN Immobilier** ([bcn-immobilier.com](https://bcn-immobilier.com)). Barcelona real estate agency. Multilingual site with property listings, services, processes.
 
 ## FAQ
 
-**How long does it take to ship?** 1 to 8 weeks depending on the project. Kickoff within 7 days of sign-off.
+**How long does it take to ship?** 1 to 8 weeks depending on the project. Fast kickoff after sign-off.
 
 **Do you handle copy, content, and design?** Yes on demand. We can take care of copywriting and design, or work alongside your team and existing partners.
 
@@ -90,9 +89,9 @@ We don't work with: large corporate accounts, slow committees, projects that dem
 
 **What stack do you use?** Web: Next.js, TypeScript, Tailwind, Supabase, Stripe, Vercel. Mobile: React Native + Expo. Shopify: Liquid + Hydrogen.
 
-**How do you collaborate during the project?** Direct Slack or WhatsApp, regular demos, a preview environment that's always live. No committees.
+**How do you collaborate during the project?** Direct contact with the devs, regular demos, a preview environment that's always live. No committees.
 
-**What happens after launch?** 14 days of support included for tweaks. After that you can sign a maintenance contract, or take over — it's your code.
+**What happens after launch?** 14 days of support included for tweaks. After that you can sign a maintenance contract, or take over, it's your code.
 
 ## Contact
 

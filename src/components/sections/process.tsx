@@ -15,7 +15,7 @@ export function Process() {
   return (
     <section
       id="process"
-      className="relative scroll-mt-20 border-t border-border py-20 sm:py-32"
+      className="relative scroll-mt-20 border-t border-border py-14 sm:py-20"
     >
       <div className="container-page">
         <SectionMarker

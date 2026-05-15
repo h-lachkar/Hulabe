@@ -58,12 +58,12 @@ const CASES_SEED: CaseSeed[] = [
     screenshotUrl: "/cases/bcn-immobilier.png",
   },
   {
-    slug: "maisonPilates",
+    slug: "yourProject",
     number: "03",
-    title: "Maison Pilates",
-    stack: ["Shopify", "Liquid", "Animations"],
-    href: "https://maisonpilates.fr",
-    screenshotUrl: "/cases/maisonpilates.png",
+    title: "Your project",
+    stack: [],
+    href: null,
+    comingSoon: true,
   },
 ];
 
@@ -80,7 +80,7 @@ export function CaseStudies() {
   return (
     <section
       id="cases"
-      className="relative scroll-mt-20 border-t border-border py-20 sm:py-32"
+      className="relative scroll-mt-20 border-t border-border py-14 sm:py-20"
     >
       <div className="container-page">
         <SectionMarker

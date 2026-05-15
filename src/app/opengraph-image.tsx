@@ -91,7 +91,7 @@ export default async function Image() {
           <span>·</span>
           <span>Quote in 24h</span>
           <span>·</span>
-          <span>Kickoff in 7 days</span>
+          <span>Fast kickoff</span>
         </div>
       </div>
     ),

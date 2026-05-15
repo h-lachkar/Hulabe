@@ -50,9 +50,9 @@ const VITRINE_FLOW: ServiceFlow = {
       kind: "single",
       title: t("Combien de pages ?", "How many pages?", "¿Cuántas páginas?"),
       subtitle: t(
-        "Une estimation suffit, on précisera ensemble.",
-        "A rough estimate is fine — we'll refine together.",
-        "Una estimación aproximada está bien.",
+        "Home, services, contact comptent chacune pour 1.",
+        "Home, services, contact each count as 1.",
+        "Inicio, servicios, contacto cuentan 1 cada una.",
       ),
       options: [
         {
@@ -73,40 +73,40 @@ const VITRINE_FLOW: ServiceFlow = {
       ],
     },
     {
-      id: "cms",
+      id: "design-start",
       kind: "single",
       title: t(
-        "CMS pour modifier le contenu ?",
-        "CMS to edit content?",
-        "¿CMS para editar contenido?",
+        "On part de quoi pour le design ?",
+        "Design starting point?",
+        "¿Punto de partida del diseño?",
       ),
       options: [
         {
-          value: "none",
+          value: "figma",
           label: t(
-            "Non, contenu fixe",
-            "No, static content",
-            "No, contenido fijo",
+            "J'ai déjà mes maquettes Figma",
+            "I already have Figma mockups",
+            "Ya tengo maquetas Figma",
+          ),
+          multiplier: 0.85,
+        },
+        {
+          value: "brand",
+          label: t(
+            "J'ai logo + charte, à designer dessus",
+            "Logo + brand done, design on top",
+            "Logo + marca lista, diseñar encima",
           ),
           multiplier: 1,
         },
         {
-          value: "simple",
+          value: "scratch",
           label: t(
-            "Simple — je veux modifier les textes",
-            "Simple — let me edit copy",
-            "Simple — para editar textos",
+            "Tout à partir de zéro",
+            "From scratch",
+            "Desde cero",
           ),
-          multiplier: 1.15,
-        },
-        {
-          value: "advanced",
-          label: t(
-            "Avancé — Notion, Sanity, ou équivalent",
-            "Advanced — Notion, Sanity, or similar",
-            "Avanzado — Notion, Sanity o similar",
-          ),
-          multiplier: 1.3,
+          multiplier: 1.2,
         },
       ],
     },
@@ -114,20 +114,19 @@ const VITRINE_FLOW: ServiceFlow = {
       id: "extras",
       kind: "multi",
       title: t(
-        "Ajouts spécifiques ?",
-        "Specific add-ons?",
-        "¿Complementos específicos?",
-      ),
-      subtitle: t(
-        "Coche tout ce qui s'applique.",
-        "Check anything that applies.",
-        "Marca lo que aplique.",
+        "Ce qu'il faut en plus ?",
+        "What else do you need?",
+        "¿Qué más necesitas?",
       ),
       options: [
         {
-          value: "blog",
-          label: t("Blog / actualités", "Blog / news", "Blog / noticias"),
-          multiplier: 1.1,
+          value: "cms",
+          label: t(
+            "CMS pour modifier mes textes",
+            "CMS to edit my copy",
+            "CMS para editar mis textos",
+          ),
+          multiplier: 1.15,
         },
         {
           value: "multilang",
@@ -139,40 +138,27 @@ const VITRINE_FLOW: ServiceFlow = {
           multiplier: 1.15,
         },
         {
-          value: "animations",
-          label: t(
-            "Animations custom",
-            "Custom animations",
-            "Animaciones custom",
-          ),
+          value: "blog",
+          label: t("Blog / actualités", "Blog / news", "Blog / noticias"),
           multiplier: 1.1,
-        },
-        {
-          value: "newsletter",
-          label: t(
-            "Capture newsletter",
-            "Newsletter capture",
-            "Captura newsletter",
-          ),
-          multiplier: 1.05,
         },
         {
           value: "seo",
           label: t(
-            "SEO avancé (technique + contenu)",
-            "Advanced SEO (technical + content)",
-            "SEO avanzado (técnico + contenido)",
+            "SEO travaillé pour ranker sur Google",
+            "Strong SEO to rank on Google",
+            "SEO trabajado para rankear en Google",
           ),
           multiplier: 1.15,
         },
         {
-          value: "form",
+          value: "booking",
           label: t(
-            "Formulaire de contact custom",
-            "Custom contact form",
-            "Formulario de contacto custom",
+            "Réservation / Calendly intégré",
+            "Booking / Calendly integration",
+            "Reserva / Calendly integrado",
           ),
-          multiplier: 1.05,
+          multiplier: 1.1,
         },
       ],
     },
@@ -185,22 +171,22 @@ const ECOMMERCE_FLOW: ServiceFlow = {
       id: "platform",
       kind: "single",
       title: t(
-        "Plateforme préférée ?",
-        "Preferred platform?",
-        "¿Plataforma preferida?",
+        "Sur quelle plateforme ?",
+        "Which platform?",
+        "¿En qué plataforma?",
       ),
       subtitle: t(
-        "Si tu hésites, on te conseille au brief.",
-        "If you're unsure, we'll advise at the brief.",
-        "Si dudas, te aconsejamos en el brief.",
+        "Pas sûr ? Coche \"Je ne sais pas\": on te conseille au brief.",
+        "Not sure? Pick \"Not sure\": we'll advise at the brief.",
+        "¿Dudas? Marca \"No estoy seguro\": te asesoramos.",
       ),
       options: [
         {
           value: "shopify",
           label: t(
-            "Shopify (le plus rapide)",
-            "Shopify (fastest)",
-            "Shopify (lo más rápido)",
+            "Shopify: go-live le plus rapide",
+            "Shopify: fastest go-live",
+            "Shopify: el más rápido",
           ),
           multiplier: 1,
         },
@@ -212,9 +198,9 @@ const ECOMMERCE_FLOW: ServiceFlow = {
         {
           value: "custom",
           label: t(
-            "Custom (Next.js + Stripe)",
-            "Custom (Next.js + Stripe)",
-            "Custom (Next.js + Stripe)",
+            "Custom (Next.js + Stripe): total contrôle",
+            "Custom (Next.js + Stripe): full control",
+            "Custom (Next.js + Stripe): control total",
           ),
           multiplier: 1.4,
         },
@@ -259,9 +245,14 @@ const ECOMMERCE_FLOW: ServiceFlow = {
       id: "ecom-features",
       kind: "multi",
       title: t(
-        "Fonctionnalités e-com ?",
-        "E-commerce features?",
-        "¿Funcionalidades e-commerce?",
+        "Tu as besoin de ces fonctions ?",
+        "Do you need these features?",
+        "¿Necesitas estas funciones?",
+      ),
+      subtitle: t(
+        "Coche uniquement ce qui est indispensable au lancement.",
+        "Only check what's must-have at launch.",
+        "Marca solo lo imprescindible al lanzamiento.",
       ),
       options: [
         {
@@ -324,9 +315,9 @@ const ECOMMERCE_FLOW: ServiceFlow = {
       id: "design",
       kind: "single",
       title: t(
-        "Design — d'où on part ?",
-        "Design — starting point?",
-        "Diseño — ¿punto de partida?",
+        "Design: d'où on part ?",
+        "Design: starting point?",
+        "Diseño: ¿punto de partida?",
       ),
       options: [
         {
@@ -370,6 +361,11 @@ const SHOPIFY_FLOW: ServiceFlow = {
         "Quel type de chantier ?",
         "What kind of work?",
         "¿Qué tipo de trabajo?",
+      ),
+      subtitle: t(
+        "Le plus gros driver du devis sur Shopify.",
+        "Biggest driver of the Shopify quote.",
+        "El factor más decisivo del presupuesto Shopify.",
       ),
       options: [
         {
@@ -495,9 +491,14 @@ const LOVABLE_FLOW: ServiceFlow = {
       id: "no-code-stack",
       kind: "single",
       title: t(
-        "Sur quoi ton MVP tourne aujourd'hui ?",
+        "Sur quoi tourne ton MVP aujourd'hui ?",
         "What's your MVP running on today?",
         "¿En qué corre tu MVP hoy?",
+      ),
+      subtitle: t(
+        "On part de ce que tu as déjà: pas de page blanche.",
+        "We start from what you have: no blank page.",
+        "Partimos de lo que ya tienes: sin página en blanco.",
       ),
       options: [
         {
@@ -621,9 +622,14 @@ const LOVABLE_FLOW: ServiceFlow = {
       id: "no-code-features",
       kind: "multi",
       title: t(
-        "Ce que la version code doit ABSOLUMENT améliorer ?",
-        "What the code version MUST improve?",
+        "Ce que la version code doit absolument améliorer ?",
+        "What the code version must improve?",
         "¿Qué debe mejorar la versión código?",
+      ),
+      subtitle: t(
+        "Le \"pourquoi on migre\": coche les vraies douleurs actuelles.",
+        "Why you're migrating: check current real pains.",
+        "El \"por qué migramos\": marca las verdaderas molestias.",
       ),
       options: [
         {
@@ -682,9 +688,14 @@ const SAAS_FLOW: ServiceFlow = {
       id: "saas-tenancy",
       kind: "single",
       title: t(
-        "Modèle d'utilisateurs ?",
-        "User model?",
-        "¿Modelo de usuarios?",
+        "Qui utilise ton SaaS ?",
+        "Who uses your SaaS?",
+        "¿Quién usa tu SaaS?",
+      ),
+      subtitle: t(
+        "Détermine l'archi data et la complexité de l'auth.",
+        "Drives data architecture and auth complexity.",
+        "Define la arquitectura de datos y la complejidad de auth.",
       ),
       options: [
         {
@@ -772,9 +783,9 @@ const SAAS_FLOW: ServiceFlow = {
         "¿Qué incluye el MVP?",
       ),
       subtitle: t(
-        "Plus c'est coché, plus c'est cher \u2014 mais on garde 8 semaines max.",
-        "More boxes = pricier \u2014 but we keep 8 weeks max.",
-        "Más casillas = más caro \u2014 pero mantenemos 8 semanas máx.",
+        "Coche le minimum vital pour livrer une vraie v1: pas la v3.",
+        "Check only what's vital for a real v1: not the v3.",
+        "Marca solo lo vital para una v1 real: no la v3.",
       ),
       options: [
         {
@@ -854,9 +865,9 @@ const SAAS_FLOW: ServiceFlow = {
         {
           value: "shadcn",
           label: t(
-            "shadcn/ui propre — efficace",
-            "Clean shadcn/ui — efficient",
-            "shadcn/ui limpio — eficiente",
+            "shadcn/ui propre: efficace",
+            "Clean shadcn/ui: efficient",
+            "shadcn/ui limpio: eficiente",
           ),
           multiplier: 1,
         },
@@ -889,9 +900,14 @@ const MOBILE_FLOW: ServiceFlow = {
       id: "platforms",
       kind: "single",
       title: t(
-        "Plateformes cibles ?",
-        "Target platforms?",
-        "¿Plataformas objetivo?",
+        "iOS, Android, ou les deux ?",
+        "iOS, Android, or both?",
+        "¿iOS, Android o ambos?",
+      ),
+      subtitle: t(
+        "Les deux = 1 seule app React Native, pas 2.",
+        "Both = one React Native app, not two.",
+        "Ambos = una sola app React Native, no dos.",
       ),
       options: [
         {
@@ -936,18 +952,18 @@ const MOBILE_FLOW: ServiceFlow = {
         {
           value: "supabase",
           label: t(
-            "À créer — Supabase / Firebase",
-            "To create — Supabase / Firebase",
-            "Por crear — Supabase / Firebase",
+            "À créer: Supabase / Firebase",
+            "To create: Supabase / Firebase",
+            "Por crear: Supabase / Firebase",
           ),
           multiplier: 1.1,
         },
         {
           value: "custom",
           label: t(
-            "À créer — API custom",
-            "To create — custom API",
-            "Por crear — API custom",
+            "À créer: API custom",
+            "To create: custom API",
+            "Por crear: API custom",
           ),
           multiplier: 1.3,
         },
@@ -957,9 +973,14 @@ const MOBILE_FLOW: ServiceFlow = {
       id: "mobile-features",
       kind: "multi",
       title: t(
-        "Fonctionnalités natives ?",
-        "Native features?",
-        "¿Funcionalidades nativas?",
+        "Quelles fonctions natives utiliser ?",
+        "Which native features do you need?",
+        "¿Qué funciones nativas necesitas?",
+      ),
+      subtitle: t(
+        "Chaque feature native = config iOS + Android + tests stores.",
+        "Each native feature = iOS + Android config + store tests.",
+        "Cada función nativa = config iOS + Android + pruebas stores.",
       ),
       options: [
         {
@@ -1084,27 +1105,27 @@ const OTHER_FLOW: ServiceFlow = {
         {
           value: "low",
           label: t(
-            "Faible — quelques pages, peu de logique",
-            "Low — few pages, little logic",
-            "Baja — pocas páginas, poca lógica",
+            "Faible: quelques pages, peu de logique",
+            "Low: few pages, little logic",
+            "Baja: pocas páginas, poca lógica",
           ),
           multiplier: 0.8,
         },
         {
           value: "medium",
           label: t(
-            "Moyenne — logique métier, base de données",
-            "Medium — business logic, database",
-            "Media — lógica de negocio, base de datos",
+            "Moyenne: logique métier, base de données",
+            "Medium: business logic, database",
+            "Media: lógica de negocio, base de datos",
           ),
           multiplier: 1.1,
         },
         {
           value: "high",
           label: t(
-            "Élevée — multi-utilisateurs, API, intégrations",
-            "High — multi-user, API, integrations",
-            "Alta — multi-usuario, API, integraciones",
+            "Élevée: multi-utilisateurs, API, intégrations",
+            "High: multi-user, API, integrations",
+            "Alta: multi-usuario, API, integraciones",
           ),
           multiplier: 1.5,
         },
@@ -1138,8 +1159,8 @@ export function isStepValid(step: FlowStep, answer: FlowAnswer): boolean {
 }
 
 export function answerLabel(step: FlowStep, answer: FlowAnswer, locale: Locale): string {
-  if (step.kind === "text") return typeof answer === "string" ? answer : "";
-  const values = Array.isArray(answer) ? answer : answer ? [answer] : [];
+  if (step.kind === "text") return typeof answer === "string" ? answer: "";
+  const values = Array.isArray(answer) ? answer: answer ? [answer]: [];
   if (step.kind === "single" || step.kind === "multi") {
     return values
       .map((v) => step.options.find((o) => o.value === v)?.label[locale] ?? v)

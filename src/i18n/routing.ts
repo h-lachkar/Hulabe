@@ -8,7 +8,7 @@
 export const LOCALES = ["fr", "en", "es"] as const;
 export type Locale = (typeof LOCALES)[number];
 
-export const DEFAULT_LOCALE: Locale = "fr";
+export const DEFAULT_LOCALE: Locale = "en";
 
 export const LOCALE_COOKIE = "NEXT_LOCALE";
 /** 1 year. */

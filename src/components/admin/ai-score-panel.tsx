@@ -1,19 +1,12 @@
 "use client";
 
 import { useTransition, useState } from "react";
+import { useTranslations } from "next-intl";
 import { RefreshCcw, Sparkles, Copy, Check } from "lucide-react";
 import type { AiNextAction } from "@prisma/client";
 import { rescoreLead } from "@/lib/admin/actions";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { timeAgo } from "@/lib/admin/format";
-
-const ACTION_LABEL: Record<AiNextAction, string> = {
-  SEND_QUOTE: "Envoyer devis",
-  BOOK_CALL: "Caler un call",
-  ASK_CLARIFICATION: "Demander des précisions",
-  DECLINE_POLITELY: "Décliner poliment",
-};
+import { useFormat } from "@/lib/admin/use-format";
 
 const ACTION_COLOR: Record<AiNextAction, string> = {
   SEND_QUOTE: "border-lime/30 bg-lime/10 text-lime",
@@ -45,6 +38,9 @@ export function AiScorePanel({
   aiModel,
   aiScoredAt,
 }: Props) {
+  const t = useTranslations("admin.aiPanel");
+  const ta = useTranslations("admin.aiPanel.actions");
+  const { timeAgo } = useFormat();
   const [pending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
 
@@ -71,7 +67,7 @@ export function AiScorePanel({
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-lime" />
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-            AI lead scoring
+            {t("title")}
           </h2>
         </div>
         <button
@@ -81,18 +77,21 @@ export function AiScorePanel({
           className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-1 text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-lime disabled:opacity-50"
         >
           <RefreshCcw className={cn("h-3 w-3", pending && "motion-safe:animate-spin")} />
-          {pending ? "scoring…" : scored ? "re-score" : "score"}
+          {pending ? t("scoring") : scored ? t("rescore") : t("score")}
         </button>
       </header>
 
       {!scored ? (
         <div className="px-5 py-8 text-center">
           <p className="text-sm text-muted-foreground">
-            Pas encore évalué. Clique{" "}
-            <span className="font-mono text-foreground">SCORE</span> pour lancer Claude.
+            {t.rich("notScoredLine1", {
+              label: () => (
+                <span className="font-mono text-foreground">{t("notScoredLine1Label")}</span>
+              ),
+            })}
           </p>
           <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
-            Requiert ANTHROPIC_API_KEY défini en env.
+            {t("notScoredLine2")}
           </p>
         </div>
       ) : (
@@ -100,7 +99,7 @@ export function AiScorePanel({
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Score
+                {t("scoreLabel")}
               </p>
               <p className="mt-1 flex items-baseline gap-2">
                 <span
@@ -115,7 +114,7 @@ export function AiScorePanel({
                 >
                   {aiScore}
                 </span>
-                <span className="font-mono text-sm text-muted-2">/ 10</span>
+                <span className="font-mono text-sm text-muted-2">{t("outOf")}</span>
               </p>
             </div>
             {aiNextAction && (
@@ -125,7 +124,7 @@ export function AiScorePanel({
                   ACTION_COLOR[aiNextAction],
                 )}
               >
-                {ACTION_LABEL[aiNextAction]}
+                {ta(aiNextAction)}
               </span>
             )}
           </div>
@@ -153,7 +152,7 @@ export function AiScorePanel({
             <div className="rounded-lg border border-border bg-surface p-4">
               <div className="flex items-center justify-between gap-2">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Suggestion de réponse
+                  {t("suggestedReply")}
                 </p>
                 <div className="flex items-center gap-2">
                   <button
@@ -162,13 +161,13 @@ export function AiScorePanel({
                     className="inline-flex items-center gap-1 rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground hover:text-lime"
                   >
                     {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                    {copied ? "copié" : "copier"}
+                    {copied ? t("copied") : t("copy")}
                   </button>
                   <a
                     href={`mailto:${leadEmail}?body=${encodeURIComponent(aiSuggestedReply)}`}
                     className="inline-flex items-center gap-1 rounded border border-lime/40 bg-lime/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-lime hover:bg-lime/20"
                   >
-                    envoyer
+                    {t("send")}
                   </a>
                 </div>
               </div>

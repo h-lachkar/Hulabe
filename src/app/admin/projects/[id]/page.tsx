@@ -1,20 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowLeft, ExternalLink, Plus, Eye, EyeOff } from "lucide-react";
 import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  formatDate,
-  formatDateTime,
-  formatEUR,
-  PROJECT_STATUS_COLOR,
-  PROJECT_STATUS_LABEL,
-  SERVICE_LABEL,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 import {
   addDeliverable,
@@ -46,6 +39,16 @@ export default async function ProjectDetailPage({
 }) {
   await requireAdmin();
   const { id } = await params;
+  const locale = await getLocale();
+  const t = await getTranslations("admin.projects.detail");
+  const {
+    serviceLabel,
+    projectStatusLabel,
+    formatDate,
+    formatDateTime,
+    formatEUR,
+    timeAgo,
+  } = getFormat(locale);
 
   const [project, notes, activity, deliverables, supportRequests] = await Promise.all([
     prisma.project.findUnique({
@@ -80,8 +83,8 @@ export default async function ProjectDetailPage({
         title={project.name}
         subtitle={
           project.lead
-            ? `Lead: ${project.lead.name ?? project.lead.email} · ${formatDate(project.createdAt)}`
-            : `Standalone · ${formatDate(project.createdAt)}`
+            ? `${t("leadPrefix")}${project.lead.name ?? project.lead.email} · ${formatDate(project.createdAt)}`
+            : `${t("standalone")} · ${formatDate(project.createdAt)}`
         }
         actions={
           <Link
@@ -89,7 +92,7 @@ export default async function ProjectDetailPage({
             className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
-            Pipeline
+            {t("pipeline")}
           </Link>
         }
       />
@@ -100,9 +103,9 @@ export default async function ProjectDetailPage({
           {/* Deliverables */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="flex items-center justify-between border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Livrables
+              {t("deliverables")}
               <span className="text-[10px] text-muted-foreground">
-                visibles côté client
+                {t("deliverablesHint")}
               </span>
             </header>
             <form action={addDeliverable} className="border-b border-border p-5">
@@ -123,26 +126,26 @@ export default async function ProjectDetailPage({
                   type="text"
                   name="title"
                   required
-                  placeholder="Titre"
+                  placeholder={t("titlePlaceholder")}
                   className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-2"
                 />
                 <input
                   type="url"
                   name="url"
-                  placeholder="https://… (optionnel)"
+                  placeholder={t("urlPlaceholder")}
                   className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-3"
                 />
               </div>
               <div className="mt-2 flex justify-end">
                 <Button type="submit" size="sm">
                   <Plus className="h-3.5 w-3.5" />
-                  Ajouter
+                  {t("add")}
                 </Button>
               </div>
             </form>
             {deliverables.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas encore de livrable.
+                {t("noDeliverables")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -179,7 +182,7 @@ export default async function ProjectDetailPage({
           {/* Notes */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Notes
+              {t("notes")}
             </header>
             <form action={addProjectNote} className="border-b border-border p-5">
               <input type="hidden" name="projectId" value={project.id} />
@@ -187,7 +190,7 @@ export default async function ProjectDetailPage({
                 name="body"
                 rows={3}
                 required
-                placeholder="Note (par défaut interne)…"
+                placeholder={t("notePlaceholder")}
                 className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
               <div className="mt-2 flex items-center justify-between gap-2">
@@ -197,16 +200,16 @@ export default async function ProjectDetailPage({
                     name="visibleToClient"
                     className="h-3.5 w-3.5 rounded border-border bg-surface text-lime"
                   />
-                  Visible côté client
+                  {t("visibleToClient")}
                 </label>
                 <Button type="submit" size="sm">
-                  Ajouter
+                  {t("add")}
                 </Button>
               </div>
             </form>
             {notes.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas encore de note.
+                {t("noNotes")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -226,11 +229,11 @@ export default async function ProjectDetailPage({
                       >
                         {n.visibleToClient ? (
                           <>
-                            <Eye className="h-3 w-3" /> client
+                            <Eye className="h-3 w-3" /> {t("client")}
                           </>
                         ) : (
                           <>
-                            <EyeOff className="h-3 w-3" /> interne
+                            <EyeOff className="h-3 w-3" /> {t("internal")}
                           </>
                         )}
                       </span>
@@ -247,14 +250,14 @@ export default async function ProjectDetailPage({
           {/* Support tickets */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="flex items-center justify-between border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              <span>Tickets support</span>
+              <span>{t("supportTickets")}</span>
               <span className="text-[10px] text-muted-foreground">
-                {supportRequests.length} total
+                {supportRequests.length} {t("totalSuffix")}
               </span>
             </header>
             {supportRequests.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas de ticket pour ce projet.
+                {t("noTickets")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -278,7 +281,7 @@ export default async function ProjectDetailPage({
                       </span>
                     </div>
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
-                      {req.createdByEmail ?? "client"} · {timeAgo(req.createdAt)}
+                      {req.createdByEmail ?? t("client")} · {timeAgo(req.createdAt)}
                     </p>
                     {req.status !== "RESOLVED" && req.status !== "CLOSED" && (
                       <form action={replyToSupportRequest} className="mt-3 space-y-2">
@@ -287,7 +290,7 @@ export default async function ProjectDetailPage({
                           name="reply"
                           rows={3}
                           required
-                          placeholder="Réponse (envoyée par email au client + ajoutée en update visible)…"
+                          placeholder={t("replyPlaceholder")}
                           className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         />
                         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -297,7 +300,7 @@ export default async function ProjectDetailPage({
                             value="IN_PROGRESS"
                             className="rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs text-foreground hover:border-lime/40 hover:text-lime"
                           >
-                            Répondre · en cours
+                            {t("replyInProgress")}
                           </button>
                           <button
                             type="submit"
@@ -305,7 +308,7 @@ export default async function ProjectDetailPage({
                             value="RESOLVED"
                             className="rounded-md bg-lime px-3 py-1.5 text-xs font-medium text-bg hover:bg-lime-dark"
                           >
-                            Répondre · résoudre
+                            {t("replyResolve")}
                           </button>
                         </div>
                       </form>
@@ -319,11 +322,11 @@ export default async function ProjectDetailPage({
           {/* Activity */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Timeline
+              {t("timeline")}
             </header>
             {activity.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas d&apos;activité.
+                {t("noActivity")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -348,7 +351,7 @@ export default async function ProjectDetailPage({
         <aside className="space-y-4">
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Status
+              {t("status")}
             </p>
             <p className="mt-2">
               <span
@@ -357,7 +360,7 @@ export default async function ProjectDetailPage({
                   PROJECT_STATUS_COLOR[project.status],
                 )}
               >
-                {PROJECT_STATUS_LABEL[project.status]}
+                {projectStatusLabel[project.status]}
               </span>
             </p>
             <form action={updateProjectStatus} className="mt-4 grid gap-2">
@@ -371,7 +374,7 @@ export default async function ProjectDetailPage({
                     value={s}
                     className="rounded-md border border-border bg-surface-2 px-2 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-lime/40 hover:text-lime"
                   >
-                    → {PROJECT_STATUS_LABEL[s]}
+                    → {projectStatusLabel[s]}
                   </button>
                 ))}
               </div>
@@ -380,15 +383,15 @@ export default async function ProjectDetailPage({
 
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Pricing
+              {t("pricing")}
             </p>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Quoted</dt>
+                <dt className="text-muted-foreground">{t("quoted")}</dt>
                 <dd className="font-mono tabular-nums">{formatEUR(project.priceQuotedCents)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Final</dt>
+                <dt className="text-muted-foreground">{t("final")}</dt>
                 <dd className="font-mono tabular-nums">{formatEUR(project.priceFinalCents)}</dd>
               </div>
             </dl>
@@ -396,25 +399,25 @@ export default async function ProjectDetailPage({
 
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Détails
+              {t("details")}
             </p>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Service</dt>
+                <dt className="text-muted-foreground">{t("service")}</dt>
                 <dd className="font-mono">
-                  {project.serviceType ? SERVICE_LABEL[project.serviceType] : "—"}
+                  {project.serviceType ? serviceLabel[project.serviceType] : "—"}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Démarré</dt>
+                <dt className="text-muted-foreground">{t("started")}</dt>
                 <dd className="font-mono">{formatDate(project.startedAt)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Shippé</dt>
+                <dt className="text-muted-foreground">{t("shipped")}</dt>
                 <dd className="font-mono">{formatDate(project.shippedAt)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Support jusqu&apos;au</dt>
+                <dt className="text-muted-foreground">{t("supportUntil")}</dt>
                 <dd className="font-mono">{formatDate(project.supportEndsAt)}</dd>
               </div>
             </dl>
@@ -423,7 +426,7 @@ export default async function ProjectDetailPage({
           {project.lead && (
             <div className="rounded-xl border border-border bg-surface p-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Lead source
+                {t("leadSource")}
               </p>
               <Link
                 href={`/admin/leads/${project.lead.id}`}
@@ -437,7 +440,7 @@ export default async function ProjectDetailPage({
               <div className="mt-4">
                 <InviteToPortalButton projectId={project.id} />
                 <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
-                  Envoie un magic-link à {project.lead.email}
+                  {t("magicLinkHint", { email: project.lead.email })}
                 </p>
               </div>
             </div>

@@ -6,12 +6,6 @@ import { Check } from "lucide-react";
 import { SectionMarker } from "@/components/section-marker";
 
 const STEPS = ["1", "2", "3", "4"] as const;
-const META = [
-  { meta: "30 MIN" },
-  { meta: "< 24H" },
-  { meta: "1-8 SEMAINES" },
-  { meta: "GO LIVE" },
-];
 
 export function Process() {
   const t = useTranslations("process");
@@ -71,7 +65,7 @@ export function Process() {
                       {String(idx + 1).padStart(2, "0")} / {STEPS.length}
                     </span>
                     <span className="font-mono text-[10px] uppercase tracking-wider text-lime sm:text-[11px]">
-                      {META[idx].meta}
+                      {ts(`${s}.meta`)}
                     </span>
                   </div>
                   <h3 className="mt-3 flex items-center gap-2 text-lg font-semibold tracking-tight sm:text-xl">

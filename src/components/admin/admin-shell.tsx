@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
   Inbox,
@@ -17,14 +18,6 @@ import type { AdminRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/leads", label: "Leads", icon: Inbox },
-  { href: "/admin/projects", label: "Projects", icon: Folders },
-  { href: "/admin/invoices", label: "Invoices", icon: Receipt },
-  { href: "/admin/support", label: "Support", icon: LifeBuoy },
-];
 
 const ROLE_COLOR: Record<AdminRole, string> = {
   OWNER: "border-lime/30 bg-lime/10 text-lime",
@@ -44,13 +37,21 @@ export function AdminShell({
   userRole: AdminRole;
 }) {
   const pathname = usePathname();
+  const tn = useTranslations("admin.nav");
+  const ts = useTranslations("admin.shell");
   const isOwner = userRole === "OWNER";
 
+  const NAV = [
+    { href: "/admin", label: tn("dashboard"), icon: LayoutDashboard, exact: true },
+    { href: "/admin/leads", label: tn("leads"), icon: Inbox },
+    { href: "/admin/projects", label: tn("projects"), icon: Folders },
+    { href: "/admin/invoices", label: tn("invoices"), icon: Receipt },
+    { href: "/admin/support", label: tn("support"), icon: LifeBuoy },
+  ];
+
   const secondary = [
-    ...(isOwner
-      ? [{ href: "/admin/team", label: "Team", icon: Users }]
-      : []),
-    { href: "/admin/settings", label: "Settings", icon: Settings },
+    ...(isOwner ? [{ href: "/admin/team", label: tn("team"), icon: Users }] : []),
+    { href: "/admin/settings", label: tn("settings"), icon: Settings },
   ];
 
   async function signOut() {
@@ -123,14 +124,14 @@ export function AdminShell({
               className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-surface-2/60 hover:text-foreground"
             >
               <ExternalLink className="h-4 w-4" />
-              PostHog
+              {tn("posthog")}
             </a>
           </nav>
 
           <div className="mt-4 rounded-lg border border-border bg-surface p-3">
             <div className="flex items-center justify-between gap-2">
               <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                Signed in
+                {ts("signedIn")}
               </p>
               <span
                 className={cn(
@@ -150,7 +151,7 @@ export function AdminShell({
               onClick={signOut}
               className="mt-3 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-lime"
             >
-              <LogOut className="h-3 w-3" /> Sign out
+              <LogOut className="h-3 w-3" /> {ts("signOut")}
             </button>
           </div>
         </div>
@@ -172,7 +173,7 @@ export function AdminShell({
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-lime"
           >
             <LogOut className="h-3.5 w-3.5" />
-            Sign out
+            {ts("signOut")}
           </button>
         </header>
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -11,35 +12,40 @@ type Line =
   | { kind: "warn"; text: string }
   | { kind: "blank" };
 
-const SCRIPT: Line[] = [
-  { kind: "prompt", cmd: "hulabe ship --project=mvp" },
-  { kind: "info", text: "→ Brief reçu · 30 min" },
-  { kind: "ok", text: "✓ Devis sous 24h ouvrées" },
-  { kind: "info", text: "→ Démarrage J+7" },
-  { kind: "ok", text: "✓ Build · Next.js · TypeScript · Supabase" },
-  { kind: "ok", text: "✓ Tests · Vercel preview" },
-  { kind: "info", text: "→ Demo · Slack feedback" },
-  { kind: "ok", text: "✓ Deploy production" },
-  { kind: "blank" },
-  { kind: "warn", text: "shipping in 2-8 weeks." },
-];
-
 export function Terminal({ className }: { className?: string }) {
+  const t = useTranslations("terminal");
   const reduce = useReducedMotion();
+
+  const SCRIPT = useMemo<Line[]>(
+    () => [
+      { kind: "prompt", cmd: t("cmd") },
+      { kind: "info", text: t("line1") },
+      { kind: "ok", text: t("line2") },
+      { kind: "info", text: t("line3") },
+      { kind: "ok", text: t("line4") },
+      { kind: "ok", text: t("line5") },
+      { kind: "info", text: t("line6") },
+      { kind: "ok", text: t("line7") },
+      { kind: "blank" },
+      { kind: "warn", text: t("footer") },
+    ],
+    [t],
+  );
+
   const [visible, setVisible] = useState(reduce ? SCRIPT.length : 0);
 
   useEffect(() => {
     if (reduce) return;
     if (visible >= SCRIPT.length) {
       // Restart loop after a pause
-      const t = setTimeout(() => setVisible(0), 4500);
-      return () => clearTimeout(t);
+      const tm = setTimeout(() => setVisible(0), 4500);
+      return () => clearTimeout(tm);
     }
     const delay =
       SCRIPT[visible].kind === "prompt" ? 250 : SCRIPT[visible].kind === "blank" ? 80 : 380;
-    const t = setTimeout(() => setVisible((v) => v + 1), delay);
-    return () => clearTimeout(t);
-  }, [visible, reduce]);
+    const tm = setTimeout(() => setVisible((v) => v + 1), delay);
+    return () => clearTimeout(tm);
+  }, [visible, reduce, SCRIPT]);
 
   return (
     <div
@@ -55,10 +61,10 @@ export function Terminal({ className }: { className?: string }) {
         <span className="h-2 w-2 rounded-full bg-[#3F3F46] sm:h-2.5 sm:w-2.5" />
         <span className="h-2 w-2 rounded-full bg-[#3F3F46] sm:h-2.5 sm:w-2.5" />
         <span className="ml-2 truncate text-[10px] uppercase tracking-wider text-muted-2 sm:ml-3 sm:text-[11px]">
-          ~/hulabe — zsh
+          {t("title")}
         </span>
         <span className="ml-auto shrink-0 text-[10px] uppercase tracking-wider text-lime">
-          ● live
+          ● {t("live")}
         </span>
       </div>
 

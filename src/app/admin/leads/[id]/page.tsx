@@ -1,20 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowLeft, ExternalLink, Mail, Phone, Folders } from "lucide-react";
 import type { LeadStatus, ServiceType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
-import {
-  formatDate,
-  formatDateTime,
-  formatPriceRange,
-  LEAD_STATUS_COLOR,
-  LEAD_STATUS_LABEL,
-  SERVICE_LABEL,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, LEAD_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 import {
   addLeadNote,
@@ -35,6 +28,16 @@ export default async function LeadDetailPage({
 }) {
   await requireAdmin();
   const { id } = await params;
+  const locale = await getLocale();
+  const t = await getTranslations("admin.leads.detail");
+  const {
+    serviceLabel,
+    leadStatusLabel,
+    formatDate,
+    formatDateTime,
+    formatPriceRange,
+    timeAgo,
+  } = getFormat(locale);
 
   const [lead, notes, activity, projects] = await Promise.all([
     prisma.lead.findUnique({ where: { id } }),
@@ -60,14 +63,14 @@ export default async function LeadDetailPage({
       <PageHeader
         kicker={`LEAD / ${lead.id.slice(0, 6).toUpperCase()}`}
         title={lead.name ?? lead.email}
-        subtitle={`Reçu ${timeAgo(lead.createdAt)} · ${lead.source}`}
+        subtitle={t("receivedAgo", { ago: timeAgo(lead.createdAt), source: lead.source })}
         actions={
           <Link
             href="/admin/leads"
             className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
-            Retour
+            {t("back")}
           </Link>
         }
       />
@@ -91,28 +94,28 @@ export default async function LeadDetailPage({
           {/* Brief / payload */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Brief
+              {t("brief")}
             </header>
             <dl className="grid gap-4 p-5 sm:grid-cols-2">
-              <Field label="Service">
-                {lead.serviceType ? SERVICE_LABEL[lead.serviceType as ServiceType] : "—"}
+              <Field label={t("fields.service")}>
+                {lead.serviceType ? serviceLabel[lead.serviceType as ServiceType] : "—"}
               </Field>
-              <Field label="Source">{lead.source}</Field>
-              <Field label="Estimation">
+              <Field label={t("fields.source")}>{lead.source}</Field>
+              <Field label={t("fields.estimation")}>
                 <span className="font-mono tabular-nums">
                   {formatPriceRange(lead.estimatedPriceMin, lead.estimatedPriceMax)}
                 </span>
               </Field>
-              <Field label="Délai déclaré">{lead.timeline ?? "—"}</Field>
-              <Field label="Budget déclaré">{lead.budget ?? "—"}</Field>
-              <Field label="Locale">
+              <Field label={t("fields.timeline")}>{lead.timeline ?? "—"}</Field>
+              <Field label={t("fields.budget")}>{lead.budget ?? "—"}</Field>
+              <Field label={t("fields.locale")}>
                 <span className="font-mono uppercase">{lead.locale}</span>
               </Field>
             </dl>
             {lead.message && (
               <div className="border-t border-border px-5 py-4">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Message
+                  {t("message")}
                 </p>
                 <pre className="mt-2 whitespace-pre-wrap font-sans text-sm text-foreground">
                   {lead.message}
@@ -122,7 +125,7 @@ export default async function LeadDetailPage({
             {lead.features.length > 0 && (
               <div className="border-t border-border px-5 py-4">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Réponses simulator
+                  {t("simulatorAnswers")}
                 </p>
                 <ul className="mt-2 flex flex-wrap gap-1.5">
                   {lead.features.map((f) => (
@@ -141,7 +144,7 @@ export default async function LeadDetailPage({
           {/* Notes */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Notes internes
+              {t("notes")}
             </header>
             <form action={addLeadNote} className="border-b border-border p-5">
               <input type="hidden" name="leadId" value={lead.id} />
@@ -149,18 +152,18 @@ export default async function LeadDetailPage({
                 name="body"
                 rows={3}
                 required
-                placeholder="Note interne (jamais visible côté client) — ex: appelé, RDV mardi 10h."
+                placeholder={t("notePlaceholder")}
                 className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
               <div className="mt-2 flex justify-end">
                 <Button type="submit" size="sm">
-                  Ajouter
+                  {t("addNote")}
                 </Button>
               </div>
             </form>
             {notes.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas encore de note.
+                {t("noNotes")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -179,11 +182,11 @@ export default async function LeadDetailPage({
           {/* Activity */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Timeline
+              {t("timeline")}
             </header>
             {activity.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                Pas d&apos;activité.
+                {t("noActivity")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -209,7 +212,7 @@ export default async function LeadDetailPage({
           {/* Status changer */}
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Status
+              {t("status")}
             </p>
             <p className="mt-2">
               <span
@@ -218,7 +221,7 @@ export default async function LeadDetailPage({
                   LEAD_STATUS_COLOR[lead.status],
                 )}
               >
-                {LEAD_STATUS_LABEL[lead.status]}
+                {leadStatusLabel[lead.status]}
               </span>
             </p>
             <form action={updateLeadStatus} className="mt-4 grid gap-2">
@@ -235,7 +238,7 @@ export default async function LeadDetailPage({
                       "border-border text-foreground hover:border-lime/40 hover:text-lime",
                     )}
                   >
-                    → {LEAD_STATUS_LABEL[s]}
+                    → {leadStatusLabel[s]}
                   </button>
                 ))}
               </div>
@@ -245,7 +248,7 @@ export default async function LeadDetailPage({
           {/* Contact */}
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Contact
+              {t("contact")}
             </p>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
@@ -270,25 +273,25 @@ export default async function LeadDetailPage({
               )}
             </ul>
             <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-muted-2">
-              Créé {formatDate(lead.createdAt)}
+              {t("createdOn", { date: formatDate(lead.createdAt) })}
             </p>
           </div>
 
           {/* Projects */}
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Projets liés
+              {t("relatedProjects")}
             </p>
             {projects.length === 0 ? (
               <>
-                <p className="mt-2 text-sm text-muted-foreground">Aucun projet.</p>
+                <p className="mt-2 text-sm text-muted-foreground">{t("noProjects")}</p>
                 <form action={createProjectFromLead} className="mt-4 space-y-3">
                   <input type="hidden" name="leadId" value={lead.id} />
                   <input
                     type="text"
                     name="name"
                     required
-                    placeholder="Nom du projet (ex: Site MVP Acme)"
+                    placeholder={t("projectNamePlaceholder")}
                     defaultValue={lead.name ? `${lead.name} — ${lead.serviceType ?? "Project"}` : ""}
                     className="flex h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
@@ -297,7 +300,7 @@ export default async function LeadDetailPage({
                   )}
                   <Button type="submit" size="sm" className="w-full">
                     <Folders className="h-3.5 w-3.5" />
-                    Créer projet
+                    {t("createProject")}
                   </Button>
                 </form>
               </>

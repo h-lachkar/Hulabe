@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ArrowRight, Check, AlertCircle } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { sendClientSetupLink } from "@/lib/auth/password-actions";
@@ -18,6 +19,7 @@ export function ClientLoginForm({
   sent?: boolean;
 }) {
   const router = useRouter();
+  const tc = useTranslations("auth.common");
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,9 +42,9 @@ export function ClientLoginForm({
       setError(
         err instanceof Error
           ? err.message === "Invalid login credentials"
-            ? "Email ou mot de passe incorrect."
+            ? tc("invalidCredentials")
             : err.message
-          : "Erreur de connexion.",
+          : tc("signInError"),
       );
       setSubmitting(false);
     }
@@ -57,7 +59,7 @@ export function ClientLoginForm({
       fd.append("email", email);
       const res = await sendClientSetupLink(fd);
       if (res.ok) {
-        setRecoverMessage(res.message ?? "Lien envoyé. Vérifie ta boîte mail.");
+        setRecoverMessage(res.message ?? tc("linkSent"));
       } else {
         setError(res.error);
       }
@@ -68,7 +70,7 @@ export function ClientLoginForm({
     return (
       <form onSubmit={onRecover} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="recover-email">Email</Label>
+          <Label htmlFor="recover-email">{tc("emailLabel")}</Label>
           <Input
             id="recover-email"
             type="email"
@@ -76,7 +78,7 @@ export function ClientLoginForm({
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="toi@exemple.com"
+            placeholder={tc("recoverEmailPlaceholder")}
             autoFocus
           />
         </div>
@@ -91,14 +93,14 @@ export function ClientLoginForm({
         {recoverMessage && (
           <div className="rounded-xl border border-lime/30 bg-lime/5 p-4 text-sm">
             <p className="mb-1 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-lime">
-              <Check className="h-3.5 w-3.5" /> Envoyé
+              <Check className="h-3.5 w-3.5" /> {tc("sentLabel")}
             </p>
             <p className="text-foreground">{recoverMessage}</p>
           </div>
         )}
 
         <Button type="submit" size="lg" className="w-full" disabled={recoverPending || !email}>
-          {recoverPending ? "Envoi…" : "Recevoir le lien"}
+          {recoverPending ? tc("sendingLink") : tc("sendLink")}
           {!recoverPending && <ArrowRight className="h-4 w-4" />}
         </Button>
 
@@ -111,7 +113,7 @@ export function ClientLoginForm({
           }}
           className="block w-full text-center text-xs text-muted-foreground hover:text-foreground"
         >
-          ← Retour à la connexion par mot de passe
+          {tc("backToPasswordLogin")}
         </button>
       </form>
     );
@@ -120,7 +122,7 @@ export function ClientLoginForm({
   return (
     <form onSubmit={onSignIn} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="signin-email">Email</Label>
+        <Label htmlFor="signin-email">{tc("emailLabel")}</Label>
         <Input
           id="signin-email"
           type="email"
@@ -128,11 +130,11 @@ export function ClientLoginForm({
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="toi@exemple.com"
+          placeholder={tc("recoverEmailPlaceholder")}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="signin-password">Mot de passe</Label>
+        <Label htmlFor="signin-password">{tc("passwordLabel")}</Label>
         <Input
           id="signin-password"
           type="password"
@@ -157,7 +159,7 @@ export function ClientLoginForm({
         className="w-full"
         disabled={submitting || !email || !password}
       >
-        {submitting ? "Connexion…" : "Se connecter"}
+        {submitting ? tc("signingIn") : tc("signInButton")}
         {!submitting && <ArrowRight className="h-4 w-4" />}
       </Button>
 
@@ -169,7 +171,7 @@ export function ClientLoginForm({
         }}
         className="block w-full text-center text-xs text-muted-foreground hover:text-foreground"
       >
-        Première connexion ou mot de passe oublié&nbsp;?
+        {tc("firstTimeOrForgot")}
       </button>
     </form>
   );

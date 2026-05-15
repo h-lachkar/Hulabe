@@ -1,16 +1,11 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 import type { LeadStatus, ServiceType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
-import {
-  formatPriceRange,
-  LEAD_STATUS_COLOR,
-  LEAD_STATUS_LABEL,
-  SERVICE_LABEL,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, LEAD_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +19,10 @@ export default async function LeadsPage({
 }) {
   await requireAdmin();
   const params = await searchParams;
+  const locale = await getLocale();
+  const t = await getTranslations("admin.leads");
+  const { serviceLabel, leadStatusLabel, formatPriceRange, timeAgo } =
+    getFormat(locale);
 
   const statusFilter = STATUSES.includes(params.status as LeadStatus)
     ? (params.status as LeadStatus)
@@ -60,7 +59,11 @@ export default async function LeadsPage({
 
   return (
     <>
-      <PageHeader kicker="LEADS" title="Inbox." subtitle={`${leads.length} leads affichés`} />
+      <PageHeader
+        kicker={t("kicker")}
+        title={t("title")}
+        subtitle={t("subtitle", { count: leads.length })}
+      />
 
       <div className="space-y-4 px-4 py-6 sm:px-6 lg:px-10">
         {/* Filters */}
@@ -70,7 +73,7 @@ export default async function LeadsPage({
             active={!statusFilter && !serviceFilter && !searchQ}
             count={totalCount}
           >
-            All
+            {t("all")}
           </FilterPill>
           {STATUSES.map((s) => (
             <FilterPill
@@ -80,7 +83,7 @@ export default async function LeadsPage({
               count={countMap[s] ?? 0}
               colorClass={LEAD_STATUS_COLOR[s]}
             >
-              {LEAD_STATUS_LABEL[s]}
+              {leadStatusLabel[s]}
             </FilterPill>
           ))}
         </div>
@@ -95,7 +98,7 @@ export default async function LeadsPage({
             type="text"
             name="q"
             defaultValue={searchQ}
-            placeholder="Email ou nom…"
+            placeholder={t("searchPlaceholder")}
             className="flex h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           {statusFilter && <input type="hidden" name="status" value={statusFilter} />}
@@ -103,7 +106,7 @@ export default async function LeadsPage({
             type="submit"
             className="inline-flex h-10 items-center rounded-md bg-surface-2 px-3 text-xs font-mono uppercase tracking-wider text-foreground hover:bg-[#262626]"
           >
-            Search
+            {t("searchButton")}
           </button>
         </form>
 
@@ -112,20 +115,20 @@ export default async function LeadsPage({
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-surface-2/40 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left">Lead</th>
-                <th className="hidden px-4 py-3 text-center lg:table-cell">AI</th>
-                <th className="px-4 py-3 text-left">Service</th>
-                <th className="hidden px-4 py-3 text-left sm:table-cell">Estimate</th>
-                <th className="hidden px-4 py-3 text-left md:table-cell">Source</th>
-                <th className="px-4 py-3 text-right">Date</th>
+                <th className="px-4 py-3 text-left">{t("columns.status")}</th>
+                <th className="px-4 py-3 text-left">{t("columns.lead")}</th>
+                <th className="hidden px-4 py-3 text-center lg:table-cell">{t("columns.ai")}</th>
+                <th className="px-4 py-3 text-left">{t("columns.service")}</th>
+                <th className="hidden px-4 py-3 text-left sm:table-cell">{t("columns.estimate")}</th>
+                <th className="hidden px-4 py-3 text-left md:table-cell">{t("columns.source")}</th>
+                <th className="px-4 py-3 text-right">{t("columns.date")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {leads.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-sm text-muted-foreground">
-                    Aucun lead avec ces filtres.
+                    {t("empty")}
                   </td>
                 </tr>
               ) : (
@@ -142,7 +145,7 @@ export default async function LeadsPage({
                             LEAD_STATUS_COLOR[lead.status],
                           )}
                         >
-                          {LEAD_STATUS_LABEL[lead.status]}
+                          {leadStatusLabel[lead.status]}
                         </span>
                       </Link>
                     </td>
@@ -177,7 +180,7 @@ export default async function LeadsPage({
                     <td className="px-4 py-3">
                       <Link href={`/admin/leads/${lead.id}`} className="block">
                         <span className="font-mono text-xs text-foreground">
-                          {lead.serviceType ? SERVICE_LABEL[lead.serviceType] : "—"}
+                          {lead.serviceType ? serviceLabel[lead.serviceType] : "—"}
                         </span>
                       </Link>
                     </td>

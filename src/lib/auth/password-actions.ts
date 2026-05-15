@@ -4,14 +4,13 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getSiteOrigin } from "@/lib/auth/site-origin";
 import {
   sendAdminPasswordEmail,
   sendClientPasswordEmail,
 } from "@/lib/resend";
 
 export type ActionResult = { ok: true; message?: string } | { ok: false; error: string };
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
 
 function normalize(email: string) {
   return email.trim().toLowerCase();
@@ -80,7 +79,8 @@ export async function sendAdminSetupLink(formData: FormData): Promise<ActionResu
     };
   }
 
-  const redirectTo = `${SITE_URL}/auth/callback?next=${encodeURIComponent("/admin/setup-password")}`;
+  const origin = await getSiteOrigin();
+  const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/admin/setup-password")}`;
   const linkRes = await generateSetupLink(email, redirectTo);
   if (!linkRes.ok) return { ok: false, error: linkRes.error };
 
@@ -130,7 +130,8 @@ export async function sendClientSetupLink(formData: FormData): Promise<ActionRes
     };
   }
 
-  const redirectTo = `${SITE_URL}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
+  const origin = await getSiteOrigin();
+  const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
   const linkRes = await generateSetupLink(email, redirectTo);
   if (!linkRes.ok) return { ok: false, error: linkRes.error };
 

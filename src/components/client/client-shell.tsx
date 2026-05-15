@@ -2,16 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { LogOut, Folders, LifeBuoy, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-
-const NAV = [
-  { href: "/client", label: "Projets", icon: Folders, exact: true },
-  { href: "/client/support", label: "Support", icon: LifeBuoy },
-  { href: "/client/settings", label: "Compte", icon: Settings },
-];
 
 export function ClientShell({
   children,
@@ -21,6 +16,13 @@ export function ClientShell({
   userEmail: string;
 }) {
   const pathname = usePathname();
+  const t = useTranslations("clientPortal.shell");
+
+  const NAV = [
+    { href: "/client", label: t("projects"), icon: Folders, exact: true },
+    { href: "/client/support", label: t("support"), icon: LifeBuoy },
+    { href: "/client/settings", label: t("account"), icon: Settings },
+  ];
 
   async function signOut() {
     const supabase = createSupabaseBrowserClient();
@@ -70,7 +72,7 @@ export function ClientShell({
               className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs text-muted-foreground hover:text-lime"
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Se déconnecter</span>
+              <span className="hidden sm:inline">{t("signOut")}</span>
             </button>
           </div>
         </div>

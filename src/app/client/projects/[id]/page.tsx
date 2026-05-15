@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -20,14 +21,7 @@ import {
 import { openSupportRequest } from "@/lib/client/actions";
 import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/markdown";
-import {
-  PROJECT_STATUS_COLOR,
-  PROJECT_STATUS_LABEL,
-  SERVICE_LABEL,
-  formatDate,
-  formatDateTime,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -43,8 +37,9 @@ export async function generateMetadata({
     where: { id },
     select: { name: true },
   });
+  const t = await getTranslations("clientPortal.project");
   return {
-    title: project ? `${project.name} · Hulabe` : "Projet · Hulabe",
+    title: project ? `${project.name} · Hulabe` : t("metaTitleFallback"),
     robots: { index: false, follow: false },
   };
 }
@@ -77,6 +72,16 @@ export default async function ClientProjectPage({
   const project = await getClientProject(id, user.email!);
   if (!project) notFound();
 
+  const locale = await getLocale();
+  const t = await getTranslations("clientPortal.project");
+  const {
+    serviceLabel,
+    projectStatusLabel,
+    formatDate,
+    formatDateTime,
+    timeAgo,
+  } = getFormat(locale);
+
   const inSupport = isInSupportWindow(project.supportEndsAt);
   const currentStepIdx = Math.max(0, ALL_STATUSES.indexOf(project.status));
 
@@ -87,14 +92,14 @@ export default async function ClientProjectPage({
         className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-muted-foreground hover:text-lime"
       >
         <ArrowLeft className="h-3 w-3" />
-        Tes projets
+        {t("backToProjects")}
       </Link>
 
       {/* Header */}
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            {project.serviceType ? SERVICE_LABEL[project.serviceType] : "Projet"}
+            {project.serviceType ? serviceLabel[project.serviceType] : t("fallbackService")}
           </p>
           <h1 className="display text-3xl sm:text-4xl">{project.name}</h1>
           <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -104,11 +109,11 @@ export default async function ClientProjectPage({
                 PROJECT_STATUS_COLOR[project.status],
               )}
             >
-              {PROJECT_STATUS_LABEL[project.status]}
+              {projectStatusLabel[project.status]}
             </span>
             {inSupport && (
               <span className="inline-flex rounded border border-lime/30 bg-lime/10 px-2 py-0.5 font-mono text-xs uppercase tracking-wider text-lime">
-                Support actif · jusqu&apos;au {formatDate(project.supportEndsAt)}
+                {t("supportActiveUntil", { date: formatDate(project.supportEndsAt) })}
               </span>
             )}
           </div>
@@ -118,7 +123,7 @@ export default async function ClientProjectPage({
       {/* Timeline */}
       <section className="mt-10 rounded-2xl border border-border bg-surface p-6 sm:p-8">
         <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-          Avancement
+          {t("progress")}
         </h2>
         <ol className="mt-6 grid gap-2 sm:grid-cols-6">
           {ALL_STATUSES.map((s, idx) => {
@@ -147,7 +152,7 @@ export default async function ClientProjectPage({
                           : "text-muted-2",
                     )}
                   >
-                    {PROJECT_STATUS_LABEL[s]}
+                    {projectStatusLabel[s]}
                   </span>
                 </div>
                 {idx < ALL_STATUSES.length - 1 && (
@@ -166,7 +171,7 @@ export default async function ClientProjectPage({
         {project.shippedAt && (
           <p className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-lime">
             <Rocket className="h-3 w-3" />
-            Livré le {formatDate(project.shippedAt)}
+            {t("shippedOn", { date: formatDate(project.shippedAt) })}
           </p>
         )}
       </section>
@@ -177,11 +182,11 @@ export default async function ClientProjectPage({
           {/* Deliverables */}
           <section className="rounded-2xl border border-border bg-surface">
             <header className="border-b border-border px-6 py-4 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Livrables
+              {t("deliverables")}
             </header>
             {project.deliverables.length === 0 ? (
               <p className="px-6 py-8 text-center text-sm text-muted-foreground">
-                Pas encore de livrable. On les pousse au fur et à mesure.
+                {t("noDeliverables")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -225,11 +230,11 @@ export default async function ClientProjectPage({
           {/* Updates (visible notes) */}
           <section className="rounded-2xl border border-border bg-surface">
             <header className="border-b border-border px-6 py-4 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Updates
+              {t("updates")}
             </header>
             {project.notes.length === 0 ? (
               <p className="px-6 py-8 text-center text-sm text-muted-foreground">
-                Pas encore d&apos;update. On poste régulièrement pendant le build.
+                {t("noUpdates")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -248,11 +253,11 @@ export default async function ClientProjectPage({
           {/* Timeline */}
           <section className="rounded-2xl border border-border bg-surface">
             <header className="border-b border-border px-6 py-4 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-              Historique
+              {t("history")}
             </header>
             {project.activities.length === 0 ? (
               <p className="px-6 py-8 text-center text-sm text-muted-foreground">
-                Rien à montrer pour l&apos;instant.
+                {t("noHistory")}
               </p>
             ) : (
               <ul className="divide-y divide-border">
@@ -278,13 +283,13 @@ export default async function ClientProjectPage({
             <div className="flex items-center gap-2">
               <LifeBuoy className="h-4 w-4 text-lime" />
               <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-                Support
+                {t("support")}
               </h2>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
               {inSupport
-                ? `Tu as une fenêtre de support incluse jusqu'au ${formatDate(project.supportEndsAt)}. Tickets illimités sur cette période.`
-                : "La fenêtre support 14 jours incluse est expirée. Tu peux quand même ouvrir un ticket — on revient vers toi avec un devis si c'est hors-périmètre."}
+                ? t("supportActiveBody", { date: formatDate(project.supportEndsAt) })
+                : t("supportExpiredBody")}
             </p>
             <form action={openSupportRequest} className="mt-4 space-y-3">
               <input type="hidden" name="projectId" value={project.id} />
@@ -292,11 +297,11 @@ export default async function ClientProjectPage({
                 name="body"
                 rows={4}
                 required
-                placeholder="Décris ce qu'il te faut. Inclus une URL et capture d'écran si utile."
+                placeholder={t("supportPlaceholder")}
                 className="w-full rounded-md border border-border bg-surface-2 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
               <Button type="submit" size="sm" className="w-full">
-                Envoyer
+                {t("send")}
               </Button>
             </form>
 
@@ -333,19 +338,19 @@ export default async function ClientProjectPage({
 
           <div className="rounded-2xl border border-border bg-surface p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Détails
+              {t("details")}
             </p>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Démarré</dt>
+                <dt className="text-muted-foreground">{t("started")}</dt>
                 <dd className="font-mono">{formatDate(project.startedAt)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Livré</dt>
+                <dt className="text-muted-foreground">{t("shipped")}</dt>
                 <dd className="font-mono">{formatDate(project.shippedAt)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Contact</dt>
+                <dt className="text-muted-foreground">{t("contact")}</dt>
                 <dd>
                   <a
                     href="mailto:support@hulabe.com"

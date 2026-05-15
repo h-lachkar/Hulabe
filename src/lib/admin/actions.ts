@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireMutator } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getSiteOrigin } from "@/lib/auth/site-origin";
 import {
   sendClientPortalInvitation,
   sendProjectStatusUpdate,
@@ -408,7 +409,7 @@ export async function inviteClientToPortal(formData: FormData): Promise<InviteRe
   // The site origin (parent app) is where /auth/callback lives — link must hit
   // the parent origin's callback to set Supabase cookies for both
   // hulabe.com and client.hulabe.com (cross-subdomain).
-  const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const siteOrigin = await getSiteOrigin();
   // After password set, we land them on the setup-password page; once they've
   // set a password they can navigate to their project from /client.
   const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;

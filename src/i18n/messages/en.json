@@ -11,6 +11,19 @@
     "contact": "Contact",
     "cta": "Get a quote"
   },
+  "terminal": {
+    "live": "live",
+    "title": "~/hulabe — zsh",
+    "cmd": "hulabe ship --project=mvp",
+    "line1": "→ Brief received · 30 min",
+    "line2": "✓ Quote in 24 working hours",
+    "line3": "→ Kickoff D+7",
+    "line4": "✓ Build · Next.js · TypeScript · Supabase",
+    "line5": "✓ Tests · Vercel preview",
+    "line6": "→ Demo · Slack feedback",
+    "line7": "✓ Deploy production",
+    "footer": "shipping in 2-8 weeks."
+  },
   "hero": {
     "kicker": "Dev studio",
     "titleLine1": "Build fast.",
@@ -77,10 +90,10 @@
     "title": "How we work.",
     "subtitle": "Four steps. No useless meetings, no slideware.",
     "steps": {
-      "1": { "title": "30-min brief", "body": "We get your project, deadline, budget. You leave with a clear plan." },
-      "2": { "title": "Fixed quote", "body": "Within 24 working hours. Scope, timeline, price. No hidden costs." },
-      "3": { "title": "Build", "body": "Kickoff within 7 days. Regular demos, direct access on Slack or WhatsApp." },
-      "4": { "title": "Ship", "body": "Go live, training, docs. 14 days of support included for tweaks." }
+      "1": { "title": "30-min brief", "body": "We get your project, deadline, budget. You leave with a clear plan.", "meta": "30 MIN" },
+      "2": { "title": "Fixed quote", "body": "Within 24 working hours. Scope, timeline, price. No hidden costs.", "meta": "< 24H" },
+      "3": { "title": "Build", "body": "Kickoff within 7 days. Regular demos, direct access on Slack or WhatsApp.", "meta": "1-8 WEEKS" },
+      "4": { "title": "Ship", "body": "Go live, training, docs. 14 days of support included for tweaks.", "meta": "GO LIVE" }
     }
   },
   "cases": {
@@ -89,7 +102,21 @@
     "subtitle": "What we've built. More cases coming.",
     "viewProject": "View project",
     "comingSoon": "Coming soon",
-    "soon": "More cases coming"
+    "soon": "More cases coming",
+    "items": {
+      "rektads": {
+        "type": "WEB / APP",
+        "pitch": "Meta ads analytics platform. Scores creatives, detects fatigue, generates the next one."
+      },
+      "bcnImmobilier": {
+        "type": "MARKETING SITE",
+        "pitch": "Barcelona real-estate agency. Expertise, services, client process."
+      },
+      "maisonPilates": {
+        "type": "E-COMMERCE",
+        "pitch": "Online Pilates studio. Catalog, seasonal sales, polished product journey."
+      }
+    }
   },
   "faq": {
     "kicker": "FAQ",
@@ -222,5 +249,427 @@
     "language": "Language",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
+  },
+  "format": {
+    "dash": "—",
+    "timeAgo": {
+      "now": "just now",
+      "minutes": "{n} min ago",
+      "hours": "{n}h ago",
+      "days": "{n}d ago"
+    },
+    "serviceTypes": {
+      "VITRINE": "Marketing site",
+      "ECOMMERCE": "E-commerce",
+      "SHOPIFY": "Shopify",
+      "LOVABLE_TO_APP": "Lovable→App",
+      "SAAS_MVP": "SaaS MVP",
+      "MOBILE_APP": "Mobile app",
+      "OTHER": "Other"
+    },
+    "leadStatus": {
+      "NEW": "New",
+      "CONTACTED": "Contacted",
+      "QUALIFIED": "Qualified",
+      "WON": "Won",
+      "LOST": "Lost"
+    },
+    "projectStatus": {
+      "DRAFT": "Brief",
+      "QUOTED": "Quote sent",
+      "SIGNED": "Signed",
+      "IN_PROGRESS": "In progress",
+      "IN_REVIEW": "In review",
+      "SHIPPED": "Shipped",
+      "ARCHIVED": "Archived"
+    }
+  },
+  "auth": {
+    "common": {
+      "passwordLabel": "Password",
+      "emailLabel": "Email",
+      "signInButton": "Sign in",
+      "signingIn": "Signing in…",
+      "sendingLink": "Sending…",
+      "sendLink": "Send link",
+      "sentLabel": "Sent",
+      "backToPasswordLogin": "← Back to password sign-in",
+      "firstTimeOrForgot": "First time or forgot your password?",
+      "invalidCredentials": "Wrong email or password.",
+      "signInError": "Sign-in error.",
+      "linkSent": "Link sent. Check your inbox.",
+      "recoverEmailPlaceholder": "you@example.com"
+    },
+    "admin": {
+      "metaTitle": "Admin · Hulabe",
+      "kicker": "HULABE / ADMIN",
+      "heading": "Sign in.",
+      "subheading": "Enter your email and password. If this is your first sign-in or you forgot your password, use the link below the form.",
+      "setupNeededTitle": "Setup required",
+      "setupNeededBody": "No admin has been created yet. Create the first OWNER via direct SQL on Supabase — see {file} §5. Then use \"First time?\" below to set your password.",
+      "recoverEmailLabel": "Admin email",
+      "recoverEmailPlaceholder": "admin@hulabe.com",
+      "signinEmailPlaceholder": "admin@hulabe.com",
+      "errors": {
+        "not_authorized": "This email isn't allowed to access admin. Ask an owner to invite you.",
+        "invalid_link": "Link expired or invalid. Request a new magic link.",
+        "forbidden": "Your role doesn't grant access to this page.",
+        "default": "Authentication error."
+      },
+      "setupPassword": {
+        "metaTitle": "Set my password · Hulabe",
+        "heading": "Choose your password",
+        "subheading": "Signed in as {email}. Choose a password for your next sign-ins."
+      }
+    },
+    "client": {
+      "metaTitle": "Client portal · Hulabe",
+      "kicker": "HULABE / CLIENT PORTAL",
+      "heading": "Welcome.",
+      "subheading": "Enter the email you used for your project and your password. If this is your first sign-in or you forgot your password, use the link below the form.",
+      "errors": {
+        "not_authorized": "No project found for this email. If you think it's a mistake, email support@hulabe.com.",
+        "invalid_link": "Link expired or invalid. Request a new link."
+      },
+      "setupPassword": {
+        "metaTitle": "Set my password · Hulabe",
+        "headingGreeting": "Hi {name}",
+        "headingWelcome": "Welcome",
+        "subheading": "Choose your password to access your portal."
+      }
+    },
+    "setupForm": {
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmLabel": "Confirm",
+      "confirmPlaceholder": "Retype your password",
+      "submit": "Set password",
+      "submitting": "Saving…",
+      "errors": {
+        "tooShort": "Password must be at least 8 characters.",
+        "mismatch": "Passwords don't match.",
+        "default": "Error updating password."
+      }
+    }
+  },
+  "admin": {
+    "shell": {
+      "signedIn": "Signed in",
+      "signOut": "Sign out",
+      "inactive": "Inactive",
+      "you": "You"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "leads": "Leads",
+      "projects": "Projects",
+      "invoices": "Invoices",
+      "support": "Support",
+      "team": "Team",
+      "settings": "Settings",
+      "posthog": "PostHog"
+    },
+    "dashboard": {
+      "kicker": "OVERVIEW",
+      "title": "Dashboard.",
+      "subtitle": "Snapshot of leads, projects and conversion. Updated on every page load.",
+      "stats": {
+        "leadsTotal": "Leads · TOTAL",
+        "leadsTotalHint": "{count} new untouched",
+        "leads7d": "Leads · 7 DAYS",
+        "leads7dHint": "incl. 0 lost",
+        "activeProjects": "Active projects",
+        "activeProjectsHint": "signed · in progress · review",
+        "wonThisMonth": "Won this month",
+        "wonThisMonthHint": "{count} projects shipped"
+      },
+      "recentLeads": "Recent leads",
+      "viewAll": "View all",
+      "noLeads": "No leads yet. The page might not be live yet.",
+      "activity": "Activity",
+      "noActivity": "No activity yet.",
+      "quickLinks": {
+        "inboxKicker": "Inbox",
+        "inboxLabel": "Handle new leads",
+        "pipelineKicker": "Pipeline",
+        "pipelineLabel": "See active projects",
+        "analyticsKicker": "Analytics",
+        "analyticsLabel": "Open PostHog"
+      }
+    },
+    "leads": {
+      "kicker": "LEADS",
+      "title": "Inbox.",
+      "subtitle": "{count} leads shown",
+      "all": "All",
+      "searchPlaceholder": "Email or name…",
+      "searchButton": "Search",
+      "columns": {
+        "status": "Status",
+        "lead": "Lead",
+        "ai": "AI",
+        "service": "Service",
+        "estimate": "Estimate",
+        "source": "Source",
+        "date": "Date"
+      },
+      "empty": "No leads match these filters.",
+      "detail": {
+        "receivedAgo": "Received {ago} · {source}",
+        "back": "Back",
+        "brief": "Brief",
+        "fields": {
+          "service": "Service",
+          "source": "Source",
+          "estimation": "Estimate",
+          "timeline": "Declared timeline",
+          "budget": "Declared budget",
+          "locale": "Locale"
+        },
+        "message": "Message",
+        "simulatorAnswers": "Simulator answers",
+        "notes": "Internal notes",
+        "notePlaceholder": "Internal note (never visible to the client) — e.g. called, meeting Tue 10am.",
+        "addNote": "Add",
+        "noNotes": "No notes yet.",
+        "timeline": "Timeline",
+        "noActivity": "No activity.",
+        "status": "Status",
+        "contact": "Contact",
+        "createdOn": "Created {date}",
+        "relatedProjects": "Related projects",
+        "noProjects": "No projects.",
+        "projectNamePlaceholder": "Project name (e.g. MVP site Acme)",
+        "createProject": "Create project"
+      }
+    },
+    "projects": {
+      "kicker": "PIPELINE",
+      "title": "Projects.",
+      "subtitle": "{count} active projects · archive hidden",
+      "empty": "—",
+      "detail": {
+        "pipeline": "Pipeline",
+        "leadPrefix": "Lead: ",
+        "standalone": "Standalone",
+        "deliverables": "Deliverables",
+        "deliverablesHint": "visible to the client",
+        "titlePlaceholder": "Title",
+        "urlPlaceholder": "https://… (optional)",
+        "add": "Add",
+        "noDeliverables": "No deliverables yet.",
+        "notes": "Notes",
+        "notePlaceholder": "Note (internal by default)…",
+        "visibleToClient": "Visible to the client",
+        "noNotes": "No notes yet.",
+        "client": "client",
+        "internal": "internal",
+        "supportTickets": "Support tickets",
+        "totalSuffix": "total",
+        "noTickets": "No ticket for this project.",
+        "replyPlaceholder": "Reply (emailed to the client + posted as a visible update)…",
+        "replyInProgress": "Reply · in progress",
+        "replyResolve": "Reply · resolve",
+        "timeline": "Timeline",
+        "noActivity": "No activity.",
+        "status": "Status",
+        "pricing": "Pricing",
+        "quoted": "Quoted",
+        "final": "Final",
+        "details": "Details",
+        "service": "Service",
+        "started": "Started",
+        "shipped": "Shipped",
+        "supportUntil": "Support until",
+        "leadSource": "Lead source",
+        "magicLinkHint": "Sends a magic link to {email}"
+      }
+    },
+    "invoices": {
+      "kicker": "INVOICES",
+      "title": "Invoices.",
+      "subtitle": "Simple tracking. Stripe / auto-billing comes later.",
+      "empty": "No invoices yet. This section becomes useful once we start issuing them — the Invoice table is already wired DB-side.",
+      "columns": {
+        "number": "No.",
+        "status": "Status",
+        "project": "Project",
+        "amount": "Amount",
+        "issued": "Issued",
+        "paid": "Paid"
+      }
+    },
+    "support": {
+      "kicker": "SUPPORT",
+      "title": "Requests & 14-day window.",
+      "subtitle": "Client support tickets + projects currently inside the 14-day support window.",
+      "windowsTitle": "Projects in support window",
+      "windowsEmpty": "No project is currently inside the 14-day support window.",
+      "shippedExpires": "Shipped {shipped} · expires {expires}",
+      "ticketsTitle": "Tickets",
+      "ticketsEmpty": "No tickets. The SupportRequest table is already wired DB-side and will be populated by the client portal once launched.",
+      "client": "client"
+    },
+    "team": {
+      "kicker": "TEAM",
+      "title": "Admin team.",
+      "subtitleOne": "{count} account · {owners} active owner",
+      "subtitleMany": "{count} accounts · {owners} active owners",
+      "inviteTitle": "Invite a new admin",
+      "inviteBody": "Magic link sent to the given email. Only admins listed here can access {path}.",
+      "listTitle": "List",
+      "listEmpty": "No admins yet.",
+      "inviteForm": {
+        "nameLabel": "Name (optional)",
+        "namePlaceholder": "Alice",
+        "roleLabel": "Role",
+        "viewerOption": "Viewer (read-only)",
+        "submit": "Send invitation",
+        "submitting": "Sending…"
+      },
+      "row": {
+        "noName": "No name",
+        "namePlaceholder": "Name",
+        "lastLogin": "Last sign-in {ago}",
+        "invitedNeverLogged": "Invited {ago} · never signed in",
+        "createdOn": "Created {date}",
+        "invitedBy": " · invited by {label}",
+        "cancel": "Cancel",
+        "save": "Save",
+        "edit": "Edit",
+        "resendInvite": "Resend invitation",
+        "sendNewMagicLink": "Send a new magic link",
+        "deactivate": "Deactivate",
+        "reactivate": "Reactivate",
+        "delete": "Delete",
+        "deleteConfirm": "Permanently delete {email}? This action is irreversible (Supabase Auth keeps the account — it can be re-invited later).",
+        "roles": {
+          "OWNER": "Owner",
+          "ADMIN": "Admin",
+          "VIEWER": "Viewer"
+        }
+      }
+    },
+    "settings": {
+      "kicker": "SETTINGS",
+      "title": "Configuration.",
+      "myAccount": "My account",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "createdAt": "Account created"
+      },
+      "teamTitle": "Admin team",
+      "manage": "Manage",
+      "teamCountOne": "{count} account. You can invite, deactivate or delete admins on the Team page.",
+      "teamCountMany": "{count} accounts. You can invite, deactivate or delete admins on the Team page.",
+      "integrationsTitle": "Integrations",
+      "integrationsHints": {
+        "supabase": "Auth + DB",
+        "supabaseService": "Client portal magic link + admin invitations",
+        "resend": "Transactional emails",
+        "posthog": "Analytics + session replay",
+        "anthropic": "AI lead scoring · {model}"
+      },
+      "connected": "● connected",
+      "notSet": "○ not set",
+      "teamSection": "Team",
+      "ownerOnlyNote": "Only an {role} can manage the admin team. Ask an owner to add you or change your role."
+    },
+    "invitePortal": {
+      "submit": "Invite to portal",
+      "submitting": "Sending…",
+      "sentTo": "Sent to {email}"
+    },
+    "aiPanel": {
+      "title": "AI lead scoring",
+      "scoring": "scoring…",
+      "rescore": "re-score",
+      "score": "score",
+      "notScoredLine1": "Not scored yet. Click {label} to run Claude.",
+      "notScoredLine1Label": "SCORE",
+      "notScoredLine2": "Requires ANTHROPIC_API_KEY in env.",
+      "scoreLabel": "Score",
+      "outOf": "/ 10",
+      "suggestedReply": "Suggested reply",
+      "copy": "copy",
+      "copied": "copied",
+      "send": "send",
+      "actions": {
+        "SEND_QUOTE": "Send quote",
+        "BOOK_CALL": "Book a call",
+        "ASK_CLARIFICATION": "Ask for clarification",
+        "DECLINE_POLITELY": "Decline politely"
+      }
+    }
+  },
+  "clientPortal": {
+    "shell": {
+      "projects": "Projects",
+      "support": "Support",
+      "account": "Account",
+      "signOut": "Sign out"
+    },
+    "home": {
+      "kicker": "PROJECTS",
+      "greeting": "Hi",
+      "noProjects": "No project visible in the portal yet.",
+      "oneProject": "Here's your project in progress.",
+      "manyProjects": "Here are your {count} projects.",
+      "emptyCta": "If you're waiting on a brief or a quote, we'll get back to you within 24 working hours. You can also email support@hulabe.com.",
+      "project": "Project",
+      "supportActiveUntil": "Support active · until {date}",
+      "started": "Started",
+      "shipped": "Shipped",
+      "updated": "Updated",
+      "deliverables": "Deliverables",
+      "tickets": "Tickets",
+      "projectCountOne": "{count} project",
+      "projectCountMany": "{count} projects"
+    },
+    "project": {
+      "backToProjects": "Your projects",
+      "metaTitleFallback": "Project · Hulabe",
+      "fallbackService": "Project",
+      "supportActiveUntil": "Support active · until {date}",
+      "progress": "Progress",
+      "shippedOn": "Shipped on {date}",
+      "deliverables": "Deliverables",
+      "noDeliverables": "No deliverables yet. We push them as we go.",
+      "updates": "Updates",
+      "noUpdates": "No updates yet. We post regularly during the build.",
+      "history": "History",
+      "noHistory": "Nothing to show yet.",
+      "support": "Support",
+      "supportActiveBody": "You have a support window included until {date}. Unlimited tickets during this period.",
+      "supportExpiredBody": "The included 14-day support window has expired. You can still open a ticket — we'll come back with a quote if it's out of scope.",
+      "supportPlaceholder": "Describe what you need. Include a URL and a screenshot if useful.",
+      "send": "Send",
+      "details": "Details",
+      "started": "Started",
+      "shipped": "Shipped",
+      "contact": "Contact",
+      "notFound": {
+        "code": "404",
+        "title": "Project not found.",
+        "body": "This URL doesn't point to any project linked to your account.",
+        "back": "Back to my projects"
+      }
+    },
+    "settings": {
+      "kicker": "ACCOUNT",
+      "title": "Account.",
+      "identityTitle": "Identity",
+      "email": "Email",
+      "userId": "User ID",
+      "footnotePrefix": "To change your email or delete your account, email "
+    },
+    "support": {
+      "kicker": "SUPPORT",
+      "title": "My requests.",
+      "subtitle": "To open a new request, go to the relevant project.",
+      "empty": "No requests yet."
+    }
   }
 }

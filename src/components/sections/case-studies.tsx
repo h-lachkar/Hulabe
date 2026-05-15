@@ -38,33 +38,29 @@ function thumScreenshot(url: string, width = 1280, crop = 800) {
 // TODO côté toi: enrichir `pitch`, `type`, `stack` avec les vrais détails.
 // Pour des previews stables et plus rapides, remplace `screenshotUrl: undefined`
 // par un chemin local du genre `/cases/rektads.png` (et ajoute le PNG dans /public/cases/).
-const CASES: Case[] = [
+type CaseSeed = Omit<Case, "type" | "pitch"> & { slug: string };
+
+const CASES_SEED: CaseSeed[] = [
   {
+    slug: "rektads",
     number: "01",
     title: "RektAds",
-    type: "WEB / APP",
-    pitch:
-      "Plateforme d'analyse de pubs Meta. Score les créas, détecte la fatigue, génère la suivante.",
     stack: ["Next.js", "TypeScript", "Tailwind"],
     href: "https://rektads.com",
     screenshotUrl: "/cases/rektads.png",
   },
   {
+    slug: "bcnImmobilier",
     number: "02",
     title: "BCN Immobilier",
-    type: "VITRINE",
-    pitch:
-      "Agence immobilière barcelonaise. Expertise, services, processus client.",
     stack: ["Next.js", "CMS", "i18n"],
     href: "https://bcn-immobilier.com",
     screenshotUrl: "/cases/bcn-immobilier.png",
   },
   {
+    slug: "maisonPilates",
     number: "03",
     title: "Maison Pilates",
-    type: "E-COMMERCE",
-    pitch:
-      "Studio Pilates en ligne. Catalogue, ventes saisonnières, parcours produit soigné.",
     stack: ["Shopify", "Liquid", "Animations"],
     href: "https://maisonpilates.fr",
     screenshotUrl: "/cases/maisonpilates.png",
@@ -73,6 +69,13 @@ const CASES: Case[] = [
 
 export function CaseStudies() {
   const t = useTranslations("cases");
+  const ti = useTranslations("cases.items");
+
+  const CASES: Case[] = CASES_SEED.map((c) => ({
+    ...c,
+    type: ti(`${c.slug}.type`),
+    pitch: ti(`${c.slug}.pitch`),
+  }));
 
   return (
     <section

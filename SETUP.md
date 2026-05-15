@@ -235,25 +235,30 @@ Sans clé API, le scoring est skip silencieusement et l'UI affiche "pas encore �
 
 ---
 
-## 7. Client portal — sous-domaine `client.hulabe.com`
+## 7. Sous-domaines `admin.hulabe.com` + `client.hulabe.com`
 
-Le portail client est servi sur `client.hulabe.com` via un rewrite Next.js. Tout le code vit dans `src/app/client/*`, et Vercel route automatiquement le sous-domaine. Détails de l'architecture dans [`CLIENT_PORTAL.md`](./CLIENT_PORTAL.md).
+L'admin **et** le portail client sont servis sur des sous-domaines dédiés via des rewrites Next.js. Tout le code vit dans `src/app/admin/*` et `src/app/client/*`, et Vercel route automatiquement les sous-domaines. Détails de l'architecture client dans [`CLIENT_PORTAL.md`](./CLIENT_PORTAL.md).
 
 ### 7.1 DNS
 
-Chez ton registrar, ajoute un record CNAME :
+Chez ton registrar, ajoute **deux** records CNAME :
 
 ```
 CNAME   client   cname.vercel-dns.com
+CNAME   admin    cname.vercel-dns.com
 ```
 
 (propagation : 5-30 min)
 
 ### 7.2 Vercel — Domains
 
-Sur ton projet Vercel → **Domains** → add `client.hulabe.com`. Vercel détecte le CNAME et provisionne SSL automatiquement.
+Sur ton projet Vercel → **Domains** → add :
+- `client.hulabe.com`
+- `admin.hulabe.com`
 
-> Important : **n'attache PAS** un domaine dédié à `/client`, et ne configure pas de redirect Vercel. Le rewrite dans `next.config.mjs` (déjà en place) fait tout le travail.
+Vercel détecte les CNAME et provisionne SSL automatiquement pour chacun.
+
+> Important : **n'attache PAS** un domaine dédié à `/client` ou `/admin`, et ne configure pas de redirect Vercel. Les rewrites dans `next.config.mjs` (déjà en place) font tout le travail.
 
 ### 7.3 Variables d'environnement
 
@@ -262,23 +267,35 @@ Dans `.env.local` (dev) et Vercel (prod) :
 ```
 NEXT_PUBLIC_CLIENT_HOST="client.hulabe.com"
 NEXT_PUBLIC_CLIENT_URL="https://client.hulabe.com"
+NEXT_PUBLIC_ADMIN_HOST="admin.hulabe.com"
+NEXT_PUBLIC_ADMIN_URL="https://admin.hulabe.com"
 ```
 
 `SUPABASE_SERVICE_ROLE_KEY` (déjà configuré en §1) sert ici à générer les magic-links d'invitation.
 
-> En dev local, tu n'as pas besoin du sous-domaine — `http://localhost:3000/client/login` fonctionne pareil.
+> En dev local, tu n'as pas besoin des sous-domaines — `http://localhost:3000/admin/login` et `http://localhost:3000/client/login` fonctionnent pareil. Les `redirectTo` Supabase sont calculés dynamiquement depuis l'origin de la requête.
 
 ### 7.4 Site URL principale Supabase
 
-Sur **Supabase → Authentication → URL Configuration**, vérifie que **Site URL** = `https://hulabe.com`. Les cookies Supabase sont attachés au domaine parent `.hulabe.com` pour fonctionner cross-subdomain (admin sur `hulabe.com/admin` ET portail sur `client.hulabe.com` partagent la session).
+Sur **Supabase → Authentication → URL Configuration**, vérifie que **Site URL** = `https://hulabe.com`. Les cookies Supabase sont attachés au domaine parent `.hulabe.com` pour fonctionner cross-subdomain (admin, client et site marketing partagent la session).
 
-### 7.5 Comment fonctionne le flow
+Ajoute aussi dans **Redirect URLs** :
 
-1. Sur `/admin/projects/[id]`, tu cliques **"Inviter au portail"**
-2. Server action génère un magic-link Supabase via le service role key
+```
+http://localhost:3000/auth/callback
+https://hulabe.com/auth/callback
+https://admin.hulabe.com/auth/callback
+https://client.hulabe.com/auth/callback
+```
+
+### 7.5 Comment fonctionne le flow d'invitation client
+
+1. Sur `admin.hulabe.com/projects/[id]`, tu cliques **"Inviter au portail"**
+2. Server action génère un lien Supabase (recovery ou invite) via le service role key
 3. Email envoyé via Resend au `lead.email` avec un template branded Hulabe
-4. Le client clique le lien → `/auth/callback` → cookie session set → redirect vers `/client/projects/[id]`
-5. Plus tard, le client peut aussi venir directement sur `client.hulabe.com` et entrer son email pour re-login (self-service)
+4. Le client clique le lien → `/auth/callback` → cookie session set → redirect vers `client.hulabe.com/setup-password`
+5. Il définit son mot de passe → arrive sur `client.hulabe.com`
+6. Plus tard, le client se re-connecte directement sur `client.hulabe.com` avec email + password
 
 ---
 
@@ -313,9 +330,11 @@ Sur **Supabase → Authentication → URL Configuration**, vérifie que **Site U
    ANTHROPIC_API_KEY                    # cocher "Sensitive"
    ANTHROPIC_MODEL
 
-   # Client portal subdomain
+   # Subdomains (admin + client portal)
    NEXT_PUBLIC_CLIENT_HOST
    NEXT_PUBLIC_CLIENT_URL
+   NEXT_PUBLIC_ADMIN_HOST
+   NEXT_PUBLIC_ADMIN_URL
 
    # Public
    NEXT_PUBLIC_SITE_URL
@@ -331,7 +350,8 @@ Sur **Supabase → Authentication → URL Configuration**, vérifie que **Site U
 3. Vercel te donne les DNS à pointer :
    - **Apex (`hulabe.com`)** : `A 76.76.21.21`
    - **www** : `CNAME cname.vercel-dns.com`
-   - **client** : `CNAME cname.vercel-dns.com` (voir §5.1)
+   - **client** : `CNAME cname.vercel-dns.com` (voir §7.1)
+   - **admin** : `CNAME cname.vercel-dns.com` (voir §7.1)
 4. Mets `NEXT_PUBLIC_SITE_URL=https://hulabe.com` dans Vercel env vars (sans `/` final)
 5. SSL est automatique (Let's Encrypt) sous 24h
 
@@ -438,9 +458,11 @@ NEXT_PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
 ANTHROPIC_API_KEY="sk-ant-..."                                # 🔒 sensitive
 ANTHROPIC_MODEL="claude-haiku-4-5-20251001"
 
-# ─── Client portal subdomain ─────────────────────────────────────
+# ─── Subdomains (admin + client portal) ──────────────────────────
 NEXT_PUBLIC_CLIENT_HOST="client.hulabe.com"
 NEXT_PUBLIC_CLIENT_URL="https://client.hulabe.com"
+NEXT_PUBLIC_ADMIN_HOST="admin.hulabe.com"
+NEXT_PUBLIC_ADMIN_URL="https://admin.hulabe.com"
 
 # ─── Public ──────────────────────────────────────────────────────
 NEXT_PUBLIC_SITE_URL="https://hulabe.com"

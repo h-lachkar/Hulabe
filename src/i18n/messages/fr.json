@@ -11,6 +11,19 @@
     "contact": "Contact",
     "cta": "Devis"
   },
+  "terminal": {
+    "live": "live",
+    "title": "~/hulabe — zsh",
+    "cmd": "hulabe ship --project=mvp",
+    "line1": "→ Brief reçu · 30 min",
+    "line2": "✓ Devis sous 24h ouvrées",
+    "line3": "→ Démarrage J+7",
+    "line4": "✓ Build · Next.js · TypeScript · Supabase",
+    "line5": "✓ Tests · Vercel preview",
+    "line6": "→ Demo · Slack feedback",
+    "line7": "✓ Deploy production",
+    "footer": "shipping in 2-8 weeks."
+  },
   "hero": {
     "kicker": "Agence dev",
     "titleLine1": "Build fast.",
@@ -77,10 +90,10 @@
     "title": "Comment on bosse.",
     "subtitle": "Quatre étapes. Pas de réunions inutiles, pas de slideware.",
     "steps": {
-      "1": { "title": "Brief 30 min", "body": "On comprend ton projet, ton délai, ton budget. Tu repars avec un plan clair." },
-      "2": { "title": "Devis fixe", "body": "Sous 24h ouvrées. Périmètre, planning, prix. Pas d'ajout caché." },
-      "3": { "title": "Build", "body": "Démarrage sous 7 jours. Demos régulières, accès direct sur Slack ou WhatsApp." },
-      "4": { "title": "Ship", "body": "Mise en ligne, formation, doc. 14 jours de support inclus pour ajustements." }
+      "1": { "title": "Brief 30 min", "body": "On comprend ton projet, ton délai, ton budget. Tu repars avec un plan clair.", "meta": "30 MIN" },
+      "2": { "title": "Devis fixe", "body": "Sous 24h ouvrées. Périmètre, planning, prix. Pas d'ajout caché.", "meta": "< 24H" },
+      "3": { "title": "Build", "body": "Démarrage sous 7 jours. Demos régulières, accès direct sur Slack ou WhatsApp.", "meta": "1-8 SEMAINES" },
+      "4": { "title": "Ship", "body": "Mise en ligne, formation, doc. 14 jours de support inclus pour ajustements.", "meta": "GO LIVE" }
     }
   },
   "cases": {
@@ -89,7 +102,21 @@
     "subtitle": "Ce qu'on a construit. Plus de cas arrivent.",
     "viewProject": "Voir le projet",
     "comingSoon": "À venir",
-    "soon": "Plus de cas à venir"
+    "soon": "Plus de cas à venir",
+    "items": {
+      "rektads": {
+        "type": "WEB / APP",
+        "pitch": "Plateforme d'analyse de pubs Meta. Score les créas, détecte la fatigue, génère la suivante."
+      },
+      "bcnImmobilier": {
+        "type": "VITRINE",
+        "pitch": "Agence immobilière barcelonaise. Expertise, services, processus client."
+      },
+      "maisonPilates": {
+        "type": "E-COMMERCE",
+        "pitch": "Studio Pilates en ligne. Catalogue, ventes saisonnières, parcours produit soigné."
+      }
+    }
   },
   "faq": {
     "kicker": "FAQ",
@@ -222,5 +249,427 @@
     "language": "Langue",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu"
+  },
+  "format": {
+    "dash": "—",
+    "timeAgo": {
+      "now": "à l'instant",
+      "minutes": "il y a {n} min",
+      "hours": "il y a {n}h",
+      "days": "il y a {n}j"
+    },
+    "serviceTypes": {
+      "VITRINE": "Site vitrine",
+      "ECOMMERCE": "E-commerce",
+      "SHOPIFY": "Shopify",
+      "LOVABLE_TO_APP": "Lovable→App",
+      "SAAS_MVP": "SaaS MVP",
+      "MOBILE_APP": "App mobile",
+      "OTHER": "Autre"
+    },
+    "leadStatus": {
+      "NEW": "Nouveau",
+      "CONTACTED": "Contacté",
+      "QUALIFIED": "Qualifié",
+      "WON": "Gagné",
+      "LOST": "Perdu"
+    },
+    "projectStatus": {
+      "DRAFT": "Brief",
+      "QUOTED": "Devis envoyé",
+      "SIGNED": "Signé",
+      "IN_PROGRESS": "En cours",
+      "IN_REVIEW": "En review",
+      "SHIPPED": "Livré",
+      "ARCHIVED": "Archivé"
+    }
+  },
+  "auth": {
+    "common": {
+      "passwordLabel": "Mot de passe",
+      "emailLabel": "Email",
+      "signInButton": "Se connecter",
+      "signingIn": "Connexion…",
+      "sendingLink": "Envoi…",
+      "sendLink": "Recevoir le lien",
+      "sentLabel": "Envoyé",
+      "backToPasswordLogin": "← Retour à la connexion par mot de passe",
+      "firstTimeOrForgot": "Première connexion ou mot de passe oublié ?",
+      "invalidCredentials": "Email ou mot de passe incorrect.",
+      "signInError": "Erreur de connexion.",
+      "linkSent": "Lien envoyé. Vérifie ta boîte mail.",
+      "recoverEmailPlaceholder": "toi@exemple.com"
+    },
+    "admin": {
+      "metaTitle": "Admin · Hulabe",
+      "kicker": "HULABE / ADMIN",
+      "heading": "Sign in.",
+      "subheading": "Entre ton email et ton mot de passe. Si c'est ta première connexion ou si tu as oublié ton mot de passe, utilise le lien sous le formulaire.",
+      "setupNeededTitle": "Setup nécessaire",
+      "setupNeededBody": "Aucun admin n'est encore créé. Crée le premier OWNER en SQL direct sur Supabase — voir {file} §5. Puis utilise « Première connexion ? » ci-dessous pour définir ton mot de passe.",
+      "recoverEmailLabel": "Email admin",
+      "recoverEmailPlaceholder": "admin@hulabe.com",
+      "signinEmailPlaceholder": "admin@hulabe.com",
+      "errors": {
+        "not_authorized": "Cet email n'est pas autorisé à accéder à l'admin. Demande à un owner de t'inviter.",
+        "invalid_link": "Lien expiré ou invalide. Demande un nouveau magic link.",
+        "forbidden": "Ton rôle ne donne pas accès à cette page.",
+        "default": "Erreur d'authentification."
+      },
+      "setupPassword": {
+        "metaTitle": "Définir mon mot de passe · Hulabe",
+        "heading": "Choisis ton mot de passe",
+        "subheading": "Connecté en tant que {email}. Choisis un mot de passe pour tes prochaines connexions."
+      }
+    },
+    "client": {
+      "metaTitle": "Espace client · Hulabe",
+      "kicker": "HULABE / ESPACE CLIENT",
+      "heading": "Bienvenue.",
+      "subheading": "Entre l'email que tu as utilisé pour ton projet et ton mot de passe. Si c'est ta première connexion ou si tu as oublié ton mot de passe, utilise le lien sous le formulaire.",
+      "errors": {
+        "not_authorized": "Aucun projet trouvé pour cet email. Si tu penses que c'est une erreur, écris à support@hulabe.com.",
+        "invalid_link": "Lien expiré ou invalide. Demande un nouveau lien."
+      },
+      "setupPassword": {
+        "metaTitle": "Définir mon mot de passe · Hulabe",
+        "headingGreeting": "Salut {name}",
+        "headingWelcome": "Bienvenue",
+        "subheading": "Choisis ton mot de passe pour accéder à ton espace."
+      }
+    },
+    "setupForm": {
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Au moins 8 caractères",
+      "confirmLabel": "Confirmer",
+      "confirmPlaceholder": "Retape le mot de passe",
+      "submit": "Définir le mot de passe",
+      "submitting": "Enregistrement…",
+      "errors": {
+        "tooShort": "Le mot de passe doit faire au moins 8 caractères.",
+        "mismatch": "Les deux mots de passe ne correspondent pas.",
+        "default": "Erreur lors de la mise à jour du mot de passe."
+      }
+    }
+  },
+  "admin": {
+    "shell": {
+      "signedIn": "Signed in",
+      "signOut": "Sign out",
+      "inactive": "Inactif",
+      "you": "You"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "leads": "Leads",
+      "projects": "Projects",
+      "invoices": "Invoices",
+      "support": "Support",
+      "team": "Team",
+      "settings": "Settings",
+      "posthog": "PostHog"
+    },
+    "dashboard": {
+      "kicker": "OVERVIEW",
+      "title": "Dashboard.",
+      "subtitle": "Snapshot des leads, projets et conversion. Mis à jour à chaque page load.",
+      "stats": {
+        "leadsTotal": "Leads · TOTAL",
+        "leadsTotalHint": "{count} nouveaux non traités",
+        "leads7d": "Leads · 7 JOURS",
+        "leads7dHint": "dont 0 perdus",
+        "activeProjects": "Projets actifs",
+        "activeProjectsHint": "signed · in progress · review",
+        "wonThisMonth": "Won ce mois",
+        "wonThisMonthHint": "{count} projets shippés"
+      },
+      "recentLeads": "Recent leads",
+      "viewAll": "Voir tous",
+      "noLeads": "Pas encore de lead. La page n'est peut-être pas encore en ligne.",
+      "activity": "Activity",
+      "noActivity": "Pas encore d'activité.",
+      "quickLinks": {
+        "inboxKicker": "Inbox",
+        "inboxLabel": "Traiter les nouveaux leads",
+        "pipelineKicker": "Pipeline",
+        "pipelineLabel": "Voir les projets actifs",
+        "analyticsKicker": "Analytics",
+        "analyticsLabel": "Ouvrir PostHog"
+      }
+    },
+    "leads": {
+      "kicker": "LEADS",
+      "title": "Inbox.",
+      "subtitle": "{count} leads affichés",
+      "all": "All",
+      "searchPlaceholder": "Email ou nom…",
+      "searchButton": "Search",
+      "columns": {
+        "status": "Status",
+        "lead": "Lead",
+        "ai": "AI",
+        "service": "Service",
+        "estimate": "Estimate",
+        "source": "Source",
+        "date": "Date"
+      },
+      "empty": "Aucun lead avec ces filtres.",
+      "detail": {
+        "receivedAgo": "Reçu {ago} · {source}",
+        "back": "Retour",
+        "brief": "Brief",
+        "fields": {
+          "service": "Service",
+          "source": "Source",
+          "estimation": "Estimation",
+          "timeline": "Délai déclaré",
+          "budget": "Budget déclaré",
+          "locale": "Locale"
+        },
+        "message": "Message",
+        "simulatorAnswers": "Réponses simulator",
+        "notes": "Notes internes",
+        "notePlaceholder": "Note interne (jamais visible côté client) — ex: appelé, RDV mardi 10h.",
+        "addNote": "Ajouter",
+        "noNotes": "Pas encore de note.",
+        "timeline": "Timeline",
+        "noActivity": "Pas d'activité.",
+        "status": "Status",
+        "contact": "Contact",
+        "createdOn": "Créé {date}",
+        "relatedProjects": "Projets liés",
+        "noProjects": "Aucun projet.",
+        "projectNamePlaceholder": "Nom du projet (ex: Site MVP Acme)",
+        "createProject": "Créer projet"
+      }
+    },
+    "projects": {
+      "kicker": "PIPELINE",
+      "title": "Projects.",
+      "subtitle": "{count} projets actifs · archive masquée",
+      "empty": "—",
+      "detail": {
+        "pipeline": "Pipeline",
+        "leadPrefix": "Lead: ",
+        "standalone": "Standalone",
+        "deliverables": "Livrables",
+        "deliverablesHint": "visibles côté client",
+        "titlePlaceholder": "Titre",
+        "urlPlaceholder": "https://… (optionnel)",
+        "add": "Ajouter",
+        "noDeliverables": "Pas encore de livrable.",
+        "notes": "Notes",
+        "notePlaceholder": "Note (par défaut interne)…",
+        "visibleToClient": "Visible côté client",
+        "noNotes": "Pas encore de note.",
+        "client": "client",
+        "internal": "interne",
+        "supportTickets": "Tickets support",
+        "totalSuffix": "total",
+        "noTickets": "Pas de ticket pour ce projet.",
+        "replyPlaceholder": "Réponse (envoyée par email au client + ajoutée en update visible)…",
+        "replyInProgress": "Répondre · en cours",
+        "replyResolve": "Répondre · résoudre",
+        "timeline": "Timeline",
+        "noActivity": "Pas d'activité.",
+        "status": "Status",
+        "pricing": "Pricing",
+        "quoted": "Quoted",
+        "final": "Final",
+        "details": "Détails",
+        "service": "Service",
+        "started": "Démarré",
+        "shipped": "Shippé",
+        "supportUntil": "Support jusqu'au",
+        "leadSource": "Lead source",
+        "magicLinkHint": "Envoie un magic-link à {email}"
+      }
+    },
+    "invoices": {
+      "kicker": "INVOICES",
+      "title": "Factures.",
+      "subtitle": "Suivi simple. L'intégration Stripe / facturation auto arrive plus tard.",
+      "empty": "Pas encore de facture. Cette section deviendra utile quand on commencera à en émettre — la table Invoice est déjà prête côté DB.",
+      "columns": {
+        "number": "N°",
+        "status": "Status",
+        "project": "Projet",
+        "amount": "Montant",
+        "issued": "Émise",
+        "paid": "Payée"
+      }
+    },
+    "support": {
+      "kicker": "SUPPORT",
+      "title": "Demandes & fenêtre 14j.",
+      "subtitle": "Tickets support clients + projets actuellement dans la fenêtre support 14 jours.",
+      "windowsTitle": "Projets en fenêtre support",
+      "windowsEmpty": "Aucun projet actuellement dans la fenêtre support 14 jours.",
+      "shippedExpires": "Shippé {shipped} · expire {expires}",
+      "ticketsTitle": "Tickets",
+      "ticketsEmpty": "Aucun ticket. La table SupportRequest est déjà câblée côté DB et sera alimentée par le client portal une fois lancé.",
+      "client": "client"
+    },
+    "team": {
+      "kicker": "TEAM",
+      "title": "Équipe admin.",
+      "subtitleOne": "{count} compte · {owners} owner actif",
+      "subtitleMany": "{count} comptes · {owners} owners actifs",
+      "inviteTitle": "Inviter un nouvel admin",
+      "inviteBody": "Magic link envoyé à l'email indiqué. Seuls les admins listés ici peuvent accéder à {path}.",
+      "listTitle": "Liste",
+      "listEmpty": "Aucun admin pour l'instant.",
+      "inviteForm": {
+        "nameLabel": "Nom (facultatif)",
+        "namePlaceholder": "Alice",
+        "roleLabel": "Rôle",
+        "viewerOption": "Viewer (lecture seule)",
+        "submit": "Envoyer l'invitation",
+        "submitting": "Envoi…"
+      },
+      "row": {
+        "noName": "Sans nom",
+        "namePlaceholder": "Nom",
+        "lastLogin": "Dernière connexion {ago}",
+        "invitedNeverLogged": "Invité {ago} · jamais connecté",
+        "createdOn": "Créé {date}",
+        "invitedBy": " · invité par {label}",
+        "cancel": "Annuler",
+        "save": "Save",
+        "edit": "Éditer",
+        "resendInvite": "Renvoyer l'invitation",
+        "sendNewMagicLink": "Envoyer un nouveau magic-link",
+        "deactivate": "Désactiver",
+        "reactivate": "Réactiver",
+        "delete": "Supprimer",
+        "deleteConfirm": "Supprimer définitivement {email} ? Cette action est irréversible (mais Supabase Auth garde le compte — il pourra être réinvité plus tard).",
+        "roles": {
+          "OWNER": "Owner",
+          "ADMIN": "Admin",
+          "VIEWER": "Viewer"
+        }
+      }
+    },
+    "settings": {
+      "kicker": "SETTINGS",
+      "title": "Configuration.",
+      "myAccount": "Mon compte",
+      "fields": {
+        "name": "Nom",
+        "email": "Email",
+        "role": "Rôle",
+        "createdAt": "Compte créé"
+      },
+      "teamTitle": "Équipe admin",
+      "manage": "Gérer",
+      "teamCountOne": "{count} compte. Tu peux inviter, désactiver ou supprimer des admins sur la page Team.",
+      "teamCountMany": "{count} comptes. Tu peux inviter, désactiver ou supprimer des admins sur la page Team.",
+      "integrationsTitle": "Intégrations",
+      "integrationsHints": {
+        "supabase": "Auth + DB",
+        "supabaseService": "Magic-link client portal + invitations admin",
+        "resend": "Emails transactionnels",
+        "posthog": "Analytics + session replay",
+        "anthropic": "AI lead scoring · {model}"
+      },
+      "connected": "● connected",
+      "notSet": "○ not set",
+      "teamSection": "Équipe",
+      "ownerOnlyNote": "Seul un {role} peut gérer l'équipe admin. Demande à un owner de t'ajouter ou de changer ton rôle."
+    },
+    "invitePortal": {
+      "submit": "Inviter au portail",
+      "submitting": "Envoi…",
+      "sentTo": "Envoyé à {email}"
+    },
+    "aiPanel": {
+      "title": "AI lead scoring",
+      "scoring": "scoring…",
+      "rescore": "re-score",
+      "score": "score",
+      "notScoredLine1": "Pas encore évalué. Clique {label} pour lancer Claude.",
+      "notScoredLine1Label": "SCORE",
+      "notScoredLine2": "Requiert ANTHROPIC_API_KEY défini en env.",
+      "scoreLabel": "Score",
+      "outOf": "/ 10",
+      "suggestedReply": "Suggestion de réponse",
+      "copy": "copier",
+      "copied": "copié",
+      "send": "envoyer",
+      "actions": {
+        "SEND_QUOTE": "Envoyer devis",
+        "BOOK_CALL": "Caler un call",
+        "ASK_CLARIFICATION": "Demander des précisions",
+        "DECLINE_POLITELY": "Décliner poliment"
+      }
+    }
+  },
+  "clientPortal": {
+    "shell": {
+      "projects": "Projets",
+      "support": "Support",
+      "account": "Compte",
+      "signOut": "Se déconnecter"
+    },
+    "home": {
+      "kicker": "PROJETS",
+      "greeting": "Salut",
+      "noProjects": "Pas encore de projet visible côté portail.",
+      "oneProject": "Voici ton projet en cours.",
+      "manyProjects": "Voici tes {count} projets.",
+      "emptyCta": "Si tu es en attente d'un brief ou d'un devis, on revient vers toi sous 24h ouvrées. Tu peux aussi écrire à support@hulabe.com.",
+      "project": "Projet",
+      "supportActiveUntil": "Support actif · jusqu'au {date}",
+      "started": "Démarré",
+      "shipped": "Livré",
+      "updated": "Mis à jour",
+      "deliverables": "Livrables",
+      "tickets": "Tickets",
+      "projectCountOne": "{count} projet",
+      "projectCountMany": "{count} projets"
+    },
+    "project": {
+      "backToProjects": "Tes projets",
+      "metaTitleFallback": "Projet · Hulabe",
+      "fallbackService": "Projet",
+      "supportActiveUntil": "Support actif · jusqu'au {date}",
+      "progress": "Avancement",
+      "shippedOn": "Livré le {date}",
+      "deliverables": "Livrables",
+      "noDeliverables": "Pas encore de livrable. On les pousse au fur et à mesure.",
+      "updates": "Updates",
+      "noUpdates": "Pas encore d'update. On poste régulièrement pendant le build.",
+      "history": "Historique",
+      "noHistory": "Rien à montrer pour l'instant.",
+      "support": "Support",
+      "supportActiveBody": "Tu as une fenêtre de support incluse jusqu'au {date}. Tickets illimités sur cette période.",
+      "supportExpiredBody": "La fenêtre support 14 jours incluse est expirée. Tu peux quand même ouvrir un ticket — on revient vers toi avec un devis si c'est hors-périmètre.",
+      "supportPlaceholder": "Décris ce qu'il te faut. Inclus une URL et capture d'écran si utile.",
+      "send": "Envoyer",
+      "details": "Détails",
+      "started": "Démarré",
+      "shipped": "Livré",
+      "contact": "Contact",
+      "notFound": {
+        "code": "404",
+        "title": "Projet introuvable.",
+        "body": "Cette URL ne pointe vers aucun projet associé à ton compte.",
+        "back": "Retour à mes projets"
+      }
+    },
+    "settings": {
+      "kicker": "COMPTE",
+      "title": "Compte.",
+      "identityTitle": "Identité",
+      "email": "Email",
+      "userId": "User ID",
+      "footnotePrefix": "Pour changer ton email ou supprimer ton compte, écris à "
+    },
+    "support": {
+      "kicker": "SUPPORT",
+      "title": "Mes demandes.",
+      "subtitle": "Pour ouvrir une nouvelle demande, va sur le projet concerné.",
+      "empty": "Pas encore de demande."
+    }
   }
 }

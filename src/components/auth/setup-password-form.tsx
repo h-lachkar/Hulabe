@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ArrowRight, AlertCircle } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { markPasswordSet } from "@/lib/auth/password-actions";
@@ -15,6 +16,7 @@ export function SetupPasswordForm({
   successRedirect: string;
 }) {
   const router = useRouter();
+  const t = useTranslations("auth.setupForm");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -25,11 +27,11 @@ export function SetupPasswordForm({
     setError(null);
 
     if (password.length < 8) {
-      setError("Le mot de passe doit faire au moins 8 caractères.");
+      setError(t("errors.tooShort"));
       return;
     }
     if (password !== confirm) {
-      setError("Les deux mots de passe ne correspondent pas.");
+      setError(t("errors.mismatch"));
       return;
     }
 
@@ -45,9 +47,7 @@ export function SetupPasswordForm({
       router.push(successRedirect);
       router.refresh();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Erreur lors de la mise à jour du mot de passe.",
-      );
+      setError(err instanceof Error ? err.message : t("errors.default"));
       setSubmitting(false);
     }
   }
@@ -55,7 +55,7 @@ export function SetupPasswordForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="new-password">Mot de passe</Label>
+        <Label htmlFor="new-password">{t("passwordLabel")}</Label>
         <Input
           id="new-password"
           type="password"
@@ -64,11 +64,11 @@ export function SetupPasswordForm({
           minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Au moins 8 caractères"
+          placeholder={t("passwordPlaceholder")}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="confirm-password">Confirmer</Label>
+        <Label htmlFor="confirm-password">{t("confirmLabel")}</Label>
         <Input
           id="confirm-password"
           type="password"
@@ -77,7 +77,7 @@ export function SetupPasswordForm({
           minLength={8}
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          placeholder="Retape le mot de passe"
+          placeholder={t("confirmPlaceholder")}
         />
       </div>
 
@@ -94,7 +94,7 @@ export function SetupPasswordForm({
         className="w-full"
         disabled={submitting || !password || !confirm}
       >
-        {submitting ? "Enregistrement…" : "Définir le mot de passe"}
+        {submitting ? t("submitting") : t("submit")}
         {!submitting && <ArrowRight className="h-4 w-4" />}
       </Button>
     </form>

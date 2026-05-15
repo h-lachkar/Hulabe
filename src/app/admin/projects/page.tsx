@@ -1,16 +1,11 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
-import {
-  formatEUR,
-  PROJECT_STATUS_COLOR,
-  PROJECT_STATUS_LABEL,
-  SERVICE_LABEL,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +21,9 @@ const COLUMNS: ProjectStatus[] = [
 
 export default async function ProjectsPage() {
   await requireAdmin();
+  const locale = await getLocale();
+  const t = await getTranslations("admin.projects");
+  const { serviceLabel, projectStatusLabel, formatEUR, timeAgo } = getFormat(locale);
 
   const projects = await prisma.project.findMany({
     where: { status: { not: "ARCHIVED" } },
@@ -44,9 +42,9 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHeader
-        kicker="PIPELINE"
-        title="Projects."
-        subtitle={`${projects.length} projets actifs · archive masquée`}
+        kicker={t("kicker")}
+        title={t("title")}
+        subtitle={t("subtitle", { count: projects.length })}
       />
 
       <div className="overflow-x-auto px-4 py-6 sm:px-6 lg:px-10">
@@ -60,7 +58,7 @@ export default async function ProjectsPage() {
                     PROJECT_STATUS_COLOR[col],
                   )}
                 >
-                  {PROJECT_STATUS_LABEL[col]}
+                  {projectStatusLabel[col]}
                   <span className="rounded bg-bg/40 px-1 text-[10px] tabular-nums">
                     {grouped[col].length}
                   </span>
@@ -69,7 +67,7 @@ export default async function ProjectsPage() {
               <div className="space-y-2">
                 {grouped[col].length === 0 ? (
                   <div className="rounded-lg border border-dashed border-border bg-surface/40 p-4 text-center text-xs text-muted-foreground">
-                    —
+                    {t("empty")}
                   </div>
                 ) : (
                   grouped[col].map((p) => (
@@ -91,7 +89,7 @@ export default async function ProjectsPage() {
                       )}
                       <div className="mt-3 flex items-center justify-between gap-2">
                         <span className="font-mono text-[10px] uppercase tracking-wider text-muted-2">
-                          {p.serviceType ? SERVICE_LABEL[p.serviceType] : "—"}
+                          {p.serviceType ? serviceLabel[p.serviceType] : "—"}
                         </span>
                         <span className="font-mono text-xs font-semibold tabular-nums text-foreground">
                           {formatEUR(p.priceQuotedCents)}

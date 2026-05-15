@@ -236,7 +236,7 @@ export async function sendSupportNotificationToAdmin({
   projectId,
 }: SupportNotificationProps) {
   if (!resend) return;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const adminLink = adminPortalUrl(`/projects/${projectId}`);
   const html = emailLayout(`
     <p style="margin:0 0 16px;font-size:16px;font-weight:600;">
       Nouveau ticket support — ${escapeHtml(projectName)}
@@ -246,7 +246,7 @@ export async function sendSupportNotificationToAdmin({
     </p>
     <pre style="margin:0 0 16px;padding:16px;background:#0A0A0A;border:1px solid #262626;border-radius:10px;white-space:pre-wrap;font-family:inherit;color:#FAFAFA;">${escapeHtml(body)}</pre>
     <p style="margin:0 0 24px;">
-      <a href="${siteUrl}/admin/projects/${projectId}" style="display:inline-block;padding:10px 16px;background:#1C1C1C;color:#FAFAFA;text-decoration:none;border:1px solid #262626;border-radius:10px;font-weight:500;font-size:13px;">
+      <a href="${adminLink}" style="display:inline-block;padding:10px 16px;background:#1C1C1C;color:#FAFAFA;text-decoration:none;border:1px solid #262626;border-radius:10px;font-weight:500;font-size:13px;">
         Ouvrir dans l'admin
       </a>
     </p>
@@ -286,7 +286,7 @@ export async function sendAdminInvitation({
   role,
 }: AdminInvitationProps) {
   if (!resend) return;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const adminUrl = adminPortalUrl();
   const inviter = inviterName ?? inviterEmail ?? "L'équipe Hulabe";
   const html = emailLayout(`
     <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
@@ -304,7 +304,7 @@ export async function sendAdminInvitation({
     </p>
     <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
       Le lien est valable 1 heure. Si tu le perds, demande un nouveau lien sur
-      <a style="color:#A3E635;" href="${siteUrl}/admin/login">${siteUrl}/admin/login</a>.
+      <a style="color:#A3E635;" href="${adminUrl}/login">${adminUrl}/login</a>.
     </p>
     <p style="margin:0;color:#A1A1AA;font-size:12px;">Hulabe — Admin</p>
   `);
@@ -332,7 +332,7 @@ export async function sendAdminPasswordEmail({
   mode,
 }: AdminPasswordEmailProps) {
   if (!resend) return;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const adminUrl = adminPortalUrl();
   const isRecovery = mode === "recovery";
   const subject = isRecovery
     ? "Réinitialiser ton mot de passe Hulabe admin"
@@ -354,7 +354,7 @@ export async function sendAdminPasswordEmail({
     </p>
     <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
       Le lien est valable 1 heure. Si tu le perds, demande un nouveau lien sur
-      <a style="color:#A3E635;" href="${siteUrl}/admin/login">${siteUrl}/admin/login</a>.
+      <a style="color:#A3E635;" href="${adminUrl}/login">${adminUrl}/login</a>.
     </p>
     ${isRecovery ? `<p style="margin:0;font-size:12px;color:#71717A;">Si ce n'est pas toi qui as fait cette demande, ignore cet email.</p>` : ""}
   `);
@@ -387,6 +387,13 @@ function projectPortalUrl(projectId: string) {
     process.env.NEXT_PUBLIC_CLIENT_URL ??
     `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/client`;
   return `${base}/projects/${projectId}`;
+}
+
+function adminPortalUrl(path: string = "") {
+  const base =
+    process.env.NEXT_PUBLIC_ADMIN_URL ??
+    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/admin`;
+  return `${base}${path}`;
 }
 
 type ProjectStatusEmailProps = {

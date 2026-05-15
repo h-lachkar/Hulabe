@@ -1,23 +1,26 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, Inbox, Folders, TrendingUp, Sparkles } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatCard } from "@/components/admin/stat-card";
-import {
-  formatEUR,
-  formatPriceRange,
-  LEAD_STATUS_COLOR,
-  LEAD_STATUS_LABEL,
-  SERVICE_LABEL,
-  timeAgo,
-} from "@/lib/admin/format";
+import { getFormat, LEAD_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
   await requireAdmin();
+  const locale = await getLocale();
+  const t = await getTranslations("admin.dashboard");
+  const {
+    serviceLabel,
+    leadStatusLabel,
+    formatEUR,
+    formatPriceRange,
+    timeAgo,
+  } = getFormat(locale);
 
   const now = new Date();
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -62,24 +65,20 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <PageHeader
-        kicker="OVERVIEW"
-        title="Dashboard."
-        subtitle="Snapshot des leads, projets et conversion. Mis à jour à chaque page load."
-      />
+      <PageHeader kicker={t("kicker")} title={t("title")} subtitle={t("subtitle")} />
 
       <div className="space-y-6 px-4 py-6 sm:space-y-8 sm:px-6 sm:py-8 lg:px-10">
         {/* Stats */}
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            label="Leads · TOTAL"
+            label={t("stats.leadsTotal")}
             value={leadsTotal}
-            hint={`${leadsNew} nouveaux non traités`}
+            hint={t("stats.leadsTotalHint", { count: leadsNew })}
           />
           <StatCard
-            label="Leads · 7 JOURS"
+            label={t("stats.leads7d")}
             value={leadsThisWeek}
-            hint="dont 0 perdus"
+            hint={t("stats.leads7dHint")}
             trend={
               leadsThisWeek > 0
                 ? { value: `+${leadsThisWeek}`, positive: true }
@@ -87,14 +86,14 @@ export default async function AdminDashboard() {
             }
           />
           <StatCard
-            label="Projets actifs"
+            label={t("stats.activeProjects")}
             value={activeProjects}
-            hint="signed · in progress · review"
+            hint={t("stats.activeProjectsHint")}
           />
           <StatCard
-            label="Won ce mois"
+            label={t("stats.wonThisMonth")}
             value={formatEUR(wonThisMonth._sum.priceFinalCents ?? 0)}
-            hint={`${wonThisMonth._count} projets shippés`}
+            hint={t("stats.wonThisMonthHint", { count: wonThisMonth._count })}
           />
         </section>
 
@@ -106,20 +105,20 @@ export default async function AdminDashboard() {
               <div className="flex items-center gap-2">
                 <Inbox className="h-4 w-4 text-lime" />
                 <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-                  Recent leads
+                  {t("recentLeads")}
                 </h2>
               </div>
               <Link
                 href="/admin/leads"
                 className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-lime"
               >
-                Voir tous <ArrowRight className="h-3 w-3" />
+                {t("viewAll")} <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             {recentLeads.length === 0 ? (
               <div className="px-5 py-12 text-center text-sm text-muted-foreground">
                 <Sparkles className="mx-auto mb-3 h-5 w-5 text-muted-2" />
-                Pas encore de lead. La page n&apos;est peut-être pas encore en ligne.
+                {t("noLeads")}
               </div>
             ) : (
               <ul className="divide-y divide-border">
@@ -135,14 +134,14 @@ export default async function AdminDashboard() {
                           LEAD_STATUS_COLOR[lead.status],
                         )}
                       >
-                        {LEAD_STATUS_LABEL[lead.status]}
+                        {leadStatusLabel[lead.status]}
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-foreground">
                           {lead.name ?? lead.email}
                         </p>
                         <p className="truncate text-xs text-muted-foreground">
-                          {lead.serviceType ? SERVICE_LABEL[lead.serviceType] : "—"}
+                          {lead.serviceType ? serviceLabel[lead.serviceType] : "—"}
                           {" · "}
                           {formatPriceRange(lead.estimatedPriceMin, lead.estimatedPriceMax)}
                         </p>
@@ -163,13 +162,13 @@ export default async function AdminDashboard() {
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-lime" />
                 <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-                  Activity
+                  {t("activity")}
                 </h2>
               </div>
             </div>
             {recentActivity.length === 0 ? (
               <div className="px-5 py-12 text-center text-sm text-muted-foreground">
-                Pas encore d&apos;activité.
+                {t("noActivity")}
               </div>
             ) : (
               <ul className="divide-y divide-border">
@@ -216,10 +215,10 @@ export default async function AdminDashboard() {
           >
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Inbox
+                {t("quickLinks.inboxKicker")}
               </p>
               <p className="mt-1 text-base font-medium text-foreground">
-                Traiter les nouveaux leads
+                {t("quickLinks.inboxLabel")}
               </p>
             </div>
             <ArrowRight className="h-4 w-4 text-muted-2 transition-colors group-hover:text-lime" />
@@ -230,10 +229,10 @@ export default async function AdminDashboard() {
           >
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Pipeline
+                {t("quickLinks.pipelineKicker")}
               </p>
               <p className="mt-1 text-base font-medium text-foreground">
-                Voir les projets actifs
+                {t("quickLinks.pipelineLabel")}
               </p>
             </div>
             <Folders className="h-4 w-4 text-muted-2 transition-colors group-hover:text-lime" />
@@ -246,10 +245,10 @@ export default async function AdminDashboard() {
           >
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Analytics
+                {t("quickLinks.analyticsKicker")}
               </p>
               <p className="mt-1 text-base font-medium text-foreground">
-                Ouvrir PostHog
+                {t("quickLinks.analyticsLabel")}
               </p>
             </div>
             <ArrowRight className="h-4 w-4 text-muted-2 transition-colors group-hover:text-lime" />

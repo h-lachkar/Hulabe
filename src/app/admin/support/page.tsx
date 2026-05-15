@@ -1,15 +1,20 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { LifeBuoy, ExternalLink } from "lucide-react";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
 import { prisma } from "@/lib/prisma";
-import { formatDate, timeAgo } from "@/lib/admin/format";
+import { getFormat } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function SupportPage() {
   await requireAdmin();
+  const locale = await getLocale();
+  const t = await getTranslations("admin.support");
+  const { formatDate, timeAgo } = getFormat(locale);
+
   const requests = await prisma.supportRequest.findMany({
     orderBy: { createdAt: "desc" },
     include: { project: { select: { id: true, name: true, supportEndsAt: true } } },
@@ -25,21 +30,17 @@ export default async function SupportPage() {
 
   return (
     <>
-      <PageHeader
-        kicker="SUPPORT"
-        title="Demandes & fenêtre 14j."
-        subtitle="Tickets support clients + projets actuellement dans la fenêtre support 14 jours."
-      />
+      <PageHeader kicker={t("kicker")} title={t("title")} subtitle={t("subtitle")} />
 
       <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-10">
         {/* Active support windows */}
         <section className="rounded-xl border border-border bg-surface">
           <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-            Projets en fenêtre support
+            {t("windowsTitle")}
           </header>
           {projectsInSupport.length === 0 ? (
             <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-              Aucun projet actuellement dans la fenêtre support 14 jours.
+              {t("windowsEmpty")}
             </p>
           ) : (
             <ul className="divide-y divide-border">
@@ -52,7 +53,10 @@ export default async function SupportPage() {
                     <div>
                       <p className="text-sm font-medium text-foreground">{p.name}</p>
                       <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                        Shippé {formatDate(p.shippedAt)} · expire {formatDate(p.supportEndsAt)}
+                        {t("shippedExpires", {
+                          shipped: formatDate(p.shippedAt),
+                          expires: formatDate(p.supportEndsAt),
+                        })}
                       </p>
                     </div>
                     <ExternalLink className="h-3.5 w-3.5 text-muted-2" />
@@ -66,15 +70,12 @@ export default async function SupportPage() {
         {/* Tickets */}
         <section className="rounded-xl border border-border bg-surface">
           <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-            Tickets
+            {t("ticketsTitle")}
           </header>
           {requests.length === 0 ? (
             <div className="px-5 py-12 text-center">
               <LifeBuoy className="mx-auto h-6 w-6 text-muted-2" />
-              <p className="mt-3 text-sm text-muted-foreground">
-                Aucun ticket. La table SupportRequest est déjà câblée côté DB et sera
-                alimentée par le client portal une fois lancé.
-              </p>
+              <p className="mt-3 text-sm text-muted-foreground">{t("ticketsEmpty")}</p>
             </div>
           ) : (
             <ul className="divide-y divide-border">
@@ -84,7 +85,7 @@ export default async function SupportPage() {
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-foreground line-clamp-2">{r.body}</p>
                       <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
-                        {r.project.name} · {r.createdByEmail ?? "client"} · {timeAgo(r.createdAt)}
+                        {r.project.name} · {r.createdByEmail ?? t("client")} · {timeAgo(r.createdAt)}
                       </p>
                     </div>
                     <span

@@ -1,14 +1,19 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, LifeBuoy } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireClient } from "@/lib/client/auth";
 import { cn } from "@/lib/utils";
-import { timeAgo } from "@/lib/admin/format";
+import { getFormat } from "@/lib/admin/format";
 
 export const dynamic = "force-dynamic";
 
 export default async function ClientSupportPage() {
   const user = await requireClient();
+  const locale = await getLocale();
+  const t = await getTranslations("clientPortal.support");
+  const { timeAgo } = getFormat(locale);
+
   const requests = await prisma.supportRequest.findMany({
     where: { project: { lead: { email: user.email!.toLowerCase() } } },
     orderBy: { createdAt: "desc" },
@@ -19,18 +24,16 @@ export default async function ClientSupportPage() {
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <p className="mb-2 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
         <span className="h-1 w-1 rounded-full bg-lime" />
-        SUPPORT
+        {t("kicker")}
       </p>
-      <h1 className="display text-3xl sm:text-4xl">Mes demandes.</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Pour ouvrir une nouvelle demande, va sur le projet concerné.
-      </p>
+      <h1 className="display text-3xl sm:text-4xl">{t("title")}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{t("subtitle")}</p>
 
       <section className="mt-10 rounded-2xl border border-border bg-surface">
         {requests.length === 0 ? (
           <div className="px-6 py-16 text-center">
             <LifeBuoy className="mx-auto h-6 w-6 text-muted-2" />
-            <p className="mt-3 text-sm text-muted-foreground">Pas encore de demande.</p>
+            <p className="mt-3 text-sm text-muted-foreground">{t("empty")}</p>
           </div>
         ) : (
           <ul className="divide-y divide-border">

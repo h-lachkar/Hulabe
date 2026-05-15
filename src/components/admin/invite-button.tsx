@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Mail, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { inviteClientToPortal, type InviteResult } from "@/lib/admin/actions";
 
 export function InviteToPortalButton({ projectId }: { projectId: string }) {
+  const t = useTranslations("admin.invitePortal");
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<InviteResult | null>(null);
 
@@ -29,13 +31,13 @@ export function InviteToPortalButton({ projectId }: { projectId: string }) {
         className="w-full"
       >
         <Mail className="h-3.5 w-3.5" />
-        {pending ? "Envoi…" : "Inviter au portail"}
+        {pending ? t("submitting") : t("submit")}
       </Button>
 
       {result?.ok && (
         <p className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-lime">
           <Check className="h-3 w-3" />
-          Envoyé à {result.sentTo}
+          {t("sentTo", { email: result.sentTo })}
         </p>
       )}
       {result && !result.ok && (

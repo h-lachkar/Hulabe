@@ -62,7 +62,7 @@ export default async function LeadsPage({
     <>
       <PageHeader kicker="LEADS" title="Inbox." subtitle={`${leads.length} leads affichés`} />
 
-      <div className="space-y-4 px-6 py-6 sm:px-10">
+      <div className="space-y-4 px-4 py-6 sm:px-6 lg:px-10">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <FilterPill
@@ -114,6 +114,7 @@ export default async function LeadsPage({
               <tr className="border-b border-border bg-surface-2/40 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">Lead</th>
+                <th className="hidden px-4 py-3 text-center lg:table-cell">AI</th>
                 <th className="px-4 py-3 text-left">Service</th>
                 <th className="hidden px-4 py-3 text-left sm:table-cell">Estimate</th>
                 <th className="hidden px-4 py-3 text-left md:table-cell">Source</th>
@@ -123,7 +124,7 @@ export default async function LeadsPage({
             <tbody className="divide-y divide-border">
               {leads.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-sm text-muted-foreground">
+                  <td colSpan={7} className="px-4 py-12 text-center text-sm text-muted-foreground">
                     Aucun lead avec ces filtres.
                   </td>
                 </tr>
@@ -151,6 +152,26 @@ export default async function LeadsPage({
                           {lead.name ?? "—"}
                         </p>
                         <p className="truncate text-xs text-muted-foreground">{lead.email}</p>
+                      </Link>
+                    </td>
+                    <td className="hidden px-4 py-3 text-center lg:table-cell">
+                      <Link href={`/admin/leads/${lead.id}`} className="block">
+                        {lead.aiScore != null ? (
+                          <span
+                            className={cn(
+                              "inline-flex h-7 w-7 items-center justify-center rounded-full font-mono text-xs font-bold tabular-nums",
+                              lead.aiScore >= 8
+                                ? "bg-lime/15 text-lime"
+                                : lead.aiScore >= 5
+                                  ? "bg-surface-2 text-foreground"
+                                  : "bg-surface-2 text-muted-2",
+                            )}
+                          >
+                            {lead.aiScore}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-[10px] text-muted-2">—</span>
+                        )}
                       </Link>
                     </td>
                     <td className="px-4 py-3">

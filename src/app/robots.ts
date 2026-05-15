@@ -8,7 +8,24 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/", "/admin/", "/client/", "/auth/"],
+      },
+      // Explicit AI/LLM crawler permissions — we want to be findable via
+      // AI assistants. Same disallow set (no private/admin content).
+      {
+        userAgent: [
+          "ChatGPT-User",
+          "GPTBot",
+          "ClaudeBot",
+          "anthropic-ai",
+          "Claude-Web",
+          "Google-Extended",
+          "PerplexityBot",
+          "Applebot-Extended",
+          "CCBot",
+        ],
+        allow: "/",
+        disallow: ["/api/", "/admin/", "/client/", "/auth/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

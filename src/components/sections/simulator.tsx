@@ -240,7 +240,7 @@ export function Simulator() {
       };
 
   return (
-    <section id="simulator" className="relative scroll-mt-20 border-t border-border py-24 sm:py-32">
+    <section id="simulator" className="relative scroll-mt-20 border-t border-border py-20 sm:py-32">
       <div className="container-page max-w-3xl">
         <SectionMarker
           number="02"
@@ -249,12 +249,12 @@ export function Simulator() {
           subtitle={t("subtitle")}
         />
 
-        <div className="rounded-2xl border border-border bg-surface p-6 sm:p-10">
-          <div className="mb-8 flex items-center justify-between gap-4">
-            <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="rounded-2xl border border-border bg-surface p-5 sm:p-10">
+          <div className="mb-6 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground sm:text-xs">
               {t("step")} {stepIdx + 1} {t("of")} {totalSteps}
             </span>
-            <div className="flex flex-1 max-w-[280px] gap-1.5">
+            <div className="flex flex-1 gap-1 sm:max-w-[280px] sm:gap-1.5">
               {Array.from({ length: totalSteps }).map((_, i) => (
                 <div
                   key={i}
@@ -298,16 +298,31 @@ export function Simulator() {
             </p>
           )}
 
-          <div className="mt-10 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Button variant="ghost" onClick={back} disabled={stepIdx === 0 || submitting}>
+          <div className="mt-8 flex flex-col-reverse gap-2 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            <Button
+              variant="ghost"
+              onClick={back}
+              disabled={stepIdx === 0 || submitting}
+              className="w-full justify-center sm:w-auto"
+            >
               <ArrowLeft className="h-4 w-4" /> {t("back")}
             </Button>
             {currentKind !== "contact" ? (
-              <Button onClick={next} disabled={!stepValid} size="lg">
+              <Button
+                onClick={next}
+                disabled={!stepValid}
+                size="lg"
+                className="w-full justify-center sm:w-auto"
+              >
                 {t("next")} <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Button onClick={submit} disabled={!stepValid || submitting} size="lg">
+              <Button
+                onClick={submit}
+                disabled={!stepValid || submitting}
+                size="lg"
+                className="w-full justify-center sm:w-auto"
+              >
                 {submitting ? t("submitting") : t("submit")}
                 {!submitting && <ArrowRight className="h-4 w-4" />}
               </Button>

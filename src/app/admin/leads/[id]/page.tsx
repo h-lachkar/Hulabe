@@ -21,6 +21,8 @@ import {
   createProjectFromLead,
   updateLeadStatus,
 } from "@/lib/admin/actions";
+import { Markdown } from "@/components/markdown";
+import { AiScorePanel } from "@/components/admin/ai-score-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -70,9 +72,22 @@ export default async function LeadDetailPage({
         }
       />
 
-      <div className="grid gap-6 px-6 py-6 sm:px-10 lg:grid-cols-3">
+      <div className="grid gap-6 px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-10">
         {/* Main */}
         <div className="space-y-6 lg:col-span-2">
+          {/* AI score */}
+          <AiScorePanel
+            leadId={lead.id}
+            leadEmail={lead.email}
+            aiScore={lead.aiScore}
+            aiReasoning={lead.aiReasoning}
+            aiSuggestedReply={lead.aiSuggestedReply}
+            aiNextAction={lead.aiNextAction}
+            aiFlags={lead.aiFlags}
+            aiModel={lead.aiModel}
+            aiScoredAt={lead.aiScoredAt}
+          />
+
           {/* Brief / payload */}
           <section className="rounded-xl border border-border bg-surface">
             <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
@@ -151,8 +166,8 @@ export default async function LeadDetailPage({
               <ul className="divide-y divide-border">
                 {notes.map((n) => (
                   <li key={n.id} className="px-5 py-4">
-                    <p className="text-sm text-foreground whitespace-pre-wrap">{n.body}</p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
+                    <Markdown source={n.body} />
+                    <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
                       {n.authorEmail ?? "—"} · {timeAgo(n.createdAt)}
                     </p>
                   </li>

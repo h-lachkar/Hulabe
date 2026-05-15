@@ -19,8 +19,11 @@ import { cn } from "@/lib/utils";
 import {
   addDeliverable,
   addProjectNote,
+  replyToSupportRequest,
   updateProjectStatus,
 } from "@/lib/admin/actions";
+import { InviteToPortalButton } from "@/components/admin/invite-button";
+import { Markdown } from "@/components/markdown";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +47,7 @@ export default async function ProjectDetailPage({
   await requireAdmin();
   const { id } = await params;
 
-  const [project, notes, activity, deliverables] = await Promise.all([
+  const [project, notes, activity, deliverables, supportRequests] = await Promise.all([
     prisma.project.findUnique({
       where: { id },
       include: { lead: { select: { id: true, name: true, email: true } } },
@@ -59,6 +62,10 @@ export default async function ProjectDetailPage({
       take: 30,
     }),
     prisma.deliverable.findMany({
+      where: { projectId: id },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.supportRequest.findMany({
       where: { projectId: id },
       orderBy: { createdAt: "desc" },
     }),
@@ -87,7 +94,7 @@ export default async function ProjectDetailPage({
         }
       />
 
-      <div className="grid gap-6 px-6 py-6 sm:px-10 lg:grid-cols-3">
+      <div className="grid gap-6 px-4 py-6 sm:px-6 lg:grid-cols-3 lg:px-10">
         {/* Main */}
         <div className="space-y-6 lg:col-span-2">
           {/* Deliverables */}
@@ -206,7 +213,9 @@ export default async function ProjectDetailPage({
                 {notes.map((n) => (
                   <li key={n.id} className="px-5 py-4">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="flex-1 text-sm text-foreground whitespace-pre-wrap">{n.body}</p>
+                      <div className="flex-1 min-w-0">
+                        <Markdown source={n.body} />
+                      </div>
                       <span
                         className={cn(
                           "shrink-0 inline-flex items-center gap-1 rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
@@ -229,6 +238,78 @@ export default async function ProjectDetailPage({
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
                       {n.authorEmail ?? "—"} · {timeAgo(n.createdAt)}
                     </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          {/* Support tickets */}
+          <section className="rounded-xl border border-border bg-surface">
+            <header className="flex items-center justify-between border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
+              <span>Tickets support</span>
+              <span className="text-[10px] text-muted-foreground">
+                {supportRequests.length} total
+              </span>
+            </header>
+            {supportRequests.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-muted-foreground">
+                Pas de ticket pour ce projet.
+              </p>
+            ) : (
+              <ul className="divide-y divide-border">
+                {supportRequests.map((req) => (
+                  <li key={req.id} className="px-5 py-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="flex-1 text-sm text-foreground whitespace-pre-wrap">
+                        {req.body}
+                      </p>
+                      <span
+                        className={cn(
+                          "shrink-0 rounded border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider",
+                          req.status === "OPEN"
+                            ? "border-lime/30 bg-lime/10 text-lime"
+                            : req.status === "IN_PROGRESS"
+                              ? "border-amber-500/30 bg-amber-500/10 text-amber-300"
+                              : "border-border bg-surface-2 text-muted-foreground",
+                        )}
+                      >
+                        {req.status}
+                      </span>
+                    </div>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
+                      {req.createdByEmail ?? "client"} · {timeAgo(req.createdAt)}
+                    </p>
+                    {req.status !== "RESOLVED" && req.status !== "CLOSED" && (
+                      <form action={replyToSupportRequest} className="mt-3 space-y-2">
+                        <input type="hidden" name="requestId" value={req.id} />
+                        <textarea
+                          name="reply"
+                          rows={3}
+                          required
+                          placeholder="Réponse (envoyée par email au client + ajoutée en update visible)…"
+                          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                        <div className="flex flex-wrap items-center justify-end gap-2">
+                          <button
+                            type="submit"
+                            name="status"
+                            value="IN_PROGRESS"
+                            className="rounded-md border border-border bg-surface-2 px-3 py-1.5 text-xs text-foreground hover:border-lime/40 hover:text-lime"
+                          >
+                            Répondre · en cours
+                          </button>
+                          <button
+                            type="submit"
+                            name="status"
+                            value="RESOLVED"
+                            className="rounded-md bg-lime px-3 py-1.5 text-xs font-medium text-bg hover:bg-lime-dark"
+                          >
+                            Répondre · résoudre
+                          </button>
+                        </div>
+                      </form>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -353,6 +434,12 @@ export default async function ProjectDetailPage({
                 </span>
                 <ExternalLink className="h-3 w-3 text-muted-2" />
               </Link>
+              <div className="mt-4">
+                <InviteToPortalButton projectId={project.id} />
+                <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
+                  Envoie un magic-link à {project.lead.email}
+                </p>
+              </div>
             </div>
           )}
         </aside>

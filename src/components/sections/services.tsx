@@ -96,10 +96,10 @@ function ServiceRow({
     >
       <a
         href="#simulator"
-        className="grid items-start gap-4 px-2 py-7 transition-colors hover:bg-surface/40 sm:grid-cols-12 sm:gap-6 sm:px-3 sm:py-8"
+        className="grid items-start gap-3 px-2 py-6 transition-colors hover:bg-surface/40 sm:grid-cols-12 sm:gap-6 sm:px-3 sm:py-8"
       >
         {/* Number + icon */}
-        <div className="flex items-center gap-4 sm:col-span-2">
+        <div className="flex items-center gap-3 sm:col-span-2 sm:gap-4">
           <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-2 transition-colors group-hover:text-lime">
             → {String(index + 1).padStart(2, "0")}
           </span>
@@ -110,13 +110,21 @@ function ServiceRow({
 
         {/* Title + tagline */}
         <div className="sm:col-span-5">
-          <h3 className="text-xl font-semibold tracking-tight transition-colors group-hover:text-lime sm:text-2xl">
+          <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-lime sm:text-2xl">
             {title}
           </h3>
           <p className="mt-1.5 text-sm text-muted-foreground sm:text-base">{tagline}</p>
+          {/* Mobile-only tags row */}
+          <div className="mt-3 flex flex-wrap items-center gap-1 sm:hidden">
+            {tags.slice(0, 3).map((tag) => (
+              <Badge key={tag} variant="mono">
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </div>
 
-        {/* Tags */}
+        {/* Tags — sm+ */}
         <div className="hidden flex-wrap items-center gap-1.5 sm:col-span-3 sm:flex">
           {tags.slice(0, 3).map((tag) => (
             <Badge key={tag} variant="mono">
@@ -126,13 +134,13 @@ function ServiceRow({
         </div>
 
         {/* Price + duration + arrow */}
-        <div className="flex items-center justify-between sm:col-span-2 sm:flex-col sm:items-end sm:gap-2">
+        <div className="flex items-center justify-between gap-3 sm:col-span-2 sm:flex-col sm:items-end sm:gap-2">
           <span className="font-mono text-base font-semibold tabular-nums text-foreground">
             {price}
             <span className="ml-0.5 text-lime">*</span>
           </span>
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+          <div className="flex items-center gap-2.5">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground sm:text-[11px]">
               {duration}
               <span className="ml-0.5 text-lime">*</span>
             </span>

@@ -24,7 +24,7 @@ export default async function InvoicesPage() {
         subtitle="Suivi simple. L'intégration Stripe / facturation auto arrive plus tard."
       />
 
-      <div className="px-6 py-6 sm:px-10">
+      <div className="px-4 py-6 sm:px-6 lg:px-10">
         {invoices.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-surface/40 p-12 text-center">
             <Receipt className="mx-auto h-6 w-6 text-muted-2" />

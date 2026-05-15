@@ -23,16 +23,23 @@ export function SectionMarker({ number, label, title, subtitle, className }: Pro
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: reduce ? 0 : 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className={cn("mb-14", className)}
+      className={cn("mb-10 sm:mb-14", className)}
     >
-      <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">
+      <div className="flex items-baseline gap-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:gap-3 sm:text-sm">
         <span className="text-lime">{number}</span>
-        <span className="h-px w-8 self-center bg-border sm:w-12" aria-hidden />
+        <span className="h-px w-6 self-center bg-border sm:w-12" aria-hidden />
         <span className="text-foreground">{label}</span>
       </div>
-      <h2 className="display mt-5 max-w-3xl text-4xl sm:text-5xl lg:text-[3.5rem]">{title}</h2>
+      <h2
+        className="display mt-4 max-w-3xl leading-[1.05] sm:mt-5"
+        style={{ fontSize: "clamp(1.875rem, 6vw, 3.5rem)" }}
+      >
+        {title}
+      </h2>
       {subtitle && (
-        <p className="mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">{subtitle}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-lg">
+          {subtitle}
+        </p>
       )}
     </motion.div>
   );

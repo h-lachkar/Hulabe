@@ -31,14 +31,3 @@ export async function updateSession(request: NextRequest) {
 
   return { supabaseResponse, user };
 }
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",")
-  .map((s) => s.trim().toLowerCase())
-  .filter(Boolean);
-
-export function isAdminEmail(email?: string | null) {
-  if (!email) return false;
-  if (ADMIN_EMAILS.length === 0) return false;
-  return ADMIN_EMAILS.includes(email.toLowerCase());
-}

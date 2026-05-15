@@ -21,7 +21,7 @@ export function Process() {
   return (
     <section
       id="process"
-      className="relative scroll-mt-20 border-t border-border py-24 sm:py-32"
+      className="relative scroll-mt-20 border-t border-border py-20 sm:py-32"
     >
       <div className="container-page">
         <SectionMarker
@@ -65,12 +65,12 @@ export function Process() {
                   aria-hidden
                 />
 
-                <div className="rounded-xl border border-border bg-surface p-6 transition-colors group-hover:border-lime/30 sm:p-7">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                <div className="rounded-xl border border-border bg-surface p-5 transition-colors group-hover:border-lime/30 sm:p-7">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
                       {String(idx + 1).padStart(2, "0")} / {STEPS.length}
                     </span>
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-lime">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-lime sm:text-[11px]">
                       {META[idx].meta}
                     </span>
                   </div>

@@ -1,19 +1,17 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
-import { updateSession, isAdminEmail } from "@/lib/supabase/middleware";
+import { updateSession } from "@/lib/supabase/middleware";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // /admin and /auth routes don't go through next-intl
-  if (pathname.startsWith("/admin") || pathname.startsWith("/auth")) {
+  /* ----------------------------- /admin gate ----------------------------- */
+  if (pathname.startsWith("/admin")) {
     const { supabaseResponse, user } = await updateSession(req);
-
-    // Allow login + auth callback unauthenticated
-    const isLoginRoute = pathname === "/admin/login" || pathname.startsWith("/auth/");
+    const isLoginRoute = pathname === "/admin/login";
     if (isLoginRoute) return supabaseResponse;
 
     if (!user) {
@@ -23,19 +21,38 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (!isAdminEmail(user.email)) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/admin/login";
-      url.searchParams.set("error", "not_authorized");
-      return NextResponse.redirect(url);
-    }
+    // Note: AdminUser table check happens in each page via requireAdmin().
+    // We can't query Prisma from edge middleware. This is fine — the page
+    // gate is the source of truth.
 
-    // Add no-index header on admin routes (defense in depth — sitemap excludes too)
     supabaseResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
     return supabaseResponse;
   }
 
-  // Everything else (marketing landing) goes through next-intl
+  /* ----------------------------- /client gate ---------------------------- */
+  if (pathname.startsWith("/client")) {
+    const { supabaseResponse, user } = await updateSession(req);
+    const isLoginRoute = pathname === "/client/login";
+    if (isLoginRoute) return supabaseResponse;
+
+    if (!user) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/client/login";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+    // Per-project ownership check happens at the page level.
+    supabaseResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return supabaseResponse;
+  }
+
+  /* ----------------------------- /auth callback -------------------------- */
+  if (pathname.startsWith("/auth")) {
+    const { supabaseResponse } = await updateSession(req);
+    return supabaseResponse;
+  }
+
+  /* ----------------------------- Marketing ------------------------------- */
   return intlMiddleware(req);
 }
 

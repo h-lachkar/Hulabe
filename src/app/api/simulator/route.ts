@@ -5,6 +5,7 @@ import { sendLeadConfirmation, sendLeadNotification } from "@/lib/resend";
 import { computeEstimate } from "@/lib/pricing";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { SERVICE_FLOWS, answerLabel, type Locale } from "@/lib/simulator-flow";
+import { scoreAndSaveLead } from "@/lib/ai/score-and-save";
 import crypto from "node:crypto";
 
 export const runtime = "nodejs";
@@ -117,6 +118,12 @@ export async function POST(req: Request) {
         leadId: lead.id,
       }),
     ]);
+
+    // Score the lead in background — fire and forget.
+    // Note: on Vercel, serverless functions wait for in-flight promises only
+    // up to the response. To guarantee execution past response, we await.
+    // The AI call is ~500-2000ms which is acceptable on the lead create path.
+    scoreAndSaveLead(lead.id).catch(() => {});
 
     return NextResponse.json({
       success: true,

@@ -49,7 +49,7 @@ export default async function ProjectsPage() {
         subtitle={`${projects.length} projets actifs · archive masquée`}
       />
 
-      <div className="overflow-x-auto px-6 py-6 sm:px-10">
+      <div className="overflow-x-auto px-4 py-6 sm:px-6 lg:px-10">
         <div className="flex min-w-max gap-3">
           {COLUMNS.map((col) => (
             <div key={col} className="w-[280px] shrink-0">

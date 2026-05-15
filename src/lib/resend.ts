@@ -125,6 +125,144 @@ export async function sendLeadNotification(props: LeadNotificationProps) {
   });
 }
 
+/* ----------------------------- Client portal --------------------------- */
+
+type InvitationProps = {
+  to: string;
+  name?: string | null;
+  magicLink: string;
+  projectName: string;
+};
+
+export async function sendClientPortalInvitation({
+  to,
+  name,
+  magicLink,
+  projectName,
+}: InvitationProps) {
+  if (!resend) return;
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">
+      On vient d'ouvrir ton espace client pour le projet
+      <strong>${escapeHtml(projectName)}</strong>. Tu y trouveras l'avancement, les livrables, et un canal direct pour
+      demander des ajustements.
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${magicLink}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        Ouvrir mon espace
+      </a>
+    </p>
+    <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
+      Le lien est valable 1 heure. Si tu le perds, demande-en un nouveau sur
+      <a style="color:#A3E635;" href="${process.env.NEXT_PUBLIC_CLIENT_URL ?? "https://client.hulabe.com"}/login">
+        client.hulabe.com
+      </a>.
+    </p>
+    <p style="margin:0;white-space:pre-line;color:#A1A1AA;">À très vite,\nHugo — Hulabe</p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `Ton espace Hulabe pour ${projectName}`,
+    html,
+  });
+}
+
+type SupportNotificationProps = {
+  projectName: string;
+  clientName: string;
+  clientEmail: string;
+  body: string;
+  projectId: string;
+};
+
+export async function sendSupportNotificationToAdmin({
+  projectName,
+  clientName,
+  clientEmail,
+  body,
+  projectId,
+}: SupportNotificationProps) {
+  if (!resend) return;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;font-size:16px;font-weight:600;">
+      Nouveau ticket support — ${escapeHtml(projectName)}
+    </p>
+    <p style="margin:0 0 16px;color:#A1A1AA;">
+      De ${escapeHtml(clientName)} (${escapeHtml(clientEmail)})
+    </p>
+    <pre style="margin:0 0 16px;padding:16px;background:#0A0A0A;border:1px solid #262626;border-radius:10px;white-space:pre-wrap;font-family:inherit;color:#FAFAFA;">${escapeHtml(body)}</pre>
+    <p style="margin:0 0 24px;">
+      <a href="${siteUrl}/admin/projects/${projectId}" style="display:inline-block;padding:10px 16px;background:#1C1C1C;color:#FAFAFA;text-decoration:none;border:1px solid #262626;border-radius:10px;font-weight:500;font-size:13px;">
+        Ouvrir dans l'admin
+      </a>
+    </p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: NOTIFICATION_EMAIL,
+    replyTo: clientEmail,
+    subject: `[Hulabe] Support ticket — ${projectName}`,
+    html,
+  });
+}
+
+/* --------------------------- Admin team invitation -------------------- */
+
+type AdminInvitationProps = {
+  to: string;
+  name?: string | null;
+  inviterName?: string | null;
+  inviterEmail?: string | null;
+  magicLink: string;
+  role: "OWNER" | "ADMIN" | "VIEWER";
+};
+
+const ROLE_LABEL = {
+  OWNER: "Owner",
+  ADMIN: "Admin",
+  VIEWER: "Viewer (lecture seule)",
+};
+
+export async function sendAdminInvitation({
+  to,
+  name,
+  inviterName,
+  inviterEmail,
+  magicLink,
+  role,
+}: AdminInvitationProps) {
+  if (!resend) return;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const inviter =
+    inviterName ?? inviterEmail ?? "L'équipe Hulabe";
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">
+      <strong>${escapeHtml(inviter)}</strong> t'invite à rejoindre l'espace admin de Hulabe en tant que
+      <strong>${ROLE_LABEL[role]}</strong>.
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${magicLink}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        Accéder à l'admin
+      </a>
+    </p>
+    <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
+      Le lien est valable 1 heure. Si tu le perds, demande un nouveau magic link sur
+      <a style="color:#A3E635;" href="${siteUrl}/admin/login">${siteUrl}/admin/login</a>.
+    </p>
+    <p style="margin:0;color:#A1A1AA;font-size:12px;">Hulabe — Admin</p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `Invitation à l'admin Hulabe`,
+    html,
+  });
+}
+
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, "&amp;")
@@ -132,4 +270,195 @@ function escapeHtml(value: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+/* ----------------------- Client-facing project emails ----------------- */
+
+const STATUS_TITLE_FR: Record<string, string> = {
+  DRAFT: "Brief",
+  QUOTED: "Devis envoyé",
+  SIGNED: "Projet signé",
+  IN_PROGRESS: "Build démarré",
+  IN_REVIEW: "En review",
+  SHIPPED: "Livré",
+  ARCHIVED: "Archivé",
+};
+
+function projectPortalUrl(projectId: string) {
+  const base =
+    process.env.NEXT_PUBLIC_CLIENT_URL ??
+    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/client`;
+  return `${base}/projects/${projectId}`;
+}
+
+type ProjectStatusEmailProps = {
+  to: string;
+  name?: string | null;
+  projectId: string;
+  projectName: string;
+  newStatus: string;
+};
+
+export async function sendProjectStatusUpdate({
+  to,
+  name,
+  projectId,
+  projectName,
+  newStatus,
+}: ProjectStatusEmailProps) {
+  if (!resend) return;
+  const statusLabel = STATUS_TITLE_FR[newStatus] ?? newStatus;
+  const portalUrl = projectPortalUrl(projectId);
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">
+      Petit update sur <strong>${escapeHtml(projectName)}</strong> :
+    </p>
+    <p style="margin:0 0 24px;">
+      <span style="display:inline-block;padding:6px 12px;background:rgba(163,230,53,0.1);color:#A3E635;border:1px solid rgba(163,230,53,0.3);border-radius:8px;font-family:ui-monospace,monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">
+        ${escapeHtml(statusLabel)}
+      </span>
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${portalUrl}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        Voir le projet
+      </a>
+    </p>
+    <p style="margin:0;color:#A1A1AA;font-size:12px;">Hugo — Hulabe</p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `${projectName} — ${statusLabel}`,
+    html,
+  });
+}
+
+type DeliverableEmailProps = {
+  to: string;
+  name?: string | null;
+  projectId: string;
+  projectName: string;
+  deliverableTitle: string;
+  deliverableUrl?: string | null;
+};
+
+export async function sendDeliverableAdded({
+  to,
+  name,
+  projectId,
+  projectName,
+  deliverableTitle,
+  deliverableUrl,
+}: DeliverableEmailProps) {
+  if (!resend) return;
+  const portalUrl = projectPortalUrl(projectId);
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">
+      Nouveau livrable sur <strong>${escapeHtml(projectName)}</strong> :
+    </p>
+    <p style="margin:0 0 24px;font-size:16px;">
+      <strong style="color:#A3E635;">${escapeHtml(deliverableTitle)}</strong>
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${deliverableUrl ?? portalUrl}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        ${deliverableUrl ? "Ouvrir le livrable" : "Voir sur le portail"}
+      </a>
+    </p>
+    <p style="margin:0;font-size:12px;color:#A1A1AA;">
+      Toujours dispo dans ton espace : <a href="${portalUrl}" style="color:#A3E635;">${portalUrl}</a>
+    </p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `${projectName} — nouveau livrable`,
+    html,
+  });
+}
+
+type NoteEmailProps = {
+  to: string;
+  name?: string | null;
+  projectId: string;
+  projectName: string;
+  body: string;
+};
+
+export async function sendClientNote({
+  to,
+  name,
+  projectId,
+  projectName,
+  body,
+}: NoteEmailProps) {
+  if (!resend) return;
+  const portalUrl = projectPortalUrl(projectId);
+  const preview = body.length > 280 ? body.slice(0, 280) + "…" : body;
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">Update sur <strong>${escapeHtml(projectName)}</strong> :</p>
+    <blockquote style="margin:0 0 24px;padding:14px 16px;background:#0A0A0A;border-left:3px solid #A3E635;border-radius:6px;color:#FAFAFA;white-space:pre-wrap;font-size:14px;line-height:1.55;">
+      ${escapeHtml(preview)}
+    </blockquote>
+    <p style="margin:0 0 24px;">
+      <a href="${portalUrl}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        Voir sur le portail
+      </a>
+    </p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `${projectName} — update`,
+    html,
+  });
+}
+
+type SupportReplyEmailProps = {
+  to: string;
+  name?: string | null;
+  projectId: string;
+  projectName: string;
+  reply: string;
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+};
+
+export async function sendSupportReplyToClient({
+  to,
+  name,
+  projectId,
+  projectName,
+  reply,
+  status,
+}: SupportReplyEmailProps) {
+  if (!resend) return;
+  const portalUrl = projectPortalUrl(projectId);
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">
+      On a répondu à ta demande sur <strong>${escapeHtml(projectName)}</strong> :
+    </p>
+    <blockquote style="margin:0 0 16px;padding:14px 16px;background:#0A0A0A;border-left:3px solid #A3E635;border-radius:6px;color:#FAFAFA;white-space:pre-wrap;font-size:14px;line-height:1.55;">
+      ${escapeHtml(reply)}
+    </blockquote>
+    <p style="margin:0 0 24px;">
+      <span style="display:inline-block;padding:4px 10px;background:rgba(163,230,53,0.1);color:#A3E635;border:1px solid rgba(163,230,53,0.3);border-radius:6px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">
+        ${status}
+      </span>
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${portalUrl}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        Voir sur le portail
+      </a>
+    </p>
+    <p style="margin:0;color:#A1A1AA;font-size:12px;">Tu peux répondre directement à cet email.</p>
+  `);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `${projectName} — réponse à ta demande`,
+    html,
+  });
 }

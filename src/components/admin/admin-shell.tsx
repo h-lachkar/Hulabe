@@ -11,7 +11,9 @@ import {
   Settings,
   LogOut,
   ExternalLink,
+  Users,
 } from "lucide-react";
+import type { AdminRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -24,16 +26,32 @@ const NAV = [
   { href: "/admin/support", label: "Support", icon: LifeBuoy },
 ];
 
-const SECONDARY = [{ href: "/admin/settings", label: "Settings", icon: Settings }];
+const ROLE_COLOR: Record<AdminRole, string> = {
+  OWNER: "border-lime/30 bg-lime/10 text-lime",
+  ADMIN: "border-blue-500/30 bg-blue-500/10 text-blue-300",
+  VIEWER: "border-border bg-surface-2 text-muted-foreground",
+};
 
 export function AdminShell({
   children,
   userEmail,
+  userName,
+  userRole,
 }: {
   children: React.ReactNode;
   userEmail: string;
+  userName?: string | null;
+  userRole: AdminRole;
 }) {
   const pathname = usePathname();
+  const isOwner = userRole === "OWNER";
+
+  const secondary = [
+    ...(isOwner
+      ? [{ href: "/admin/team", label: "Team", icon: Users }]
+      : []),
+    { href: "/admin/settings", label: "Settings", icon: Settings },
+  ];
 
   async function signOut() {
     const supabase = createSupabaseBrowserClient();
@@ -79,7 +97,7 @@ export function AdminShell({
 
         <div className="border-t border-border p-4">
           <nav className="space-y-1">
-            {SECONDARY.map((item) => {
+            {secondary.map((item) => {
               const active = pathname.startsWith(item.href);
               const Icon = item.icon;
               return (
@@ -110,10 +128,23 @@ export function AdminShell({
           </nav>
 
           <div className="mt-4 rounded-lg border border-border bg-surface p-3">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-              Signed in
-            </p>
-            <p className="mt-1 truncate text-sm text-foreground">{userEmail}</p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                Signed in
+              </p>
+              <span
+                className={cn(
+                  "inline-flex rounded border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider",
+                  ROLE_COLOR[userRole],
+                )}
+              >
+                {userRole.toLowerCase()}
+              </span>
+            </div>
+            {userName && (
+              <p className="mt-1 truncate text-sm font-medium text-foreground">{userName}</p>
+            )}
+            <p className={cn("truncate font-mono text-xs", userName ? "text-muted-foreground" : "mt-1 text-sm text-foreground")}>{userEmail}</p>
             <button
               type="button"
               onClick={signOut}

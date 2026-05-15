@@ -1,6 +1,7 @@
 # Client portal — design doc
 
-> Statut : **PLAN**, pas encore implémenté. Les fondations DB sont déjà posées.
+> Statut : **v1 LIVRÉE** ✅ (login, list, detail, deliverables, notes visibles, support tickets, invite-flow depuis admin).
+> Ce qui reste : maintenance contracts + facturation récurrente Stripe + uploads de fichiers via Supabase Storage.
 
 L'objectif : un portail client à `client.hulabe.com` (ou `hulabe.com/client` selon ton choix au moment du build) où chaque client peut voir l'avancement de son projet, accéder aux livrables, et ouvrir un ticket pendant la fenêtre support 14j ou via maintenance.
 

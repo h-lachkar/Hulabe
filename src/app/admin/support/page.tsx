@@ -31,7 +31,7 @@ export default async function SupportPage() {
         subtitle="Tickets support clients + projets actuellement dans la fenêtre support 14 jours."
       />
 
-      <div className="space-y-6 px-6 py-6 sm:px-10">
+      <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-10">
         {/* Active support windows */}
         <section className="rounded-xl border border-border bg-surface">
           <header className="border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">

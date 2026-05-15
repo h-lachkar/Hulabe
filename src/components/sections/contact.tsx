@@ -58,7 +58,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="relative scroll-mt-20 border-t border-border py-24 sm:py-32"
+      className="relative scroll-mt-20 border-t border-border py-20 sm:py-32"
     >
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">

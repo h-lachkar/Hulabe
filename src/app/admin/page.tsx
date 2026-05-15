@@ -68,7 +68,7 @@ export default async function AdminDashboard() {
         subtitle="Snapshot des leads, projets et conversion. Mis à jour à chaque page load."
       />
 
-      <div className="space-y-8 px-6 py-8 sm:px-10">
+      <div className="space-y-6 px-4 py-6 sm:space-y-8 sm:px-6 sm:py-8 lg:px-10">
         {/* Stats */}
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard

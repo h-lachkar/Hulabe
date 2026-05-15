@@ -36,20 +36,21 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="container-page relative pb-20 pt-16 sm:pb-28 sm:pt-24 lg:pb-32">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
+      <div className="container-page relative pb-20 pt-14 sm:pb-28 sm:pt-24 lg:pb-32">
+        <div className="grid items-center gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-10">
           {/* Left: text */}
           <div className="lg:col-span-7">
             <motion.p
               {...v(0)}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3 py-1 font-mono text-xs uppercase tracking-wider text-muted-foreground backdrop-blur-sm"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground backdrop-blur-sm sm:text-xs"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-lime motion-safe:animate-pulse" />
               {t("kicker")}
             </motion.p>
             <motion.h1
               {...v(0.06)}
-              className="display text-[3rem] leading-[0.95] sm:text-6xl md:text-7xl lg:text-[5.5rem]"
+              className="display leading-[0.95]"
+              style={{ fontSize: "clamp(2.5rem, 9vw, 5.5rem)" }}
             >
               <span className="block">{t("titleLine1")}</span>
               <span className="block">
@@ -59,32 +60,32 @@ export function Hero() {
             </motion.h1>
             <motion.p
               {...v(0.14)}
-              className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg"
+              className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg"
             >
               {t("subtitle")}
             </motion.p>
             <motion.div
               {...v(0.22)}
-              className="mt-8 flex flex-col items-start gap-3 sm:flex-row"
+              className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-start"
             >
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="w-full justify-center sm:w-auto">
                 <a href="#simulator">
                   {t("ctaPrimary")} <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
-              <Button asChild size="lg" variant="secondary">
+              <Button asChild size="lg" variant="secondary" className="w-full justify-center sm:w-auto">
                 <a href="#services">{t("ctaSecondary")}</a>
               </Button>
             </motion.div>
 
             <motion.ul
               {...v(0.32)}
-              className="mt-10 flex flex-wrap items-center gap-x-2 gap-y-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground sm:text-xs"
+              className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground sm:mt-10 sm:text-xs"
               aria-label={t("trust")}
             >
               {trust.map((item) => (
                 <li key={item}>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5 backdrop-blur-sm">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-2.5 py-1 backdrop-blur-sm sm:px-3 sm:py-1.5">
                     <span className="h-1 w-1 rounded-full bg-lime" />
                     {item}
                   </span>

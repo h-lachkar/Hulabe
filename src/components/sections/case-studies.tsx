@@ -77,7 +77,7 @@ export function CaseStudies() {
   return (
     <section
       id="cases"
-      className="relative scroll-mt-20 border-t border-border py-24 sm:py-32"
+      className="relative scroll-mt-20 border-t border-border py-20 sm:py-32"
     >
       <div className="container-page">
         <SectionMarker

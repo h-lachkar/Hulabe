@@ -44,26 +44,26 @@ export function Terminal({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border bg-[#0E0E0E] font-mono text-[13px] leading-[1.7] shadow-[0_0_0_1px_rgba(163,230,53,0.08),0_24px_60px_-30px_rgba(163,230,53,0.18)]",
+        "relative overflow-hidden rounded-xl border border-border bg-[#0E0E0E] font-mono text-[12px] leading-[1.7] shadow-[0_0_0_1px_rgba(163,230,53,0.08),0_24px_60px_-30px_rgba(163,230,53,0.18)] sm:text-[13px]",
         className,
       )}
       aria-hidden
     >
       {/* Title bar */}
-      <div className="flex items-center gap-2 border-b border-border bg-surface-2/60 px-4 py-2.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#3F3F46]" />
-        <span className="ml-3 text-[11px] uppercase tracking-wider text-muted-2">
+      <div className="flex items-center gap-2 border-b border-border bg-surface-2/60 px-3 py-2.5 sm:px-4">
+        <span className="h-2 w-2 rounded-full bg-[#3F3F46] sm:h-2.5 sm:w-2.5" />
+        <span className="h-2 w-2 rounded-full bg-[#3F3F46] sm:h-2.5 sm:w-2.5" />
+        <span className="h-2 w-2 rounded-full bg-[#3F3F46] sm:h-2.5 sm:w-2.5" />
+        <span className="ml-2 truncate text-[10px] uppercase tracking-wider text-muted-2 sm:ml-3 sm:text-[11px]">
           ~/hulabe — zsh
         </span>
-        <span className="ml-auto text-[10px] uppercase tracking-wider text-lime">
+        <span className="ml-auto shrink-0 text-[10px] uppercase tracking-wider text-lime">
           ● live
         </span>
       </div>
 
       {/* Content */}
-      <div className="min-h-[280px] p-5 sm:min-h-[320px]">
+      <div className="min-h-[260px] p-4 sm:min-h-[320px] sm:p-5">
         {SCRIPT.slice(0, visible).map((line, i) => (
           <Row key={i} line={line} reduce={!!reduce} />
         ))}

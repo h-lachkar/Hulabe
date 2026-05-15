@@ -7,24 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const ERROR_MESSAGES: Record<string, string> = {
-  not_authorized: "Cet email n'est pas dans la liste des admins.",
-  invalid_link: "Lien expiré ou invalide. Demande un nouveau magic link.",
-};
-
 export function LoginForm({
-  errorParam,
+  errorMessage,
   sent: initialSent,
 }: {
-  errorParam?: string;
+  errorMessage?: string | null;
   sent: boolean;
 }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(initialSent);
-  const [error, setError] = useState<string | null>(
-    errorParam ? ERROR_MESSAGES[errorParam] ?? "Erreur d'authentification." : null,
-  );
+  const [error, setError] = useState<string | null>(errorMessage ?? null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -1,4 +1,36 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "legal.privacy" });
+  const path =
+    locale === routing.defaultLocale ? "/legal/privacy" : `/${locale}/legal/privacy`;
+  return {
+    title: t("title"),
+    description:
+      locale === "fr"
+        ? "Politique de confidentialité de Hulabe — données collectées, droits RGPD, contact."
+        : locale === "es"
+          ? "Política de privacidad de Hulabe — datos recogidos, derechos RGPD, contacto."
+          : "Hulabe privacy policy — data collected, GDPR rights, contact.",
+    alternates: {
+      canonical: path,
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [
+          l,
+          l === routing.defaultLocale ? "/legal/privacy" : `/${l}/legal/privacy`,
+        ]),
+      ),
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function PrivacyPage({
   params,

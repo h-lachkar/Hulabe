@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { contactSchema } from "@/lib/validations";
 import { sendLeadConfirmation, sendLeadNotification } from "@/lib/resend";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { scoreAndSaveLead } from "@/lib/ai/score-and-save";
 import crypto from "node:crypto";
 
 export const runtime = "nodejs";
@@ -65,6 +66,9 @@ export async function POST(req: Request) {
         leadId: lead.id,
       }),
     ]);
+
+    // AI score (fire and forget)
+    scoreAndSaveLead(lead.id).catch(() => {});
 
     return NextResponse.json({ success: true, id: lead.id });
   } catch (err) {

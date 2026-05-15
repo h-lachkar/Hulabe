@@ -24,6 +24,16 @@ model Lead {
   locale            String
   status            LeadStatus   @default(NEW)
   ipHash            String?
+
+  // --- AI lead scoring (filled async after create) ---
+  aiScore            Int?     // 1-10 deal probability
+  aiReasoning        String?  @db.Text
+  aiSuggestedReply   String?  @db.Text
+  aiNextAction       AiNextAction?
+  aiFlags            String[]      @default([])
+  aiModel            String?  // e.g. "claude-haiku-4-5"
+  aiScoredAt         DateTime?
+
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
@@ -238,4 +248,41 @@ enum SupportRequestStatus {
   IN_PROGRESS
   RESOLVED
   CLOSED
+}
+
+enum AiNextAction {
+  SEND_QUOTE
+  BOOK_CALL
+  ASK_CLARIFICATION
+  DECLINE_POLITELY
+}
+
+/// Admin users who can access /admin. Authentication is done via Supabase
+/// magic-link, but the source of truth for "who is admin" is THIS table —
+/// not an env var. The first OWNER is seeded manually via SQL (see SETUP.md).
+model AdminUser {
+  id          String     @id @default(cuid())
+  email       String     @unique
+  name        String?
+  role        AdminRole  @default(ADMIN)
+  isActive    Boolean    @default(true)
+  /// AdminUser.id of the admin who created this account (null = seeded manually).
+  invitedById String?
+  invitedBy   AdminUser? @relation("AdminInvites", fields: [invitedById], references: [id], onDelete: SetNull)
+  invitees    AdminUser[] @relation("AdminInvites")
+  /// When the magic-link invitation was sent.
+  invitedAt   DateTime?
+  /// Set on every successful login.
+  lastLoginAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([isActive])
+  @@index([role])
+}
+
+enum AdminRole {
+  OWNER
+  ADMIN
+  VIEWER
 }

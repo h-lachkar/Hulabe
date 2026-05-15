@@ -23,15 +23,11 @@ export function WhatsIncluded({ className }: { className?: string }) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface to-surface-2/40 p-6 shadow-[0_0_0_1px_rgba(163,230,53,0.08),0_24px_60px_-30px_rgba(163,230,53,0.18)] sm:p-8 ${className ?? ""}`}
+      className={`relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface to-surface-2/40 p-6 shadow-[0_0_0_1px_hsl(var(--lime)/0.08),0_24px_60px_-30px_hsl(var(--lime)/0.18)] sm:p-8 ${className ?? ""}`}
     >
-      {/* Subtle background pattern */}
+      {/* Subtle background pattern (theme-aware) */}
       <div
-        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 opacity-20 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(163,230,53,0.6) 0%, transparent 70%)",
-        }}
+        className="hero-halo-bg-soft pointer-events-none absolute -right-16 -top-16 h-48 w-48 opacity-20 blur-3xl"
         aria-hidden
       />
 

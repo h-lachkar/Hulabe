@@ -17,11 +17,12 @@ import {
 import type { AdminRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const ROLE_COLOR: Record<AdminRole, string> = {
   OWNER: "border-lime/30 bg-lime/10 text-lime",
-  ADMIN: "border-blue-500/30 bg-blue-500/10 text-blue-300",
+  ADMIN: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300",
   VIEWER: "border-border bg-surface-2 text-muted-foreground",
 };
 
@@ -65,7 +66,7 @@ export function AdminShell({
       {/* Sidebar — fixed, doesn't scroll with content */}
       <aside className="hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-surface/40 lg:sticky lg:top-0 lg:flex">
         <div className="flex h-16 items-center gap-3 border-b border-border px-6">
-          <Logo variant="dark" className="h-7 w-auto" />
+          <Logo variant="auto" className="h-7 w-auto" />
           <span className="rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-lime">
             ADMIN
           </span>
@@ -146,13 +147,16 @@ export function AdminShell({
               <p className="mt-1 truncate text-sm font-medium text-foreground">{userName}</p>
             )}
             <p className={cn("truncate font-mono text-xs", userName ? "text-muted-foreground" : "mt-1 text-sm text-foreground")}>{userEmail}</p>
-            <button
-              type="button"
-              onClick={signOut}
-              className="mt-3 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-lime"
-            >
-              <LogOut className="h-3 w-3" /> {ts("signOut")}
-            </button>
+            <div className="mt-3 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={signOut}
+                className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-lime"
+              >
+                <LogOut className="h-3 w-3" /> {ts("signOut")}
+              </button>
+              <ThemeToggle className="-mr-1.5" />
+            </div>
           </div>
         </div>
       </aside>
@@ -162,19 +166,22 @@ export function AdminShell({
         {/* Mobile top bar */}
         <header className="flex h-14 items-center justify-between border-b border-border px-4 lg:hidden">
           <div className="flex items-center gap-2">
-            <Logo variant="dark" className="h-6 w-auto" />
+            <Logo variant="auto" className="h-6 w-auto" />
             <span className="rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-lime">
               ADMIN
             </span>
           </div>
-          <button
-            type="button"
-            onClick={signOut}
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-lime"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            {ts("signOut")}
-          </button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={signOut}
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-lime"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              {ts("signOut")}
+            </button>
+          </div>
         </header>
 
         {/* Mobile bottom nav */}

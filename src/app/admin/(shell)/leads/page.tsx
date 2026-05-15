@@ -104,7 +104,7 @@ export default async function LeadsPage({
           {statusFilter && <input type="hidden" name="status" value={statusFilter} />}
           <button
             type="submit"
-            className="inline-flex h-10 items-center rounded-md bg-surface-2 px-3 text-xs font-mono uppercase tracking-wider text-foreground hover:bg-[#262626]"
+            className="inline-flex h-10 items-center rounded-md bg-surface-2 px-3 text-xs font-mono uppercase tracking-wider text-foreground hover:bg-accent"
           >
             {t("searchButton")}
           </button>

@@ -22,13 +22,9 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-50" aria-hidden />
-      {/* Hero halo */}
+      {/* Hero halo (theme-aware) */}
       <div
-        className="pointer-events-none absolute -top-40 -right-32 h-[820px] w-[820px] opacity-25 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(163,230,53,0.55) 0%, rgba(163,230,53,0.18) 35%, transparent 70%)",
-        }}
+        className="hero-halo-bg pointer-events-none absolute -top-40 -right-32 h-[820px] w-[820px] opacity-25 blur-3xl"
         aria-hidden
       />
       <div

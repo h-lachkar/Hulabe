@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitch } from "@/components/layout/language-switch";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -58,7 +59,7 @@ export function Header() {
           aria-label="Hulabe"
         >
           <Logo
-            variant="dark"
+            variant="auto"
             priority
             className={cn(
               "w-auto transition-[height] duration-200",
@@ -79,14 +80,15 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
           <LanguageSwitch />
-          <Button asChild size="sm" className="hidden sm:inline-flex">
+          <Button asChild size="sm" className="ml-1 hidden sm:inline-flex">
             <a href="#simulator">{t("cta")}</a>
           </Button>
           <button
             type="button"
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-surface-2"
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-accent"
             onClick={() => setOpen((s) => !s)}
             aria-label={open ? tc("closeMenu") : tc("openMenu")}
             aria-expanded={open}
@@ -104,7 +106,7 @@ export function Header() {
                 key={item.key}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-3 text-base text-foreground hover:bg-surface-2"
+                className="rounded-md px-3 py-3 text-base text-foreground hover:bg-accent"
               >
                 {t(item.key)}
               </a>

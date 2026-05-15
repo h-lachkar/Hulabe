@@ -369,7 +369,7 @@ function ServicePicker({
               <span
                 className={cn(
                   "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                  selected ? "border-lime bg-lime text-bg" : "border-border",
+                  selected ? "border-lime bg-lime text-primary-foreground" : "border-border",
                 )}
               >
                 {selected && <Check className="h-3 w-3" strokeWidth={3} />}
@@ -431,7 +431,7 @@ function DynamicStepView({
                 <span
                   className={cn(
                     "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                    selected ? "border-lime bg-lime text-bg" : "border-border",
+                    selected ? "border-lime bg-lime text-primary-foreground" : "border-border",
                   )}
                 >
                   {selected && <Check className="h-3 w-3" strokeWidth={3} />}
@@ -507,7 +507,7 @@ function TimelineStep({
               <span
                 className={cn(
                   "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                  selected ? "border-lime bg-lime text-bg" : "border-border",
+                  selected ? "border-lime bg-lime text-primary-foreground" : "border-border",
                 )}
               >
                 {selected && <Check className="h-3 w-3" strokeWidth={3} />}
@@ -551,7 +551,7 @@ function BudgetStep({
               <span
                 className={cn(
                   "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors",
-                  selected ? "border-lime bg-lime text-bg" : "border-border",
+                  selected ? "border-lime bg-lime text-primary-foreground" : "border-border",
                 )}
               >
                 {selected && <Check className="h-3 w-3" strokeWidth={3} />}

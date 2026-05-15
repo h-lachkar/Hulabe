@@ -306,7 +306,7 @@ export default async function ProjectDetailPage({
                             type="submit"
                             name="status"
                             value="RESOLVED"
-                            className="rounded-md bg-lime px-3 py-1.5 text-xs font-medium text-bg hover:bg-lime-dark"
+                            className="rounded-md bg-lime px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-lime-dark"
                           >
                             {t("replyResolve")}
                           </button>

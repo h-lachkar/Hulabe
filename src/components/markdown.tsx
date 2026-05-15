@@ -20,7 +20,7 @@ export function Markdown({ source, className }: { source: string; className?: st
   return (
     <div
       className={cn(
-        "prose prose-invert prose-sm max-w-none",
+        "prose prose-sm max-w-none dark:prose-invert",
         "prose-p:my-2 prose-p:leading-relaxed",
         "prose-a:text-lime prose-a:underline-offset-2 hover:prose-a:underline",
         "prose-strong:text-foreground",

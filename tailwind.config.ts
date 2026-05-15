@@ -52,15 +52,15 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Hulabe palette
-        bg: "#0A0A0A",
-        surface: "#141414",
-        "surface-2": "#1C1C1C",
+        // Hulabe palette (theme-aware via CSS vars)
+        bg: "hsl(var(--bg))",
+        surface: "hsl(var(--surface))",
+        "surface-2": "hsl(var(--surface-2))",
+        "muted-2": "hsl(var(--muted-2))",
         lime: {
-          DEFAULT: "#A3E635",
-          dark: "#84CC16",
+          DEFAULT: "hsl(var(--lime))",
+          dark: "hsl(var(--lime-dark))",
         },
-        "muted-2": "#71717A",
       },
       borderRadius: {
         lg: "var(--radius)",

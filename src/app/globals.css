@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── DARK THEME (default) ──────────────────────────────────────────────── */
   :root {
-    /* shadcn tokens — dark scheme by default */
+    /* shadcn tokens */
     --background: 0 0% 4%;          /* #0A0A0A */
     --foreground: 0 0% 98%;         /* #FAFAFA */
 
@@ -21,7 +22,7 @@
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 11%;
-    --muted-foreground: 240 5% 72%; /* slightly brighter for body legibility */
+    --muted-foreground: 240 5% 72%; /* slightly brighter for legibility */
 
     --accent: 0 0% 14%;
     --accent-foreground: 0 0% 98%;
@@ -33,16 +34,87 @@
     --input: 0 0% 15%;
     --ring: 83 80% 55%;
 
+    /* Hulabe palette */
+    --bg: 0 0% 4%;                  /* #0A0A0A */
+    --surface: 0 0% 8%;             /* #141414 */
+    --surface-2: 0 0% 11%;          /* #1C1C1C */
+    --muted-2: 240 4% 46%;          /* #71717A */
+    --lime: 83 80% 55%;             /* #A3E635 */
+    --lime-dark: 82 80% 45%;        /* #84CC16 */
+
+    /* Theme-aware effect colors */
+    --grid-line: 0 0% 100%;         /* white grid on dark */
+    --grid-opacity: 0.03;
+    --hero-halo: 163 230 53;        /* rgb tuple for radial gradients */
+    --hero-halo-strength: 0.55;
+    --selection-bg: 83 80% 55%;     /* lime */
+    --selection-fg: 0 0% 4%;        /* near-black */
+    --shadow-drop: 0 0 0;           /* rgb tuple — black drop shadow */
+    --shadow-drop-opacity: 0.5;
+
     --radius: 10px;
+
+    color-scheme: dark;
   }
 
-  /* Force dark colors regardless of system */
-  html {
-    color-scheme: dark;
+  /* ── LIGHT THEME ──────────────────────────────────────────────────────── */
+  .light {
+    --background: 0 0% 100%;        /* #FFFFFF */
+    --foreground: 0 0% 8%;          /* #141414 — near-black text */
+
+    --card: 0 0% 100%;              /* #FFFFFF */
+    --card-foreground: 0 0% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+
+    /* Lime stays as accent. Use darker shade for on-light contrast. */
+    --primary: 82 78% 38%;          /* #65A30D — darker lime for AA contrast on white */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;          /* #F4F4F5 */
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 240 4% 36%; /* #52525B — readable mid-gray */
+
+    --accent: 0 0% 94%;             /* #F0F0F1 */
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 5% 88%;           /* #DEDFE2 — soft hairline */
+    --input: 240 5% 88%;
+    --ring: 82 78% 38%;
+
+    /* Hulabe palette (light) */
+    --bg: 0 0% 98%;                 /* #FAFAFA — body background */
+    --surface: 0 0% 100%;           /* #FFFFFF — cards / elevated */
+    --surface-2: 240 5% 96%;        /* #F4F4F5 — chips / wells */
+    --muted-2: 240 4% 46%;          /* same — mid-gray */
+    --lime: 82 78% 38%;             /* #65A30D — darker for light bg */
+    --lime-dark: 82 78% 32%;        /* even darker on hover */
+
+    /* Theme-aware effect colors */
+    --grid-line: 0 0% 0%;           /* black grid on light */
+    --grid-opacity: 0.04;
+    --hero-halo: 163 230 53;        /* still lime tuple, lower strength */
+    --hero-halo-strength: 0.18;
+    --selection-bg: 82 78% 38%;
+    --selection-fg: 0 0% 100%;
+    --shadow-drop: 18 18 20;        /* very dark rgb for soft shadow */
+    --shadow-drop-opacity: 0.08;
+
+    color-scheme: light;
   }
 
   * {
     @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -53,12 +125,6 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Smooth scroll for anchor jumps */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Tighter, more refined h1-h3 tracking by default */
   h1, h2, h3 {
     text-wrap: balance;
   }
@@ -68,8 +134,8 @@
   }
 
   ::selection {
-    background: #A3E635;
-    color: #0A0A0A;
+    background: hsl(var(--selection-bg));
+    color: hsl(var(--selection-fg));
   }
 }
 
@@ -87,18 +153,29 @@
   }
 
   .accent-dot {
-    color: #A3E635;
+    color: hsl(var(--lime));
   }
 
+  /* Theme-aware grid background */
   .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        hsl(var(--grid-line) / var(--grid-opacity)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--grid-line) / var(--grid-opacity)) 1px,
+        transparent 1px
+      );
     background-size: 64px 64px;
   }
 
   .ring-lime {
-    box-shadow: 0 0 0 1px rgba(163, 230, 53, 0.4), 0 0 40px -8px rgba(163, 230, 53, 0.25);
+    box-shadow:
+      0 0 0 1px hsl(var(--lime) / 0.4),
+      0 0 40px -8px hsl(var(--lime) / 0.25);
   }
 
   .card-hover {
@@ -106,12 +183,12 @@
     will-change: transform, border-color, box-shadow;
   }
   .card-hover:hover {
-    border-color: rgba(163, 230, 53, 0.45);
+    border-color: hsl(var(--lime) / 0.45);
     transform: translateY(-2px);
     box-shadow:
-      0 0 0 1px rgba(163, 230, 53, 0.12),
-      0 18px 40px -20px rgba(163, 230, 53, 0.22),
-      0 6px 18px -12px rgba(0, 0, 0, 0.5);
+      0 0 0 1px hsl(var(--lime) / 0.12),
+      0 18px 40px -20px hsl(var(--lime) / 0.22),
+      0 6px 18px -12px rgb(var(--shadow-drop) / var(--shadow-drop-opacity));
   }
 
   /* Hairline divider with a subtle gradient (less harsh than border-border) */
@@ -136,7 +213,7 @@
     backdrop-filter: blur(8px);
   }
 
-  /* Subtle noise overlay to break up flat dark surfaces */
+  /* Subtle noise overlay to break up flat surfaces */
   .noise {
     position: relative;
   }
@@ -148,6 +225,24 @@
     opacity: 0.025;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* Theme-aware hero halo (used as inline background gradient via CSS var) */
+  .hero-halo-bg {
+    background: radial-gradient(
+      ellipse at center,
+      rgb(var(--hero-halo) / var(--hero-halo-strength)) 0%,
+      rgb(var(--hero-halo) / calc(var(--hero-halo-strength) * 0.35)) 35%,
+      transparent 70%
+    );
+  }
+
+  .hero-halo-bg-soft {
+    background: radial-gradient(
+      circle,
+      rgb(var(--hero-halo) / calc(var(--hero-halo-strength) * 0.8)) 0%,
+      transparent 70%
+    );
   }
 }
 

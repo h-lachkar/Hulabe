@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { LogOut, Folders, LifeBuoy, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function ClientShell({
@@ -36,7 +37,7 @@ export function ClientShell({
       <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link href="/client" className="flex items-center gap-3" aria-label="Hulabe">
-            <Logo variant="dark" className="h-7 w-auto" />
+            <Logo variant="auto" className="h-7 w-auto" />
             <span className="hidden rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-lime sm:inline">
               CLIENT
             </span>
@@ -62,10 +63,11 @@ export function ClientShell({
             })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             <span className="hidden truncate font-mono text-xs text-muted-foreground sm:inline">
               {userEmail}
             </span>
+            <ThemeToggle />
             <button
               type="button"
               onClick={signOut}

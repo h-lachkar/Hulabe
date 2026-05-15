@@ -122,11 +122,7 @@ function CaseItem({
         {/* Always-present styled fallback (visible if image fails or before load) */}
         <div className="absolute inset-0 bg-grid opacity-30" aria-hidden />
         <div
-          className="pointer-events-none absolute -bottom-12 left-1/2 h-48 w-72 -translate-x-1/2 opacity-25 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(163,230,53,0.45) 0%, transparent 70%)",
-          }}
+          className="hero-halo-bg-soft pointer-events-none absolute -bottom-12 left-1/2 h-48 w-72 -translate-x-1/2 opacity-25 blur-3xl"
           aria-hidden
         />
         <div className="absolute inset-0 flex items-center justify-center">

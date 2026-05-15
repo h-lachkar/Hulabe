@@ -14,7 +14,7 @@ export function Footer() {
       <div className="border-b border-border bg-surface-2/40">
         <div className="container-page flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <Logo variant="dark" className="h-7 w-auto" />
+            <Logo variant="auto" className="h-7 w-auto" />
             <span className="hidden h-4 w-px bg-border sm:block" aria-hidden />
             <span className="hidden text-sm text-muted-foreground sm:inline">{t("tagline")}</span>
           </div>

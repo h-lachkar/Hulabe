@@ -136,7 +136,7 @@ export default async function ClientProjectPage({
                     className={cn(
                       "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px] tabular-nums",
                       reached
-                        ? "border-lime bg-lime text-bg"
+                        ? "border-lime bg-lime text-primary-foreground"
                         : "border-border bg-surface-2 text-muted-2",
                     )}
                   >

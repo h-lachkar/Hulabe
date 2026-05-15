@@ -14,7 +14,7 @@ export default async function ProjectNotFound() {
       <p className="mt-3 text-sm text-muted-foreground">{t("body")}</p>
       <Link
         href="/client"
-        className="mt-6 inline-flex items-center gap-2 rounded-md bg-lime px-4 py-2 text-sm font-semibold text-bg hover:bg-lime-dark"
+        className="mt-6 inline-flex items-center gap-2 rounded-md bg-lime px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-lime-dark"
       >
         {t("back")}
       </Link>

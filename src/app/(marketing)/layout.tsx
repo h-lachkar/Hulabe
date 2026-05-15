@@ -11,7 +11,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import type { Locale } from "@/i18n/routing";
 import "@/app/globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.hulabe.com";
 
 const KEYWORDS: Record<Locale, string[]> = {
   fr: [

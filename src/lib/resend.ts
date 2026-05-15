@@ -385,14 +385,14 @@ const STATUS_TITLE_FR: Record<string, string> = {
 function projectPortalUrl(projectId: string) {
   const base =
     process.env.NEXT_PUBLIC_CLIENT_URL ??
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/client`;
+    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.hulabe.com"}/client`;
   return `${base}/projects/${projectId}`;
 }
 
 function adminPortalUrl(path: string = "") {
   const base =
     process.env.NEXT_PUBLIC_ADMIN_URL ??
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/admin`;
+    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.hulabe.com"}/admin`;
   return `${base}${path}`;
 }
 

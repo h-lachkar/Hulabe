@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/routing";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.hulabe.com";
 
 type Service = {
   slug: string;

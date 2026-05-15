@@ -27,5 +27,5 @@ export async function getSiteOrigin(): Promise<string> {
   } catch {
     // headers() throws outside of request scope — fall through to env var.
   }
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.hulabe.com";
 }

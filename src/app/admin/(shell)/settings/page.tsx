@@ -4,6 +4,7 @@ import { Users, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
+import { LocalePicker } from "@/components/locale-picker";
 import { getFormat } from "@/lib/admin/format";
 
 export const dynamic = "force-dynamic";
@@ -61,6 +62,11 @@ export default async function SettingsPage() {
               </dd>
             </div>
           </dl>
+        </section>
+
+        {/* Locale picker */}
+        <section className="rounded-xl border border-border bg-surface p-6">
+          <LocalePicker />
         </section>
 
         {isOwner && teamSnapshot && (

@@ -303,7 +303,7 @@
     "admin": {
       "metaTitle": "Admin · Hulabe",
       "kicker": "HULABE / ADMIN",
-      "heading": "Sign in.",
+      "heading": "Connexion.",
       "subheading": "Entre ton email et ton mot de passe. Si c'est ta première connexion ou si tu as oublié ton mot de passe, utilise le lien sous le formulaire.",
       "setupNeededTitle": "Setup nécessaire",
       "setupNeededBody": "Aucun admin n'est encore créé. Crée le premier OWNER en SQL direct sur Supabase — voir {file} §5. Puis utilise « Première connexion ? » ci-dessous pour définir ton mot de passe.",
@@ -354,19 +354,19 @@
   },
   "admin": {
     "shell": {
-      "signedIn": "Signed in",
-      "signOut": "Sign out",
+      "signedIn": "Connecté",
+      "signOut": "Déconnexion",
       "inactive": "Inactif",
-      "you": "You"
+      "you": "Toi"
     },
     "nav": {
-      "dashboard": "Dashboard",
+      "dashboard": "Tableau de bord",
       "leads": "Leads",
-      "projects": "Projects",
-      "invoices": "Invoices",
+      "projects": "Projets",
+      "invoices": "Factures",
       "support": "Support",
-      "team": "Team",
-      "settings": "Settings",
+      "team": "Équipe",
+      "settings": "Paramètres",
       "posthog": "PostHog"
     },
     "dashboard": {

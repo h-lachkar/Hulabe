@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { requireClient } from "@/lib/client/auth";
+import { LocalePicker } from "@/components/locale-picker";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,10 @@ export default async function ClientSettingsPage() {
           </a>
           .
         </p>
+      </section>
+
+      <section className="mt-6 rounded-2xl border border-border bg-surface p-6">
+        <LocalePicker />
       </section>
     </div>
   );

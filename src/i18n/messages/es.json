@@ -303,7 +303,7 @@
     "admin": {
       "metaTitle": "Admin · Hulabe",
       "kicker": "HULABE / ADMIN",
-      "heading": "Sign in.",
+      "heading": "Iniciar sesión.",
       "subheading": "Introduce tu email y contraseña. Si es tu primera vez o has olvidado tu contraseña, usa el enlace debajo del formulario.",
       "setupNeededTitle": "Setup necesario",
       "setupNeededBody": "No hay ningún admin creado todavía. Crea el primer OWNER con SQL directo en Supabase — ver {file} §5. Luego usa «¿Primera vez?» abajo para definir tu contraseña.",
@@ -354,8 +354,8 @@
   },
   "admin": {
     "shell": {
-      "signedIn": "Signed in",
-      "signOut": "Sign out",
+      "signedIn": "Conectado",
+      "signOut": "Cerrar sesión",
       "inactive": "Inactivo",
       "you": "Tú"
     },

@@ -4,8 +4,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "@/app/globals.css";
-import { AdminShell } from "@/components/admin/admin-shell";
-import { getAdminContext } from "@/lib/admin/auth";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
 
@@ -18,8 +16,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/**
+ * Bare admin layout — only provides <html>, <body>, fonts, and the next-intl
+ * client provider. The AdminShell (sidebar, nav) is applied only to routes
+ * inside the (shell) route group.
+ *
+ * Login, setup-password, and any other "edge" admin routes live outside the
+ * shell so the user can't navigate away while in those states.
+ */
 export default async function AdminRootLayout({ children }: { children: React.ReactNode }) {
-  const ctx = await getAdminContext();
   const locale = await getLocale();
   const messages = await getMessages();
 
@@ -27,17 +32,7 @@ export default async function AdminRootLayout({ children }: { children: React.Re
     <html lang={locale} className={`${GeistSans.variable} ${GeistMono.variable} dark`}>
       <body className="min-h-screen bg-bg text-foreground">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {ctx ? (
-            <AdminShell
-              userEmail={ctx.admin.email}
-              userName={ctx.admin.name}
-              userRole={ctx.admin.role}
-            >
-              {children}
-            </AdminShell>
-          ) : (
-            children
-          )}
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

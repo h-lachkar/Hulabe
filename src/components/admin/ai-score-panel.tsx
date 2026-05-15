@@ -84,11 +84,7 @@ export function AiScorePanel({
       {!scored ? (
         <div className="px-5 py-8 text-center">
           <p className="text-sm text-muted-foreground">
-            {t.rich("notScoredLine1", {
-              label: () => (
-                <span className="font-mono text-foreground">{t("notScoredLine1Label")}</span>
-              ),
-            })}
+            {t("notScoredLine1", { label: t("notScoredLine1Label") })}
           </p>
           <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
             {t("notScoredLine2")}

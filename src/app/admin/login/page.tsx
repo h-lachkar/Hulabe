@@ -59,9 +59,7 @@ export default async function AdminLoginPage({
           <div className="mt-6 rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 text-xs text-amber-200">
             <p className="font-mono uppercase tracking-wider">{t("setupNeededTitle")}</p>
             <p className="mt-2 leading-relaxed">
-              {t.rich("setupNeededBody", {
-                file: () => <code className="rounded bg-bg/50 px-1">SETUP.md</code>,
-              })}
+              {t("setupNeededBody", { file: "SETUP.md" })}
             </p>
           </div>
         )}

@@ -16,6 +16,15 @@ export async function requireClient() {
   } = await supabase.auth.getUser();
 
   if (!user || !user.email) redirect("/client/login");
+
+  // Force the user to set a real password if they only have an OTP session
+  // (from invite or recovery email). We track this in user metadata, flipped
+  // by markPasswordSet() inside the setup-password form.
+  const passwordSetAt = user.user_metadata?.passwordSetAt;
+  if (!passwordSetAt) {
+    redirect("/client/setup-password");
+  }
+
   return user;
 }
 

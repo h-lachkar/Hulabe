@@ -47,6 +47,13 @@ export async function requireAdmin(
     redirect("/admin/login?error=not_authorized");
   }
 
+  // Force the user to set a password on first login (or after a reset).
+  // Without this gate they could navigate the shell with only an OTP session,
+  // which is a poor security & UX state.
+  if (!admin.passwordSetAt) {
+    redirect("/admin/setup-password");
+  }
+
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(admin.role)) {
     redirect("/admin?error=forbidden");
   }

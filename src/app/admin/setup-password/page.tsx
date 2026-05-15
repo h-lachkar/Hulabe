@@ -43,9 +43,7 @@ export default async function AdminSetupPasswordPage() {
           <span className="text-lime">.</span>
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {ts.rich("subheading", {
-            email: () => <strong>{user.email}</strong>,
-          })}
+          {ts("subheading", { email: user.email })}
         </p>
         <div className="mt-8">
           <SetupPasswordForm successRedirect="/admin" />

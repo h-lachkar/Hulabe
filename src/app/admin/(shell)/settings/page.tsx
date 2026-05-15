@@ -157,9 +157,7 @@ export default async function SettingsPage() {
               {t("teamSection")}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {t.rich("ownerOnlyNote", {
-                role: () => <span className="font-mono">OWNER</span>,
-              })}
+              {t("ownerOnlyNote", { role: "OWNER" })}
             </p>
           </section>
         )}

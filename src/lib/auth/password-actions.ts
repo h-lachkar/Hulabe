@@ -172,7 +172,7 @@ export async function markPasswordSet(): Promise<ActionResult> {
   } = await supabase.auth.getUser();
   if (!user?.email) return { ok: false, error: "Pas connecté" };
 
-  // Best-effort: if there's an AdminUser row for this email, flip passwordSetAt.
+  // Persist on AdminUser (for admins) — best effort
   await prisma.adminUser
     .updateMany({
       where: { email: { equals: user.email, mode: "insensitive" } },
@@ -180,8 +180,17 @@ export async function markPasswordSet(): Promise<ActionResult> {
     })
     .catch(() => {});
 
+  // Persist on Supabase user metadata so the gate works for non-admin users
+  // (clients, etc.) too. Read by requireClient() and elsewhere.
+  await supabase.auth
+    .updateUser({
+      data: { passwordSetAt: new Date().toISOString() },
+    })
+    .catch(() => {});
+
   revalidatePath("/admin");
   revalidatePath("/admin/team");
+  revalidatePath("/client");
   return { ok: true };
 }
 

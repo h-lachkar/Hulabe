@@ -34,11 +34,7 @@ export default async function AdminTeamPage() {
             {t("inviteTitle")}
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            {t.rich("inviteBody", {
-              path: () => (
-                <code className="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-xs">/admin</code>
-              ),
-            })}
+            {t("inviteBody", { path: "/admin" })}
           </p>
           <div className="mt-5">
             <InviteAdminForm />

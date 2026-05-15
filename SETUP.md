@@ -155,8 +155,8 @@ INSERT INTO "AdminUser" (
   -- cuid-style id (manuel, ou utilise gen_random_uuid()::text)
   'cm_' || replace(gen_random_uuid()::text, '-', ''),
   -- ton email (sera matché case-insensitive au login)
-  'hugo@hulabe.com',
-  'Hugo',
+  'admin@hulabe.com',
+  'Admin',
   'OWNER',
   true,
   NOW(),

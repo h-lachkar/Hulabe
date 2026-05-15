@@ -1,9 +1,5 @@
-import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
-import { routing } from "@/i18n/routing";
 import { updateSession } from "@/lib/supabase/middleware";
-
-const intlMiddleware = createIntlMiddleware(routing);
 
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -11,7 +7,8 @@ export default async function middleware(req: NextRequest) {
   /* ----------------------------- /admin gate ----------------------------- */
   if (pathname.startsWith("/admin")) {
     const { supabaseResponse, user } = await updateSession(req);
-    const isLoginRoute = pathname === "/admin/login";
+    const isLoginRoute =
+      pathname === "/admin/login" || pathname === "/admin/setup-password";
     if (isLoginRoute) return supabaseResponse;
 
     if (!user) {
@@ -32,7 +29,8 @@ export default async function middleware(req: NextRequest) {
   /* ----------------------------- /client gate ---------------------------- */
   if (pathname.startsWith("/client")) {
     const { supabaseResponse, user } = await updateSession(req);
-    const isLoginRoute = pathname === "/client/login";
+    const isLoginRoute =
+      pathname === "/client/login" || pathname === "/client/setup-password";
     if (isLoginRoute) return supabaseResponse;
 
     if (!user) {
@@ -41,7 +39,6 @@ export default async function middleware(req: NextRequest) {
       url.search = "";
       return NextResponse.redirect(url);
     }
-    // Per-project ownership check happens at the page level.
     supabaseResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
     return supabaseResponse;
   }
@@ -53,7 +50,8 @@ export default async function middleware(req: NextRequest) {
   }
 
   /* ----------------------------- Marketing ------------------------------- */
-  return intlMiddleware(req);
+  // No locale routing — locale is resolved from cookie in src/i18n/request.ts
+  return NextResponse.next();
 }
 
 export const config = {

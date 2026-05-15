@@ -194,7 +194,7 @@ const FAQS: Record<Locale, FaqItem[]> = {
 };
 
 export function HomeJsonLd({ locale }: { locale: Locale }) {
-  const url = locale === "fr" ? SITE_URL : `${SITE_URL}/${locale}`;
+  const url = SITE_URL;
 
   const organization = {
     "@context": "https://schema.org",
@@ -261,7 +261,7 @@ export function HomeJsonLd({ locale }: { locale: Locale }) {
     provider: { "@id": `${SITE_URL}#organization` },
     serviceType: s.name[locale],
     areaServed: { "@type": "AdministrativeArea", name: "Worldwide" },
-    termsOfService: `${SITE_URL}/${locale === "fr" ? "legal/terms" : `${locale}/legal/terms`}`,
+    termsOfService: `${SITE_URL}/legal/terms`,
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "EUR",

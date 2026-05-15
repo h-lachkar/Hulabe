@@ -127,20 +127,26 @@ export async function sendLeadNotification(props: LeadNotificationProps) {
 
 /* ----------------------------- Client portal --------------------------- */
 
-type InvitationProps = {
+type ClientInvitationProps = {
   to: string;
   name?: string | null;
   magicLink: string;
   projectName: string;
 };
 
+/**
+ * Invite a client to the portal — sent when admin clicks "Inviter au portail"
+ * on /admin/projects/[id]. The link lands on /client/setup-password.
+ */
 export async function sendClientPortalInvitation({
   to,
   name,
   magicLink,
   projectName,
-}: InvitationProps) {
+}: ClientInvitationProps) {
   if (!resend) return;
+  const clientUrl =
+    process.env.NEXT_PUBLIC_CLIENT_URL ?? "https://client.hulabe.com";
   const html = emailLayout(`
     <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
     <p style="margin:0 0 16px;">
@@ -148,16 +154,17 @@ export async function sendClientPortalInvitation({
       <strong>${escapeHtml(projectName)}</strong>. Tu y trouveras l'avancement, les livrables, et un canal direct pour
       demander des ajustements.
     </p>
+    <p style="margin:0 0 16px;">
+      Pour commencer, choisis ton mot de passe en cliquant ci-dessous :
+    </p>
     <p style="margin:0 0 24px;">
       <a href="${magicLink}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
-        Ouvrir mon espace
+        Définir mon mot de passe
       </a>
     </p>
     <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
       Le lien est valable 1 heure. Si tu le perds, demande-en un nouveau sur
-      <a style="color:#A3E635;" href="${process.env.NEXT_PUBLIC_CLIENT_URL ?? "https://client.hulabe.com"}/login">
-        client.hulabe.com
-      </a>.
+      <a style="color:#A3E635;" href="${clientUrl}/login">${clientUrl}/login</a>.
     </p>
     <p style="margin:0;white-space:pre-line;color:#A1A1AA;">À très vite,\nHugo — Hulabe</p>
   `);
@@ -167,6 +174,50 @@ export async function sendClientPortalInvitation({
     subject: `Ton espace Hulabe pour ${projectName}`,
     html,
   });
+}
+
+/* ------------------ Client password set / recovery email ---------------- */
+
+type ClientPasswordEmailProps = {
+  to: string;
+  name?: string | null;
+  link: string;
+  mode: "invite" | "recovery";
+};
+
+export async function sendClientPasswordEmail({
+  to,
+  name,
+  link,
+  mode,
+}: ClientPasswordEmailProps) {
+  if (!resend) return;
+  const clientUrl =
+    process.env.NEXT_PUBLIC_CLIENT_URL ?? "https://client.hulabe.com";
+  const isRecovery = mode === "recovery";
+  const subject = isRecovery
+    ? "Réinitialiser ton mot de passe Hulabe"
+    : "Définir ton mot de passe pour l'espace client";
+  const cta = isRecovery ? "Réinitialiser mon mot de passe" : "Définir mon mot de passe";
+  const intro = isRecovery
+    ? "Tu as demandé à réinitialiser ton mot de passe sur ton espace client."
+    : "Pour accéder à ton espace client, choisis ton mot de passe.";
+
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">${intro}</p>
+    <p style="margin:0 0 24px;">
+      <a href="${link}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        ${cta}
+      </a>
+    </p>
+    <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
+      Le lien est valable 1 heure. Si tu le perds, demande-en un nouveau sur
+      <a style="color:#A3E635;" href="${clientUrl}/login">${clientUrl}/login</a>.
+    </p>
+    ${isRecovery ? `<p style="margin:0;font-size:12px;color:#71717A;">Si ce n'est pas toi qui as fait cette demande, ignore cet email.</p>` : ""}
+  `);
+  await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
 }
 
 type SupportNotificationProps = {
@@ -236,21 +287,23 @@ export async function sendAdminInvitation({
 }: AdminInvitationProps) {
   if (!resend) return;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
-  const inviter =
-    inviterName ?? inviterEmail ?? "L'équipe Hulabe";
+  const inviter = inviterName ?? inviterEmail ?? "L'équipe Hulabe";
   const html = emailLayout(`
     <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
     <p style="margin:0 0 16px;">
       <strong>${escapeHtml(inviter)}</strong> t'invite à rejoindre l'espace admin de Hulabe en tant que
       <strong>${ROLE_LABEL[role]}</strong>.
     </p>
+    <p style="margin:0 0 16px;">
+      Pour commencer, choisis ton mot de passe en cliquant ci-dessous :
+    </p>
     <p style="margin:0 0 24px;">
       <a href="${magicLink}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
-        Accéder à l'admin
+        Définir mon mot de passe
       </a>
     </p>
     <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
-      Le lien est valable 1 heure. Si tu le perds, demande un nouveau magic link sur
+      Le lien est valable 1 heure. Si tu le perds, demande un nouveau lien sur
       <a style="color:#A3E635;" href="${siteUrl}/admin/login">${siteUrl}/admin/login</a>.
     </p>
     <p style="margin:0;color:#A1A1AA;font-size:12px;">Hulabe — Admin</p>
@@ -261,6 +314,51 @@ export async function sendAdminInvitation({
     subject: `Invitation à l'admin Hulabe`,
     html,
   });
+}
+
+/* ------------------ Admin password set / recovery email ---------------- */
+
+type AdminPasswordEmailProps = {
+  to: string;
+  name?: string | null;
+  link: string;
+  mode: "invite" | "recovery";
+};
+
+export async function sendAdminPasswordEmail({
+  to,
+  name,
+  link,
+  mode,
+}: AdminPasswordEmailProps) {
+  if (!resend) return;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
+  const isRecovery = mode === "recovery";
+  const subject = isRecovery
+    ? "Réinitialiser ton mot de passe Hulabe admin"
+    : "Définir ton mot de passe pour l'admin Hulabe";
+  const cta = isRecovery
+    ? "Réinitialiser mon mot de passe"
+    : "Définir mon mot de passe";
+  const intro = isRecovery
+    ? "Tu as demandé à réinitialiser ton mot de passe sur l'admin Hulabe."
+    : "Pour accéder à ton admin, choisis ton mot de passe.";
+
+  const html = emailLayout(`
+    <p style="margin:0 0 16px;">${name ? `Salut ${name},` : "Salut,"}</p>
+    <p style="margin:0 0 16px;">${intro}</p>
+    <p style="margin:0 0 24px;">
+      <a href="${link}" style="display:inline-block;padding:12px 20px;background:#A3E635;color:#0A0A0A;text-decoration:none;border-radius:10px;font-weight:600;">
+        ${cta}
+      </a>
+    </p>
+    <p style="margin:0 0 16px;font-size:12px;color:#71717A;">
+      Le lien est valable 1 heure. Si tu le perds, demande un nouveau lien sur
+      <a style="color:#A3E635;" href="${siteUrl}/admin/login">${siteUrl}/admin/login</a>.
+    </p>
+    ${isRecovery ? `<p style="margin:0;font-size:12px;color:#71717A;">Si ce n'est pas toi qui as fait cette demande, ignore cet email.</p>` : ""}
+  `);
+  await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
 }
 
 function escapeHtml(value: string) {

@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "legal.privacy" });
-  const path =
-    locale === routing.defaultLocale ? "/legal/privacy" : `/${locale}/legal/privacy`;
   return {
     title: t("title"),
     description:
@@ -19,26 +12,13 @@ export async function generateMetadata({
         : locale === "es"
           ? "Política de privacidad de Hulabe — datos recogidos, derechos RGPD, contacto."
           : "Hulabe privacy policy — data collected, GDPR rights, contact.",
-    alternates: {
-      canonical: path,
-      languages: Object.fromEntries(
-        routing.locales.map((l) => [
-          l,
-          l === routing.defaultLocale ? "/legal/privacy" : `/${l}/legal/privacy`,
-        ]),
-      ),
-    },
+    alternates: { canonical: "/legal/privacy" },
     robots: { index: true, follow: true },
   };
 }
 
-export default async function PrivacyPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+export default async function PrivacyPage() {
+  const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "legal.privacy" });
   return (
     <article className="container-page max-w-3xl py-20 prose prose-invert">

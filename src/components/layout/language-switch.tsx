@@ -1,8 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
-import { useRouter, usePathname, routing } from "@/i18n/routing";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,27 +12,30 @@ import {
   DropdownMenuCheckIcon,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
+import { setLocale } from "@/i18n/actions";
+import { LOCALES, type Locale } from "@/i18n/routing";
 import { track } from "@/components/posthog-provider";
 
-const LABELS: Record<(typeof routing.locales)[number], string> = {
+const LABELS: Record<Locale, string> = {
   fr: "Français",
   en: "English",
   es: "Español",
 };
 
 export function LanguageSwitch() {
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const t = useTranslations("common");
   const router = useRouter();
-  const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  function onSelect(next: (typeof routing.locales)[number]) {
+  function onSelect(next: Locale) {
     if (next === locale) return;
     track("language_changed", { from: locale, to: next });
-    startTransition(() => {
-      router.replace(pathname, { locale: next });
+    startTransition(async () => {
+      const fd = new FormData();
+      fd.append("locale", next);
+      await setLocale(fd);
+      router.refresh();
     });
   }
 
@@ -50,7 +54,7 @@ export function LanguageSwitch() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {routing.locales.map((l) => (
+        {LOCALES.map((l) => (
           <DropdownMenuItem
             key={l}
             onSelect={() => onSelect(l)}

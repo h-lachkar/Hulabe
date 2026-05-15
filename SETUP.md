@@ -132,9 +132,7 @@ Resend envoie 6 types d'emails :
 
 ## 5. Premier admin OWNER (SQL direct dans Supabase)
 
-L'accès à `/admin` est contrôlé par la table `AdminUser`. Tant que cette table est vide, **personne ne peut accéder à l'admin**. Il faut donc créer le premier OWNER manuellement.
-
-> Note : tu n'as **pas besoin** de créer un compte côté Supabase Auth d'abord. La table `AdminUser` est la source de vérité — au premier login, Supabase Auth crée le user `auth.users` automatiquement via le magic link, et le code matche par email avec ton entrée `AdminUser`.
+L'accès à `/admin` est contrôlé par la table `AdminUser`. La connexion se fait **par email + mot de passe** classique. Tant que cette table est vide, **personne ne peut accéder à l'admin** — il faut donc créer le premier OWNER manuellement, puis utiliser le flow « mot de passe oublié » pour définir son mot de passe.
 
 ### 5.1 Exécuter la query SQL
 
@@ -167,38 +165,53 @@ INSERT INTO "AdminUser" (
 4. Clique **Run**. Tu dois voir `Success. No rows returned`.
 5. Vérifie : **Table editor → AdminUser** → ta ligne doit être là, `role: OWNER`, `isActive: true`.
 
-### 5.2 Premier login
+> Tu n'as **pas besoin** de créer un compte Supabase Auth à la main : il sera créé automatiquement à l'étape 5.2.
+
+### 5.2 Définir ton premier mot de passe
 
 1. Lance `pnpm dev`
 2. Va sur `http://localhost:3000/admin/login`
-3. Entre l'email exact que tu viens d'insérer
-4. Reçois le magic link, clique dessus
-5. Tu arrives sur `/admin` avec ton badge **OWNER**
+3. Clique sur **« Première connexion ou mot de passe oublié ? »**
+4. Entre l'email exact que tu viens d'insérer en SQL → submit
+5. Tu reçois un email contenant un lien **« Définir mon mot de passe »**
+6. Clique → tu arrives sur `/admin/setup-password`
+7. Choisis ton mot de passe (min 8 caractères) → submit
+8. Tu arrives sur `/admin` avec ton badge **OWNER**
+9. Pour tes prochaines connexions, va sur `/admin/login` et utilise email + mot de passe
 
-### 5.3 Gérer les autres admins
+### 5.3 Inviter / gérer les autres admins
 
 À partir de là, tu peux **gérer toute l'équipe via l'UI** (plus jamais besoin de SQL) :
 
 - `/admin/team` (visible uniquement par les OWNER)
-- **Inviter** un nouvel admin par email avec un rôle (OWNER / ADMIN / VIEWER)
+- **Inviter** un nouvel admin par email + nom + rôle (OWNER / ADMIN / VIEWER) → email avec lien « Définir mon mot de passe »
 - **Désactiver / réactiver** un admin (compte gardé en DB, accès retiré)
 - **Supprimer** définitivement un admin
 - **Promouvoir / rétrograder** un admin
-- **Renvoyer le magic link** pour un admin qui n'a jamais log in
+- **Renvoyer le lien de mot de passe** pour un admin qui n'a jamais défini son mot de passe (ou qui l'a oublié)
 - **Renommer** un admin
 
 ### 5.4 Rôles
 
-- **OWNER** : tous les droits, y compris gérer les autres admins (la seule façon d'arriver à `/admin/team`)
+- **OWNER** : tous les droits, y compris gérer les autres admins (seul à voir `/admin/team`)
 - **ADMIN** : tout sauf gérer les admins (peut traiter les leads, projets, support, etc.)
-- **VIEWER** : lecture seule (peut consulter mais pas modifier — les server actions bloquent)
+- **VIEWER** : lecture seule (peut consulter mais pas modifier — les server actions bloquent côté serveur)
 
 ### 5.5 Edge cases
 
 - **Last OWNER protection** : impossible de désactiver / supprimer / rétrograder le dernier OWNER actif. L'UI affichera une erreur.
 - **Self-protection** : tu ne peux pas te désactiver / supprimer toi-même (même si OWNER).
 - **Email collision** : si tu essaies d'inviter un email qui existe déjà (actif ou désactivé), l'UI t'oriente vers la réactivation plutôt que la création.
-- **Pas encore log in** : un admin invité existe en DB tant qu'il n'a pas cliqué le magic link. `lastLoginAt` reste null. Tu peux renvoyer l'invite tant qu'il n'a pas log in.
+- **Pas encore log in** : un admin invité existe en DB tant qu'il n'a pas défini son mot de passe. `passwordSetAt` reste null. Tu peux renvoyer le lien à tout moment depuis `/admin/team`.
+
+### 5.6 Côté client portal
+
+Le **client portal** utilise exactement la même mécanique :
+- Login par email + mot de passe sur `client.hulabe.com/login`
+- « Première connexion ou mot de passe oublié ? » envoie un lien pour définir/réinitialiser le mot de passe
+- Quand un OWNER clique **« Inviter au portail »** sur un projet admin → l'invitation contient un lien « Définir mon mot de passe » qui arrive sur `/client/setup-password`
+
+Seuls les emails associés à un `Lead` ayant au moins un `Project` peuvent recevoir un lien de connexion client.
 
 ---
 

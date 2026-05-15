@@ -405,33 +405,42 @@ export async function inviteClientToPortal(formData: FormData): Promise<InviteRe
     return { ok: false, error: "Ce projet n'a pas de lead associé avec un email" };
   }
 
-  // Construct redirect URL: prefer NEXT_PUBLIC_CLIENT_URL if defined,
-  // fall back to <site>/client.
-  const clientBase =
-    process.env.NEXT_PUBLIC_CLIENT_URL ??
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com"}/client`;
-  // The site origin (parent app) is where /auth/callback lives — magic link
-  // must hit the parent origin's callback to set Supabase cookies for both
+  // The site origin (parent app) is where /auth/callback lives — link must hit
+  // the parent origin's callback to set Supabase cookies for both
   // hulabe.com and client.hulabe.com (cross-subdomain).
   const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
-  const nextUrl = `${clientBase}/projects/${projectId}`;
-  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent(nextUrl)}`;
+  // After password set, we land them on the setup-password page; once they've
+  // set a password they can navigate to their project from /client.
+  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
 
   let magicLink: string;
   try {
     const supabaseAdmin = createSupabaseAdminClient();
-    const { data, error } = await supabaseAdmin.auth.admin.generateLink({
-      type: "magiclink",
+
+    // Try invite first (creates the auth user if not exists).
+    const inv = await supabaseAdmin.auth.admin.generateLink({
+      type: "invite",
       email: project.lead.email,
       options: { redirectTo },
     });
-    if (error || !data?.properties?.action_link) {
-      return {
-        ok: false,
-        error: error?.message ?? "Impossible de générer le lien magic-link",
-      };
+    if (!inv.error && inv.data?.properties?.action_link) {
+      magicLink = inv.data.properties.action_link;
+    } else {
+      // Fall back to recovery (user already exists).
+      const rec = await supabaseAdmin.auth.admin.generateLink({
+        type: "recovery",
+        email: project.lead.email,
+        options: { redirectTo },
+      });
+      if (rec.error || !rec.data?.properties?.action_link) {
+        return {
+          ok: false,
+          error:
+            rec.error?.message ?? inv.error?.message ?? "Impossible de générer le lien",
+        };
+      }
+      magicLink = rec.data.properties.action_link;
     }
-    magicLink = data.properties.action_link;
   } catch (err) {
     return {
       ok: false,

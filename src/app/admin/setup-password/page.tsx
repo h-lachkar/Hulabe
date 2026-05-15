@@ -1,0 +1,45 @@
+import { redirect } from "next/navigation";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SetupPasswordForm } from "@/components/auth/setup-password-form";
+import { findActiveAdminByEmail } from "@/lib/admin/auth";
+
+export const metadata = {
+  title: "Définir mon mot de passe · Hulabe",
+  robots: { index: false, follow: false },
+};
+
+export default async function AdminSetupPasswordPage() {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Must be signed in (via invite/recovery link)
+  if (!user?.email) redirect("/admin/login");
+
+  // Must be a registered admin
+  const admin = await findActiveAdminByEmail(user.email);
+  if (!admin) {
+    await supabase.auth.signOut();
+    redirect("/admin/login?error=not_authorized");
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-bg p-6">
+      <div className="w-full max-w-sm">
+        <div className="mb-10 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-lime" />
+          HULABE / ADMIN
+        </div>
+        <h1 className="display text-3xl">Choisis ton mot de passe<span className="text-lime">.</span></h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Connecté en tant que <strong>{user.email}</strong>. Choisis un mot de passe pour
+          tes prochaines connexions.
+        </p>
+        <div className="mt-8">
+          <SetupPasswordForm successRedirect="/admin" />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -40,12 +40,21 @@ export default async function ClientLoginPage({
         </div>
         <h1 className="display text-3xl">Bienvenue.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Entre l&apos;email que tu as utilisé pour ton projet. On t&apos;envoie un lien de
-          connexion magique — aucun mot de passe.
+          Entre l&apos;email que tu as utilisé pour ton projet et ton mot de passe. Si
+          c&apos;est ta première connexion ou si tu as oublié ton mot de passe, utilise
+          le lien sous le formulaire.
         </p>
 
         <div className="mt-8">
-          <ClientLoginForm errorParam={params.error} sent={params.sent === "1"} />
+          <ClientLoginForm
+            errorMessage={
+              params.error === "not_authorized"
+                ? "Aucun projet trouvé pour cet email. Si tu penses que c'est une erreur, écris à support@hulabe.com."
+                : params.error === "invalid_link"
+                  ? "Lien expiré ou invalide. Demande un nouveau lien."
+                  : null
+            }
+          />
         </div>
       </div>
     </div>

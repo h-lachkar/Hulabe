@@ -31,17 +31,20 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin/login?error=invalid_link", url.origin));
   }
 
-  // Admin path: check AdminUser table (case-insensitive)
+  // Honor explicit next= param when provided (used by invite/recovery links).
+  if (next) {
+    return NextResponse.redirect(new URL(next, url.origin));
+  }
+
+  // No next param — figure out where to go based on identity.
   const admin = await findActiveAdminByEmail(user.email);
   if (admin) {
-    // Update lastLoginAt
     prisma.adminUser
       .update({ where: { id: admin.id }, data: { lastLoginAt: new Date() } })
       .catch(() => {});
-    return NextResponse.redirect(new URL(next ?? "/admin", url.origin));
+    return NextResponse.redirect(new URL("/admin", url.origin));
   }
 
-  // Client portal path: must be a lead with at least one project for this email
   const hasProject = await prisma.lead.findFirst({
     where: {
       email: user.email.toLowerCase(),
@@ -51,13 +54,9 @@ export async function GET(req: NextRequest) {
   });
 
   if (hasProject) {
-    return NextResponse.redirect(new URL(next ?? "/client", url.origin));
+    return NextResponse.redirect(new URL("/client", url.origin));
   }
 
-  // Neither admin nor known client — sign out and reject
   await supabase.auth.signOut();
-  // Default rejection target: admin login (more useful since invited admins
-  // come from there). Client portal users will get the same message via /client/login.
-  const target = next?.startsWith("/client") ? "/client/login" : "/admin/login";
-  return NextResponse.redirect(new URL(`${target}?error=not_authorized`, url.origin));
+  return NextResponse.redirect(new URL("/admin/login?error=not_authorized", url.origin));
 }

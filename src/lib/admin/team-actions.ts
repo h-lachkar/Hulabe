@@ -15,18 +15,32 @@ export type TeamActionResult =
 
 async function generateAdminMagicLink(email: string) {
   const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hulabe.com";
-  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/admin")}`;
+  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/admin/setup-password")}`;
 
   const supabaseAdmin = createSupabaseAdminClient();
-  const { data, error } = await supabaseAdmin.auth.admin.generateLink({
-    type: "magiclink",
+
+  // Try invite first (creates user if not exists, sends invitation flow).
+  const inv = await supabaseAdmin.auth.admin.generateLink({
+    type: "invite",
     email,
     options: { redirectTo },
   });
-  if (error || !data?.properties?.action_link) {
-    throw new Error(error?.message ?? "Impossible de générer le magic link");
+  if (!inv.error && inv.data?.properties?.action_link) {
+    return inv.data.properties.action_link as string;
   }
-  return data.properties.action_link as string;
+
+  // Fall back to recovery (e.g. user already exists with confirmed email).
+  const rec = await supabaseAdmin.auth.admin.generateLink({
+    type: "recovery",
+    email,
+    options: { redirectTo },
+  });
+  if (rec.error || !rec.data?.properties?.action_link) {
+    throw new Error(
+      rec.error?.message ?? inv.error?.message ?? "Impossible de générer le lien",
+    );
+  }
+  return rec.data.properties.action_link as string;
 }
 
 function normalizeEmail(email: string) {

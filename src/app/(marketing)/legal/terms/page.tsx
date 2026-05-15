@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "legal.terms" });
-  const path =
-    locale === routing.defaultLocale ? "/legal/terms" : `/${locale}/legal/terms`;
   return {
     title: t("title"),
     description:
@@ -19,26 +12,13 @@ export async function generateMetadata({
         : locale === "es"
           ? "Términos y condiciones de Hulabe — presupuesto, pago (30/30/40), propiedad del código."
           : "Hulabe terms of service — quote, payment (30/30/40), code ownership, contact.",
-    alternates: {
-      canonical: path,
-      languages: Object.fromEntries(
-        routing.locales.map((l) => [
-          l,
-          l === routing.defaultLocale ? "/legal/terms" : `/${l}/legal/terms`,
-        ]),
-      ),
-    },
+    alternates: { canonical: "/legal/terms" },
     robots: { index: true, follow: true },
   };
 }
 
-export default async function TermsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+export default async function TermsPage() {
+  const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "legal.terms" });
   return (
     <article className="container-page max-w-3xl py-20">

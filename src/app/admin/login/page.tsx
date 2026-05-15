@@ -45,8 +45,8 @@ export default async function AdminLoginPage({
         </div>
         <h1 className="display text-3xl">Sign in.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Magic link envoyé sur ton email. Seuls les comptes invités dans
-          l&apos;équipe admin peuvent se connecter.
+          Entre ton email et ton mot de passe. Si c&apos;est ta première connexion ou si
+          tu as oublié ton mot de passe, utilise le lien sous le formulaire.
         </p>
 
         {!anyAdmin && (
@@ -54,13 +54,15 @@ export default async function AdminLoginPage({
             <p className="font-mono uppercase tracking-wider">Setup nécessaire</p>
             <p className="mt-2 leading-relaxed">
               Aucun admin n&apos;est encore créé. Crée le premier OWNER en SQL direct sur
-              Supabase — voir <code className="rounded bg-bg/50 px-1">SETUP.md §4</code>.
+              Supabase — voir <code className="rounded bg-bg/50 px-1">SETUP.md §5</code>.
+              Puis utilise &laquo;&nbsp;Première connexion&nbsp;?&nbsp;&raquo; ci-dessous pour
+              définir ton mot de passe.
             </p>
           </div>
         )}
 
         <div className="mt-8">
-          <LoginForm errorMessage={errorMessage} sent={params.sent === "1"} />
+          <LoginForm errorMessage={errorMessage} />
         </div>
       </div>
     </div>

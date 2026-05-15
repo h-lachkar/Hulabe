@@ -272,6 +272,9 @@ model AdminUser {
   invitees    AdminUser[] @relation("AdminInvites")
   /// When the magic-link invitation was sent.
   invitedAt   DateTime?
+  /// Set when the user successfully sets their password for the first time
+  /// (either via initial invite or forgot-password flow).
+  passwordSetAt DateTime?
   /// Set on every successful login.
   lastLoginAt DateTime?
   createdAt   DateTime   @default(now())

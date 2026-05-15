@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Menu, X } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitch } from "@/components/layout/language-switch";

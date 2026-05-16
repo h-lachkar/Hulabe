@@ -1,6 +1,16 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+/** Cached per render tree to avoid repeated supabase.auth.getUser() calls. */
+const resolveClientUser = cache(async () => {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+});
 
 /**
  * Use inside any /client server component or server action.
@@ -10,11 +20,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
  * Use `getClientProject(id, email)` to fetch a project safely.
  */
 export async function requireClient() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await resolveClientUser();
   if (!user || !user.email) redirect("/client/login");
 
   // Force the user to set a real password if they only have an OTP session
@@ -29,10 +35,7 @@ export async function requireClient() {
 }
 
 export async function getClientUser() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await resolveClientUser();
   if (!user || !user.email) return null;
   return user;
 }

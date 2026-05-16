@@ -13,6 +13,7 @@ import {
   LogOut,
   ExternalLink,
   Users,
+  UserCircle,
 } from "lucide-react";
 import type { AdminRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,7 @@ export function AdminShell({
     { href: "/admin", label: tn("dashboard"), icon: LayoutDashboard, exact: true },
     { href: "/admin/leads", label: tn("leads"), icon: Inbox },
     { href: "/admin/projects", label: tn("projects"), icon: Folders },
+    { href: "/admin/clients", label: tn("clients"), icon: UserCircle },
     { href: "/admin/invoices", label: tn("invoices"), icon: Receipt },
     { href: "/admin/support", label: tn("support"), icon: LifeBuoy },
   ];
@@ -80,6 +82,7 @@ export function AdminShell({
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                   active
@@ -106,6 +109,7 @@ export function AdminShell({
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   className={cn(
                     "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                     active
@@ -185,7 +189,7 @@ export function AdminShell({
         </header>
 
         {/* Mobile bottom nav */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-5 border-t border-border bg-bg/95 backdrop-blur lg:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-6 border-t border-border bg-bg/95 backdrop-blur lg:hidden">
           {NAV.map((item) => {
             const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
             const Icon = item.icon;
@@ -193,6 +197,7 @@ export function AdminShell({
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={cn(
                   "flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] uppercase tracking-wider",
                   active ? "text-lime" : "text-muted-foreground",

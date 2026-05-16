@@ -12,10 +12,13 @@ import { cn } from "@/lib/utils";
 import {
   addLeadNote,
   createProjectFromLead,
+  deleteLead,
   updateLeadStatus,
 } from "@/lib/admin/actions";
 import { Markdown } from "@/components/markdown";
 import { AiScorePanel } from "@/components/admin/ai-score-panel";
+import { DangerZone } from "@/components/admin/danger-zone";
+import { EmailSendButton } from "@/components/admin/email-send-button";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +29,8 @@ export default async function LeadDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireAdmin();
+  const { admin } = await requireAdmin();
+  const isOwner = admin.role === "OWNER";
   const { id } = await params;
   const locale = await getLocale();
   const t = await getTranslations("admin.leads.detail");
@@ -275,6 +279,13 @@ export default async function LeadDetailPage({
             <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-muted-2">
               {t("createdOn", { date: formatDate(lead.createdAt) })}
             </p>
+            <div className="mt-4 border-t border-border pt-4">
+              <EmailSendButton
+                to={lead.email}
+                recipientName={lead.name ?? undefined}
+                leadId={lead.id}
+              />
+            </div>
           </div>
 
           {/* Projects */}
@@ -320,6 +331,17 @@ export default async function LeadDetailPage({
               </ul>
             )}
           </div>
+
+          {/* Danger zone (OWNER only) */}
+          {isOwner && (
+            <DangerZone
+              action={deleteLead}
+              idField="leadId"
+              id={lead.id}
+              entityLabel={lead.name ?? lead.email}
+              isOwner={isOwner}
+            />
+          )}
         </aside>
       </div>
     </>

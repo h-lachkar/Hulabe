@@ -99,8 +99,8 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-bg">
-          <nav className="container-page flex flex-col gap-1 py-4">
+        <div className="fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto border-t border-border bg-bg md:hidden">
+          <nav className="container-page flex flex-col gap-1 py-6">
             {NAV.map((item) => (
               <a
                 key={item.key}
@@ -111,7 +111,7 @@ export function Header() {
                 {t(item.key)}
               </a>
             ))}
-            <Button asChild size="lg" className="mt-2">
+            <Button asChild size="lg" className="mt-4">
               <a href="#simulator" onClick={() => setOpen(false)}>
                 {t("cta")}
               </a>

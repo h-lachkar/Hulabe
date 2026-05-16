@@ -172,6 +172,8 @@
     "submit": "Send",
     "submitting": "Sending…",
     "success": "Message received. We'll get back to you within 24 working hours.",
+    "successWithName": "Thanks {name}.",
+    "confirmedBadge": "CONFIRMED",
     "error": "Something went wrong. Try again or email support@hulabe.com.",
     "or": "or",
     "directEmail": "support@hulabe.com"
@@ -397,10 +399,21 @@
       "inactive": "Inactive",
       "you": "You"
     },
+    "danger": {
+      "delete": "Delete",
+      "title": "Irreversible action",
+      "warning": "You are about to permanently delete {entity}. All notes, activity and related data will be lost.",
+      "typeToConfirm": "Type",
+      "confirmDelete": "Delete permanently",
+      "deleting": "Deleting…",
+      "cancel": "Cancel",
+      "error": "Delete failed."
+    },
     "nav": {
       "dashboard": "Dashboard",
       "leads": "Leads",
       "projects": "Projects",
+      "clients": "Clients",
       "invoices": "Invoices",
       "support": "Support",
       "team": "Team",
@@ -420,6 +433,17 @@
         "activeProjectsHint": "signed · in progress · review",
         "wonThisMonth": "Won this month",
         "wonThisMonthHint": "{count} projects shipped"
+      },
+      "kpis": {
+        "revenuePaidMtd": "Paid revenue · MTD",
+        "revenuePaidMtdHint": "Previous month: {prev}",
+        "outstanding": "Outstanding",
+        "outstandingOverdue": "{overdue} overdue",
+        "outstandingClean": "Up to date, nothing overdue",
+        "conversion": "Conversion rate",
+        "conversionHint": "{won} won out of {total} leads MTD",
+        "velocity": "Velocity",
+        "velocityHint": "Avg signed → shipped (30d)"
       },
       "recentLeads": "Recent leads",
       "viewAll": "View all",
@@ -496,6 +520,34 @@
         "urlPlaceholder": "https://… (optional)",
         "add": "Add",
         "noDeliverables": "No deliverables yet.",
+        "hideFromClient": "Hide from client",
+        "showToClient": "Show to client",
+        "deleteDeliverable": "Delete deliverable",
+        "invoices": "Invoices",
+        "newInvoice": "New",
+        "noInvoices": "No invoice attached to this project.",
+        "deliverableForm": {
+          "kind": {
+            "TEXT": "Text / note",
+            "LINK": "Link",
+            "REPO": "Code repo",
+            "DEPLOYMENT": "Deployment",
+            "DESIGN": "Design",
+            "DOC": "Document",
+            "FILE": "File"
+          },
+          "titlePlaceholder": "Deliverable title",
+          "urlPlaceholder": "https://…",
+          "descriptionPlaceholder": "Description (optional)",
+          "bodyPlaceholder": "Content (markdown)…",
+          "filePicker": "File to upload",
+          "fileHint": "Max 50 MB. Stored on Supabase Storage.",
+          "visibleToClient": "Visible to the client",
+          "add": "Add",
+          "adding": "Adding…",
+          "toastAdded": "Deliverable added.",
+          "error": "Error"
+        },
         "notes": "Notes",
         "notePlaceholder": "Note (internal by default)…",
         "visibleToClient": "Visible to the client",
@@ -520,14 +572,17 @@
         "shipped": "Shipped",
         "supportUntil": "Support until",
         "leadSource": "Lead source",
-        "magicLinkHint": "Sends a magic link to {email}"
+        "magicLinkHint": "Sends a magic link to {email}",
+        "archive": "Archive project"
       }
     },
     "invoices": {
       "kicker": "INVOICES",
       "title": "Invoices.",
-      "subtitle": "Simple tracking. Stripe / auto-billing comes later.",
-      "empty": "No invoices yet. This section becomes useful once we start issuing them, the Invoice table is already wired DB-side.",
+      "subtitle": "Create, edit and download PDF invoices. Auto-numbered per year.",
+      "empty": "No invoices yet. Create your first one from a project or here.",
+      "newInvoice": "New invoice",
+      "backToList": "Back",
       "columns": {
         "number": "No.",
         "status": "Status",
@@ -535,7 +590,128 @@
         "amount": "Amount",
         "issued": "Issued",
         "paid": "Paid"
+      },
+      "new": {
+        "title": "New invoice",
+        "subtitle": "Pick a project and adjust line items. The number is auto-generated."
+      },
+      "detail": {
+        "subtitle": "{project} · {status} · updated {ago}",
+        "downloadPdf": "Download PDF",
+        "openPdf": "Open PDF",
+        "preview": "PDF preview",
+        "previewHint": "PDF is generated server-side on demand. Ready to send to your client.",
+        "markSent": "Mark sent",
+        "markPaid": "Mark paid",
+        "cancel": "Cancel invoice",
+        "editTitle": "Invoice details",
+        "dueAt": "Due",
+        "project": "Project"
+      },
+      "form": {
+        "project": "Project",
+        "pickProject": "— Pick a project —",
+        "billedTo": "Billed to",
+        "clientName": "Name",
+        "clientEmail": "Email",
+        "clientAddress": "Address",
+        "clientVat": "VAT no.",
+        "dueDays": "Due (days)",
+        "lineItems": "Line items",
+        "descriptionPlaceholder": "Description",
+        "qty": "Qty",
+        "unitPrice": "Unit price",
+        "addLine": "Add line",
+        "removeLine": "Remove",
+        "taxRate": "Tax rate",
+        "notes": "Notes (visible on PDF)",
+        "notesPlaceholder": "Payment terms, IBAN, legal mentions…",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "grandTotal": "Total due",
+        "create": "Create invoice",
+        "save": "Save",
+        "saving": "Saving…",
+        "createdToast": "Invoice created.",
+        "savedToast": "Changes saved.",
+        "error": "Error"
       }
+    },
+    "clients": {
+      "kicker": "CLIENTS",
+      "title": "Clients.",
+      "subtitle": "{count} registered clients.",
+      "empty": "No clients yet. Add the first one.",
+      "newClient": "New client",
+      "backToList": "Back",
+      "active": "Active",
+      "inactive": "Inactive",
+      "columns": {
+        "client": "Client",
+        "company": "Company",
+        "projects": "Projects",
+        "status": "Status",
+        "lastLogin": "Last login",
+        "created": "Created"
+      },
+      "new": {
+        "title": "New client",
+        "subtitle": "Create the profile and invite them to the portal."
+      },
+      "detail": {
+        "back": "Back",
+        "active": "Active",
+        "inactive": "Inactive",
+        "resendInvite": "Resend invite",
+        "deactivate": "Deactivate",
+        "reactivate": "Reactivate",
+        "invited": "Invited",
+        "passwordSet": "Password set",
+        "lastLogin": "Last login",
+        "created": "Created",
+        "editTitle": "Client information",
+        "contact": "Contact",
+        "projects": "Linked projects",
+        "noProjects": "No project linked to this email yet."
+      },
+      "form": {
+        "email": "Email",
+        "name": "Name",
+        "company": "Company",
+        "phone": "Phone",
+        "notes": "Internal notes",
+        "notesPlaceholder": "Only visible to admins.",
+        "sendInvite": "Send invitation email",
+        "create": "Create client",
+        "creating": "Creating…",
+        "created": "Client created.",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Saved.",
+        "error": "Error"
+      }
+    },
+    "email": {
+      "sendEmail": "Send email",
+      "sendEmailTo": "Send email to {to}",
+      "template": "Template",
+      "templates": {
+        "WELCOME": "Welcome aboard",
+        "QUOTE_SENT": "Quote sent",
+        "PROJECT_UPDATE": "Project update",
+        "FEEDBACK_REQUEST": "Feedback request",
+        "CUSTOM": "Custom message"
+      },
+      "subject": "Subject",
+      "subjectPlaceholder": "Email subject",
+      "body": "Body",
+      "bodyPlaceholder": "Your message…",
+      "ctaLabel": "CTA label",
+      "ctaLabelPlaceholder": "e.g. View my quote",
+      "ctaUrl": "CTA URL",
+      "send": "Send",
+      "sending": "Sending…",
+      "close": "Close"
     },
     "support": {
       "kicker": "SUPPORT",

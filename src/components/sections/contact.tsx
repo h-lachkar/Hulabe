@@ -88,16 +88,10 @@ export function Contact() {
                   className="flex flex-col items-start gap-4 py-6"
                 >
                   <Badge variant="lime" className="font-mono">
-                    <Check className="mr-1 h-3 w-3" /> CONFIRMED
+                    <Check className="mr-1 h-3 w-3" /> {t("confirmedBadge")}
                   </Badge>
                   <p className="text-base text-foreground">
-                    {submittedName
-                      ? locale === "fr"
-                        ? `Merci ${submittedName}.`
-                        : locale === "es"
-                          ? `Gracias ${submittedName}.`
-                          : `Thanks ${submittedName}.`
-                      : t("success")}
+                    {submittedName ? t("successWithName", { name: submittedName }) : t("success")}
                   </p>
                   <p className="text-sm text-muted-foreground">{t("success")}</p>
                 </motion.div>

@@ -172,6 +172,8 @@
     "submit": "Enviar",
     "submitting": "Enviando…",
     "success": "Mensaje recibido. Te respondemos en 24h hábiles.",
+    "successWithName": "Gracias {name}.",
+    "confirmedBadge": "CONFIRMADO",
     "error": "Algo salió mal. Inténtalo de nuevo o escribe a support@hulabe.com.",
     "or": "o",
     "directEmail": "support@hulabe.com"
@@ -397,10 +399,21 @@
       "inactive": "Inactivo",
       "you": "Tú"
     },
+    "danger": {
+      "delete": "Eliminar",
+      "title": "Acción irreversible",
+      "warning": "Vas a eliminar permanentemente {entity}. Se perderán todas las notas, actividad y datos relacionados.",
+      "typeToConfirm": "Escribe",
+      "confirmDelete": "Eliminar permanentemente",
+      "deleting": "Eliminando…",
+      "cancel": "Cancelar",
+      "error": "Error al eliminar."
+    },
     "nav": {
       "dashboard": "Dashboard",
       "leads": "Leads",
       "projects": "Proyectos",
+      "clients": "Clientes",
       "invoices": "Facturas",
       "support": "Soporte",
       "team": "Equipo",
@@ -420,6 +433,17 @@
         "activeProjectsHint": "signed · in progress · review",
         "wonThisMonth": "Won este mes",
         "wonThisMonthHint": "{count} proyectos entregados"
+      },
+      "kpis": {
+        "revenuePaidMtd": "Ingresos cobrados · MTD",
+        "revenuePaidMtdHint": "Mes anterior: {prev}",
+        "outstanding": "Pendiente",
+        "outstandingOverdue": "{overdue} vencido",
+        "outstandingClean": "Al día, nada vencido",
+        "conversion": "Tasa de conversión",
+        "conversionHint": "{won} won de {total} leads MTD",
+        "velocity": "Velocity",
+        "velocityHint": "Media signed → shipped (30d)"
       },
       "recentLeads": "Leads recientes",
       "viewAll": "Ver todos",
@@ -496,6 +520,34 @@
         "urlPlaceholder": "https://… (opcional)",
         "add": "Añadir",
         "noDeliverables": "Aún no hay entregables.",
+        "hideFromClient": "Ocultar al cliente",
+        "showToClient": "Mostrar al cliente",
+        "deleteDeliverable": "Eliminar entregable",
+        "invoices": "Facturas",
+        "newInvoice": "Nueva",
+        "noInvoices": "Sin factura para este proyecto.",
+        "deliverableForm": {
+          "kind": {
+            "TEXT": "Texto / nota",
+            "LINK": "Enlace",
+            "REPO": "Repo código",
+            "DEPLOYMENT": "Despliegue",
+            "DESIGN": "Diseño",
+            "DOC": "Documento",
+            "FILE": "Archivo"
+          },
+          "titlePlaceholder": "Título del entregable",
+          "urlPlaceholder": "https://…",
+          "descriptionPlaceholder": "Descripción (opcional)",
+          "bodyPlaceholder": "Contenido (markdown)…",
+          "filePicker": "Archivo a subir",
+          "fileHint": "Máx 50 MB. Almacenado en Supabase Storage.",
+          "visibleToClient": "Visible para el cliente",
+          "add": "Añadir",
+          "adding": "Añadiendo…",
+          "toastAdded": "Entregable añadido.",
+          "error": "Error"
+        },
         "notes": "Notas",
         "notePlaceholder": "Nota (interna por defecto)…",
         "visibleToClient": "Visible para el cliente",
@@ -520,14 +572,17 @@
         "shipped": "Entregado",
         "supportUntil": "Soporte hasta",
         "leadSource": "Lead source",
-        "magicLinkHint": "Envía un magic link a {email}"
+        "magicLinkHint": "Envía un magic link a {email}",
+        "archive": "Archivar proyecto"
       }
     },
     "invoices": {
       "kicker": "INVOICES",
       "title": "Facturas.",
-      "subtitle": "Seguimiento simple. La integración Stripe / facturación auto llegará después.",
-      "empty": "Aún no hay facturas. Esta sección será útil cuando empecemos a emitirlas, la tabla Invoice ya está lista en DB.",
+      "subtitle": "Crea, edita y descarga facturas PDF. Numeración automática por año.",
+      "empty": "Aún no hay facturas. Crea la primera desde un proyecto o aquí.",
+      "newInvoice": "Nueva factura",
+      "backToList": "Volver",
       "columns": {
         "number": "Nº",
         "status": "Estado",
@@ -535,7 +590,128 @@
         "amount": "Importe",
         "issued": "Emitida",
         "paid": "Pagada"
+      },
+      "new": {
+        "title": "Nueva factura",
+        "subtitle": "Elige un proyecto y ajusta las líneas. El número se genera automáticamente."
+      },
+      "detail": {
+        "subtitle": "{project} · {status} · actualizada {ago}",
+        "downloadPdf": "Descargar PDF",
+        "openPdf": "Abrir PDF",
+        "preview": "Vista previa PDF",
+        "previewHint": "El PDF se genera en el servidor bajo demanda. Listo para enviar al cliente.",
+        "markSent": "Marcar enviada",
+        "markPaid": "Marcar pagada",
+        "cancel": "Cancelar factura",
+        "editTitle": "Detalles de la factura",
+        "dueAt": "Vencimiento",
+        "project": "Proyecto"
+      },
+      "form": {
+        "project": "Proyecto",
+        "pickProject": "— Elige un proyecto —",
+        "billedTo": "Facturado a",
+        "clientName": "Nombre",
+        "clientEmail": "Email",
+        "clientAddress": "Dirección",
+        "clientVat": "Nº IVA",
+        "dueDays": "Vencimiento (días)",
+        "lineItems": "Líneas",
+        "descriptionPlaceholder": "Descripción",
+        "qty": "Cant.",
+        "unitPrice": "Precio unitario",
+        "addLine": "Añadir línea",
+        "removeLine": "Quitar",
+        "taxRate": "Tasa IVA",
+        "notes": "Notas (visibles en el PDF)",
+        "notesPlaceholder": "Condiciones de pago, IBAN, menciones legales…",
+        "subtotal": "Subtotal",
+        "tax": "IVA",
+        "grandTotal": "Total a pagar",
+        "create": "Crear factura",
+        "save": "Guardar",
+        "saving": "Guardando…",
+        "createdToast": "Factura creada.",
+        "savedToast": "Cambios guardados.",
+        "error": "Error"
       }
+    },
+    "clients": {
+      "kicker": "CLIENTES",
+      "title": "Clientes.",
+      "subtitle": "{count} clientes registrados.",
+      "empty": "Aún no hay clientes. Añade el primero.",
+      "newClient": "Nuevo cliente",
+      "backToList": "Volver",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "columns": {
+        "client": "Cliente",
+        "company": "Empresa",
+        "projects": "Proyectos",
+        "status": "Estado",
+        "lastLogin": "Último login",
+        "created": "Creado"
+      },
+      "new": {
+        "title": "Nuevo cliente",
+        "subtitle": "Crea el perfil e invítalo a su portal."
+      },
+      "detail": {
+        "back": "Volver",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "resendInvite": "Reenviar invitación",
+        "deactivate": "Desactivar",
+        "reactivate": "Reactivar",
+        "invited": "Invitado",
+        "passwordSet": "Contraseña definida",
+        "lastLogin": "Último login",
+        "created": "Creado",
+        "editTitle": "Información del cliente",
+        "contact": "Contacto",
+        "projects": "Proyectos vinculados",
+        "noProjects": "Aún no hay proyecto vinculado a este email."
+      },
+      "form": {
+        "email": "Email",
+        "name": "Nombre",
+        "company": "Empresa",
+        "phone": "Teléfono",
+        "notes": "Notas internas",
+        "notesPlaceholder": "Solo visibles para admins.",
+        "sendInvite": "Enviar invitación por email",
+        "create": "Crear cliente",
+        "creating": "Creando…",
+        "created": "Cliente creado.",
+        "save": "Guardar",
+        "saving": "Guardando…",
+        "saved": "Guardado.",
+        "error": "Error"
+      }
+    },
+    "email": {
+      "sendEmail": "Enviar email",
+      "sendEmailTo": "Enviar email a {to}",
+      "template": "Plantilla",
+      "templates": {
+        "WELCOME": "Bienvenido a bordo",
+        "QUOTE_SENT": "Presupuesto enviado",
+        "PROJECT_UPDATE": "Update proyecto",
+        "FEEDBACK_REQUEST": "Petición de feedback",
+        "CUSTOM": "Mensaje libre"
+      },
+      "subject": "Asunto",
+      "subjectPlaceholder": "Asunto del email",
+      "body": "Cuerpo",
+      "bodyPlaceholder": "Tu mensaje…",
+      "ctaLabel": "Botón CTA (texto)",
+      "ctaLabelPlaceholder": "Ej: Ver mi presupuesto",
+      "ctaUrl": "Botón CTA (URL)",
+      "send": "Enviar",
+      "sending": "Enviando…",
+      "close": "Cerrar"
     },
     "support": {
       "kicker": "SUPPORT",

@@ -111,8 +111,8 @@ export default async function LeadsPage({
         </form>
 
         {/* Table */}
-        <div className="overflow-hidden rounded-xl border border-border bg-surface">
-          <table className="w-full">
+        <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+          <table className="w-full min-w-[640px]">
             <thead>
               <tr className="border-b border-border bg-surface-2/40 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 <th className="px-4 py-3 text-left">{t("columns.status")}</th>

@@ -104,8 +104,9 @@ model Note {
   @@index([createdAt])
 }
 
-/// Project deliverables exposed in the client portal
-/// (links to repos, deployment URLs, design files, docs, screenshots).
+/// Project deliverables exposed in the client portal.
+/// A deliverable can be a TEXT note, a LINK, a file (FILE) uploaded to
+/// Supabase Storage, or a categorized link (REPO/DEPLOYMENT/DESIGN/DOC).
 model Deliverable {
   id          String   @id @default(cuid())
   projectId   String
@@ -114,7 +115,13 @@ model Deliverable {
   title       String
   description String?  @db.Text
   url         String?
-  fileKey     String?  // future: S3/Supabase Storage object key
+
+  // File metadata (when kind = FILE)
+  fileKey      String?  // Supabase Storage object key, relative to "deliverables" bucket
+  fileName     String?  // Original filename for display
+  fileSize     Int?     // Bytes
+  fileContentType String?
+
   visibleToClient Boolean @default(true)
   deliveredAt DateTime?
   createdAt   DateTime @default(now())
@@ -167,16 +174,59 @@ model Invoice {
   project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   number    String        @unique
   status    InvoiceStatus @default(DRAFT)
-  amountCents Int
+
+  // Amounts in cents to avoid float issues
+  subtotalCents Int  @default(0)
+  taxRate       Int  @default(0)  // basis points (2000 = 20.00%)
+  taxCents      Int  @default(0)
+  amountCents   Int                // grand total = subtotal + tax
+
+  currency  String       @default("EUR")
+
+  // Billing info (snapshot at issue time so future client edits don't mutate
+  // historical invoices)
+  clientName    String?
+  clientEmail   String?
+  clientAddress String?  @db.Text
+  clientVatNumber String?
+
   issuedAt  DateTime?
   paidAt    DateTime?
   dueAt     DateTime?
   notes     String?       @db.Text
+
+  lines     InvoiceLine[]
+
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
   @@index([projectId])
   @@index([status])
+  @@index([issuedAt])
+}
+
+model InvoiceLine {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String   @db.Text
+  quantity    Float    @default(1)
+  unitPriceCents Int
+  /// Computed at write time (quantity * unitPriceCents). Stored to make
+  /// reads & PDF generation deterministic.
+  totalCents  Int
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+/// Counter used to mint the next invoice number per fiscal year.
+/// Invoice number format: YYYY-NNNN (e.g. 2026-0001, 2026-0002…)
+model InvoiceCounter {
+  year     Int  @id
+  current  Int  @default(0)
+  updatedAt DateTime @updatedAt
 }
 
 enum LeadSource {
@@ -235,6 +285,7 @@ enum ActivityKind {
 }
 
 enum DeliverableKind {
+  TEXT
   LINK
   REPO
   DEPLOYMENT
@@ -288,4 +339,28 @@ enum AdminRole {
   OWNER
   ADMIN
   VIEWER
+}
+
+/// Client portal users. Authentication is done via Supabase magic-link, but
+/// the source of truth for "who can log into /client" is THIS table.
+/// A ClientUser is identified by their email and may have access to one or
+/// more projects (matched on lead.email == clientUser.email).
+model ClientUser {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  company     String?
+  phone       String?
+  isActive    Boolean  @default(true)
+  /// AdminUser.id of the admin who created/invited this client.
+  invitedById String?
+  invitedAt   DateTime?
+  /// Set when the user successfully sets their password for the first time.
+  passwordSetAt DateTime?
+  lastLoginAt DateTime?
+  notes       String?  @db.Text  // internal admin notes about this client
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
 }

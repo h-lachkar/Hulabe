@@ -1,11 +1,22 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight, Inbox, Folders, TrendingUp, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Inbox,
+  Folders,
+  TrendingUp,
+  Sparkles,
+  Receipt,
+  Users,
+  Zap,
+  AlertCircle,
+} from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatCard } from "@/components/admin/stat-card";
 import { getFormat, LEAD_STATUS_COLOR } from "@/lib/admin/format";
+import { getDashboardKpis } from "@/lib/admin/kpi";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +45,7 @@ export default async function AdminDashboard() {
     wonThisMonth,
     recentLeads,
     recentActivity,
+    kpis,
   ] = await Promise.all([
     prisma.lead.count(),
     prisma.lead.count({ where: { createdAt: { gte: weekAgo } } }),
@@ -61,6 +73,7 @@ export default async function AdminDashboard() {
         project: { select: { id: true, name: true } },
       },
     }),
+    getDashboardKpis(),
   ]);
 
   return (
@@ -94,6 +107,41 @@ export default async function AdminDashboard() {
             label={t("stats.wonThisMonth")}
             value={formatEUR(wonThisMonth._sum.priceFinalCents ?? 0)}
             hint={t("stats.wonThisMonthHint", { count: wonThisMonth._count })}
+          />
+        </section>
+
+        {/* KPI grid — revenue, conversion, velocity, clients */}
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard
+            label={t("kpis.revenuePaidMtd")}
+            value={formatEUR(kpis.revenuePaidMtdCents)}
+            hint={t("kpis.revenuePaidMtdHint", {
+              prev: formatEUR(kpis.revenuePaidPrevMtdCents),
+            })}
+          />
+          <StatCard
+            label={t("kpis.outstanding")}
+            value={formatEUR(kpis.revenueOutstandingCents)}
+            hint={
+              kpis.revenueOverdueCents > 0
+                ? t("kpis.outstandingOverdue", {
+                    overdue: formatEUR(kpis.revenueOverdueCents),
+                  })
+                : t("kpis.outstandingClean")
+            }
+          />
+          <StatCard
+            label={t("kpis.conversion")}
+            value={kpis.conversionRate != null ? `${kpis.conversionRate}%` : "—"}
+            hint={t("kpis.conversionHint", {
+              won: kpis.leadsWonMtd,
+              total: kpis.leadsMtd,
+            })}
+          />
+          <StatCard
+            label={t("kpis.velocity")}
+            value={kpis.avgVelocityDays != null ? `${kpis.avgVelocityDays}d` : "—"}
+            hint={t("kpis.velocityHint")}
           />
         </section>
 

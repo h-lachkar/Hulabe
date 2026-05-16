@@ -28,6 +28,7 @@ export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
     where: { status: { not: "ARCHIVED" } },
     orderBy: { updatedAt: "desc" },
+    take: 100,
     include: { lead: { select: { name: true, email: true } } },
   });
 
@@ -50,7 +51,7 @@ export default async function ProjectsPage() {
       <div className="overflow-x-auto px-4 py-6 sm:px-6 lg:px-10">
         <div className="flex min-w-max gap-3">
           {COLUMNS.map((col) => (
-            <div key={col} className="w-[280px] shrink-0">
+            <div key={col} className="w-[260px] shrink-0 sm:w-[280px]">
               <div className="mb-3 flex items-center justify-between">
                 <span
                   className={cn(

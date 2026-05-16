@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import type { AdminRole, AdminUser } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -24,6 +25,22 @@ export async function findActiveAdminByEmail(email: string) {
 }
 
 /**
+ * Cached per React render tree: resolves the Supabase user + AdminUser once,
+ * even when called from layout + page + nested server components.
+ * Cuts auth round-trips from 2-3 per nav to 1.
+ */
+const resolveAdmin = cache(async () => {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user || !user.email) return { user: null, admin: null };
+
+  const admin = await findActiveAdminByEmail(user.email);
+  return { user, admin };
+});
+
+/**
  * Use inside any /admin server component or server action.
  * - Redirects to /admin/login if not authenticated
  * - Redirects to /admin/login?error=not_authorized if email is not an active AdminUser
@@ -33,16 +50,13 @@ export async function findActiveAdminByEmail(email: string) {
 export async function requireAdmin(
   allowedRoles?: AdminRole[],
 ): Promise<AdminContext> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user, admin } = await resolveAdmin();
 
   if (!user || !user.email) redirect("/admin/login");
 
-  const admin = await findActiveAdminByEmail(user.email);
   if (!admin) {
     // Force sign-out — they have a valid Supabase session but no AdminUser entry.
+    const supabase = await createSupabaseServerClient();
     await supabase.auth.signOut();
     redirect("/admin/login?error=not_authorized");
   }
@@ -80,15 +94,8 @@ export async function requireAdmin(
 
 /** Like requireAdmin but returns null instead of redirecting (use for layouts). */
 export async function getAdminContext(): Promise<AdminContext | null> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user || !user.email) return null;
-
-  const admin = await findActiveAdminByEmail(user.email);
-  if (!admin) return null;
-
+  const { user, admin } = await resolveAdmin();
+  if (!user || !user.email || !admin) return null;
   return { user: { id: user.id, email: user.email }, admin };
 }
 

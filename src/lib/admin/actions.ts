@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin, requireMutator } from "@/lib/admin/auth";
+import { requireAdmin, requireMutator, requireOwner } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSiteOrigin } from "@/lib/auth/site-origin";
 import {
@@ -488,4 +488,86 @@ export async function rescoreLead(formData: FormData) {
   if (!leadId) return;
   await scoreAndSaveLead(leadId);
   revalidatePath(`/admin/leads/${leadId}`);
+}
+
+/* ---------------------- Destructive actions (OWNER) ---------------------- */
+
+/**
+ * Hard-delete a lead and ALL its dependent rows (notes, activities, projects
+ * via cascade). OWNER-only. The form is expected to include a typed
+ * confirmation token to make accidental deletes harder.
+ */
+export async function deleteLead(formData: FormData) {
+  await requireOwner();
+  const leadId = formData.get("leadId") as string;
+  const confirm = formData.get("confirm") as string;
+  if (!leadId || confirm !== "DELETE") {
+    throw new Error("Type DELETE to confirm.");
+  }
+
+  const lead = await prisma.lead.findUnique({
+    where: { id: leadId },
+    select: { id: true, email: true, projects: { select: { id: true } } },
+  });
+  if (!lead) return;
+
+  // Detach related projects first (leadId is SetNull on cascade for projects
+  // because a project may outlive its lead — we don't want to delete the work).
+  // Notes + activities are cascade-deleted by Prisma onDelete: Cascade.
+  await prisma.lead.delete({ where: { id: leadId } });
+
+  revalidatePath("/admin/leads");
+  revalidatePath("/admin");
+  redirect("/admin/leads");
+}
+
+/**
+ * Hard-delete a project and ALL its dependent rows (deliverables, notes,
+ * support requests, activities, invoices — all cascade). OWNER-only.
+ */
+export async function deleteProject(formData: FormData) {
+  await requireOwner();
+  const projectId = formData.get("projectId") as string;
+  const confirm = formData.get("confirm") as string;
+  if (!projectId || confirm !== "DELETE") {
+    throw new Error("Type DELETE to confirm.");
+  }
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { id: true, name: true },
+  });
+  if (!project) return;
+
+  await prisma.project.delete({ where: { id: projectId } });
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/admin");
+  redirect("/admin/projects");
+}
+
+/**
+ * Archive a project (soft delete equivalent — keeps history, hides from
+ * default lists). Available to any mutator (ADMIN or OWNER).
+ */
+export async function archiveProject(formData: FormData) {
+  const { user } = await requireMutator();
+  const projectId = formData.get("projectId") as string;
+  if (!projectId) return;
+
+  await prisma.project.update({
+    where: { id: projectId },
+    data: { status: ProjectStatus.ARCHIVED },
+  });
+
+  await logActivity({
+    kind: ActivityKind.PROJECT_STATUS_CHANGED,
+    summary: `Archived project`,
+    projectId,
+    authorId: user.id,
+    authorEmail: user.email,
+  });
+
+  revalidatePath(`/admin/projects/${projectId}`);
+  revalidatePath("/admin/projects");
 }

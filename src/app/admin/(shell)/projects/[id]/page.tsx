@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowLeft, ExternalLink, Plus, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, ExternalLink, Plus, Eye, EyeOff, Trash2 } from "lucide-react";
 import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -10,13 +10,23 @@ import { Button } from "@/components/ui/button";
 import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
 import {
-  addDeliverable,
   addProjectNote,
+  archiveProject,
+  deleteProject,
   replyToSupportRequest,
   updateProjectStatus,
 } from "@/lib/admin/actions";
+import {
+  createDeliverable,
+  deleteDeliverable,
+  toggleDeliverableVisibility,
+} from "@/lib/admin/deliverable-actions";
 import { InviteToPortalButton } from "@/components/admin/invite-button";
 import { Markdown } from "@/components/markdown";
+import { DangerZone } from "@/components/admin/danger-zone";
+import { DeliverableForm, DeliverableKindIcon } from "@/components/admin/deliverable-form";
+import { EmailSendButton } from "@/components/admin/email-send-button";
+import { formatBytes } from "@/lib/supabase/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +47,9 @@ export default async function ProjectDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireAdmin();
+  const { admin } = await requireAdmin();
+  const isOwner = admin.role === "OWNER";
+  const canMutate = admin.role === "OWNER" || admin.role === "ADMIN";
   const { id } = await params;
   const locale = await getLocale();
   const t = await getTranslations("admin.projects.detail");
@@ -50,7 +62,7 @@ export default async function ProjectDetailPage({
     timeAgo,
   } = getFormat(locale);
 
-  const [project, notes, activity, deliverables, supportRequests] = await Promise.all([
+  const [project, notes, activity, deliverables, supportRequests, invoices] = await Promise.all([
     prisma.project.findUnique({
       where: { id },
       include: { lead: { select: { id: true, name: true, email: true } } },
@@ -69,6 +81,10 @@ export default async function ProjectDetailPage({
       orderBy: { createdAt: "desc" },
     }),
     prisma.supportRequest.findMany({
+      where: { projectId: id },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.invoice.findMany({
       where: { projectId: id },
       orderBy: { createdAt: "desc" },
     }),
@@ -108,41 +124,7 @@ export default async function ProjectDetailPage({
                 {t("deliverablesHint")}
               </span>
             </header>
-            <form action={addDeliverable} className="border-b border-border p-5">
-              <input type="hidden" name="projectId" value={project.id} />
-              <div className="grid gap-2 sm:grid-cols-3">
-                <select
-                  name="kind"
-                  className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  defaultValue="LINK"
-                >
-                  {DELIVERABLE_KINDS.map((k) => (
-                    <option key={k} value={k}>
-                      {k}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  name="title"
-                  required
-                  placeholder={t("titlePlaceholder")}
-                  className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-2"
-                />
-                <input
-                  type="url"
-                  name="url"
-                  placeholder={t("urlPlaceholder")}
-                  className="h-10 rounded-md border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-3"
-                />
-              </div>
-              <div className="mt-2 flex justify-end">
-                <Button type="submit" size="sm">
-                  <Plus className="h-3.5 w-3.5" />
-                  {t("add")}
-                </Button>
-              </div>
-            </form>
+            <DeliverableForm projectId={project.id} action={createDeliverable} />
             {deliverables.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
                 {t("noDeliverables")}
@@ -151,7 +133,8 @@ export default async function ProjectDetailPage({
               <ul className="divide-y divide-border">
                 {deliverables.map((d) => (
                   <li key={d.id} className="flex items-start gap-3 px-5 py-3">
-                    <span className="mt-0.5 inline-block rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <span className="mt-0.5 inline-flex items-center gap-1 rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <DeliverableKindIcon kind={d.kind} className="h-3 w-3" />
                       {d.kind}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -166,13 +149,49 @@ export default async function ProjectDetailPage({
                           {d.url} <ExternalLink className="h-3 w-3" />
                         </a>
                       )}
+                      {d.fileKey && (
+                        <a
+                          href={`/admin/deliverables/${d.id}/file`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 truncate font-mono text-xs text-muted-foreground hover:text-lime"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          {d.fileName ?? "file"}
+                          {d.fileSize ? ` (${formatBytes(d.fileSize)})` : ""}
+                        </a>
+                      )}
                       {d.description && (
-                        <p className="mt-1 text-xs text-muted-foreground">{d.description}</p>
+                        <p className="mt-1 whitespace-pre-wrap text-xs text-muted-foreground">{d.description}</p>
                       )}
                     </div>
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-muted-2">
-                      {timeAgo(d.createdAt)}
-                    </span>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <form action={toggleDeliverableVisibility}>
+                        <input type="hidden" name="deliverableId" value={d.id} />
+                        <button
+                          type="submit"
+                          title={d.visibleToClient ? t("hideFromClient") : t("showToClient")}
+                          className={cn(
+                            "rounded-md p-1.5 transition-colors",
+                            d.visibleToClient
+                              ? "text-lime hover:bg-accent"
+                              : "text-muted-2 hover:bg-accent hover:text-foreground",
+                          )}
+                        >
+                          {d.visibleToClient ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                        </button>
+                      </form>
+                      <form action={deleteDeliverable}>
+                        <input type="hidden" name="deliverableId" value={d.id} />
+                        <button
+                          type="submit"
+                          title={t("deleteDeliverable")}
+                          className="rounded-md p-1.5 text-muted-2 transition-colors hover:bg-destructive/10 hover:text-destructive"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </form>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -241,6 +260,47 @@ export default async function ProjectDetailPage({
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted-2">
                       {n.authorEmail ?? "—"} · {timeAgo(n.createdAt)}
                     </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          {/* Invoices */}
+          <section className="rounded-xl border border-border bg-surface">
+            <header className="flex items-center justify-between border-b border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.2em] text-foreground">
+              <span>{t("invoices")}</span>
+              <Link
+                href={`/admin/invoices/new?projectId=${project.id}`}
+                className="inline-flex items-center gap-1.5 rounded-md bg-lime px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground hover:bg-lime-dark"
+              >
+                <Plus className="h-3 w-3" /> {t("newInvoice")}
+              </Link>
+            </header>
+            {invoices.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-muted-foreground">
+                {t("noInvoices")}
+              </p>
+            ) : (
+              <ul className="divide-y divide-border">
+                {invoices.map((inv) => (
+                  <li key={inv.id}>
+                    <Link
+                      href={`/admin/invoices/${inv.id}`}
+                      className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-surface-2/40"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-sm font-medium text-foreground">
+                          #{inv.number}
+                        </span>
+                        <span className="rounded border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                          {inv.status}
+                        </span>
+                      </div>
+                      <span className="font-mono text-sm tabular-nums text-foreground">
+                        {formatEUR(inv.amountCents)}
+                      </span>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -437,12 +497,44 @@ export default async function ProjectDetailPage({
                 </span>
                 <ExternalLink className="h-3 w-3 text-muted-2" />
               </Link>
-              <div className="mt-4">
+              <div className="mt-4 space-y-2">
                 <InviteToPortalButton projectId={project.id} />
+                <EmailSendButton
+                  to={project.lead.email}
+                  recipientName={project.lead.name ?? undefined}
+                  projectName={project.name}
+                  projectId={project.id}
+                />
                 <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-2">
                   {t("magicLinkHint", { email: project.lead.email })}
                 </p>
               </div>
+            </div>
+          )}
+
+          {/* Archive (ADMIN+) and Danger zone (OWNER only) */}
+          {(canMutate || isOwner) && (
+            <div className="space-y-3">
+              {canMutate && project.status !== "ARCHIVED" && (
+                <form action={archiveProject}>
+                  <input type="hidden" name="projectId" value={project.id} />
+                  <button
+                    type="submit"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    {t("archive")}
+                  </button>
+                </form>
+              )}
+              {isOwner && (
+                <DangerZone
+                  action={deleteProject}
+                  idField="projectId"
+                  id={project.id}
+                  entityLabel={project.name}
+                  isOwner={isOwner}
+                />
+              )}
             </div>
           )}
         </aside>

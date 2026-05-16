@@ -93,6 +93,15 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: "/",
+      // Hulabe uses cookie-based locale selection (no URL prefix), so all
+      // three locales share the same canonical URL. We declare hreflang
+      // entries so search engines understand the page is multilingual.
+      languages: {
+        "fr-FR": "/",
+        "en-US": "/",
+        "es-ES": "/",
+        "x-default": "/",
+      },
     },
     robots: {
       index: true,

@@ -10,6 +10,9 @@ const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i.posth
 
 let initialized = false;
 
+/** PostHog is initialized only by <PostHogProvider>, which currently wraps
+ *  only the marketing layout. Admin and client portals are intentionally
+ *  excluded — `track()` is a no-op in those contexts. */
 function init() {
   if (initialized) return;
   if (typeof window === "undefined") return;
@@ -69,9 +72,12 @@ function PageviewTracker() {
   return null;
 }
 
-/** Convenience helper to capture events from anywhere in client code. */
+/** Convenience helper to capture events from anywhere in client code.
+ *  No-op when PostHog hasn't been initialized — e.g. inside admin/client
+ *  portals where the provider is intentionally omitted. */
 export function track(event: string, properties?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   if (!POSTHOG_KEY) return;
+  if (!initialized) return;
   posthog.capture(event, properties);
 }

@@ -52,6 +52,7 @@ export function ClientShell({
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   className={cn(
                     "text-sm transition-colors",
                     active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
@@ -91,6 +92,7 @@ export function ClientShell({
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] uppercase tracking-wider",
                 active ? "text-lime" : "text-muted-foreground",

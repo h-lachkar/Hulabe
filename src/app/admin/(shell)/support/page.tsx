@@ -15,18 +15,21 @@ export default async function SupportPage() {
   const t = await getTranslations("admin.support");
   const { formatDate, timeAgo } = getFormat(locale);
 
-  const requests = await prisma.supportRequest.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { project: { select: { id: true, name: true, supportEndsAt: true } } },
-  });
-
-  const projectsInSupport = await prisma.project.findMany({
-    where: {
-      shippedAt: { not: null },
-      supportEndsAt: { gte: new Date() },
-    },
-    orderBy: { supportEndsAt: "asc" },
-  });
+  const [requests, projectsInSupport] = await Promise.all([
+    prisma.supportRequest.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      include: { project: { select: { id: true, name: true, supportEndsAt: true } } },
+    }),
+    prisma.project.findMany({
+      where: {
+        shippedAt: { not: null },
+        supportEndsAt: { gte: new Date() },
+      },
+      orderBy: { supportEndsAt: "asc" },
+      take: 50,
+    }),
+  ]);
 
   return (
     <>

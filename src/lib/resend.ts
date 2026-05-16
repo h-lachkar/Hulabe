@@ -567,3 +567,124 @@ export async function sendSupportReplyToClient({
     html,
   });
 }
+
+/* ---------------------- Admin-initiated templates ----------------------- */
+
+/**
+ * Generic admin → client/lead email sender. The admin chooses one of the
+ * predefined templates (welcome / quote_sent / project_update / feedback /
+ * custom) and the body + subject are filled from a template registry.
+ */
+export type AdminEmailTemplate =
+  | "WELCOME"
+  | "QUOTE_SENT"
+  | "PROJECT_UPDATE"
+  | "FEEDBACK_REQUEST"
+  | "CUSTOM";
+
+type AdminEmailVars = {
+  recipientName?: string;
+  projectName?: string;
+  customSubject?: string;
+  customBody?: string;
+  ctaUrl?: string;
+  ctaLabel?: string;
+};
+
+function renderAdminTemplate(template: AdminEmailTemplate, vars: AdminEmailVars) {
+  const greet = vars.recipientName ? `Hi ${vars.recipientName},` : "Hi,";
+  const cta =
+    vars.ctaUrl && vars.ctaLabel
+      ? `<p style="margin:24px 0 0;"><a href="${escapeHtml(vars.ctaUrl)}" style="display:inline-block;background:#A3E635;color:#0A0A0A;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:8px;">${escapeHtml(vars.ctaLabel)}</a></p>`
+      : "";
+
+  switch (template) {
+    case "WELCOME":
+      return {
+        subject: vars.projectName
+          ? `Welcome aboard — ${vars.projectName}`
+          : "Welcome aboard",
+        html: `
+<p style="margin:0 0 16px;">${escapeHtml(greet)}</p>
+<p style="margin:0 0 16px;">Thrilled to start working with you${vars.projectName ? ` on ${escapeHtml(vars.projectName)}` : ""}. Here's what happens next:</p>
+<ol style="padding-left:18px;color:#D4D4D8;line-height:1.7;margin:0 0 16px;">
+  <li>I'll send you a kickoff doc within 24h.</li>
+  <li>We schedule a 30 min sync to align on scope.</li>
+  <li>You'll get a private client portal to track everything.</li>
+</ol>
+${cta}
+<p style="margin:24px 0 0;color:#A1A1AA;font-size:13px;">Just reply if anything's unclear.</p>
+        `,
+      };
+    case "QUOTE_SENT":
+      return {
+        subject: vars.projectName
+          ? `Your quote for ${vars.projectName}`
+          : "Your quote",
+        html: `
+<p style="margin:0 0 16px;">${escapeHtml(greet)}</p>
+<p style="margin:0 0 16px;">Your quote is ready. Fixed price, clear scope, committed timeline — no surprises.</p>
+${cta || `<p style="margin:24px 0 0;color:#A1A1AA;font-size:13px;">Attached to this email / linked in your client portal.</p>`}
+<p style="margin:24px 0 0;color:#A1A1AA;font-size:13px;">Reply with any questions — happy to walk through it on a call.</p>
+        `,
+      };
+    case "PROJECT_UPDATE":
+      return {
+        subject: vars.projectName
+          ? `Update on ${vars.projectName}`
+          : "Project update",
+        html: `
+<p style="margin:0 0 16px;">${escapeHtml(greet)}</p>
+<p style="margin:0 0 16px;">Quick update on where we are:</p>
+<div style="white-space:pre-line;padding:16px;background:#1C1C1C;border-radius:8px;color:#D4D4D8;line-height:1.7;">${escapeHtml(vars.customBody ?? "")}</div>
+${cta}
+        `,
+      };
+    case "FEEDBACK_REQUEST":
+      return {
+        subject: vars.projectName
+          ? `Quick feedback on ${vars.projectName}?`
+          : "Quick feedback?",
+        html: `
+<p style="margin:0 0 16px;">${escapeHtml(greet)}</p>
+<p style="margin:0 0 16px;">Could you spare 2 minutes to share your feedback on ${vars.projectName ? escapeHtml(vars.projectName) : "the work so far"}? Anything that feels off, missing, or could be sharper — I want to hear it.</p>
+${cta}
+<p style="margin:24px 0 0;color:#A1A1AA;font-size:13px;">A reply to this email works too.</p>
+        `,
+      };
+    case "CUSTOM":
+    default:
+      return {
+        subject: vars.customSubject || "A message from Hulabe",
+        html: `
+<p style="margin:0 0 16px;">${escapeHtml(greet)}</p>
+<div style="white-space:pre-line;color:#D4D4D8;line-height:1.7;">${escapeHtml(vars.customBody ?? "")}</div>
+${cta}
+        `,
+      };
+  }
+}
+
+export async function sendAdminEmail(params: {
+  to: string;
+  template: AdminEmailTemplate;
+  vars?: AdminEmailVars;
+  /** Override the auto-generated subject. */
+  subject?: string;
+  /** Optional cc (e.g. the admin who sent it). */
+  cc?: string;
+}) {
+  if (!resend) {
+    throw new Error("Resend is not configured (RESEND_API_KEY missing).");
+  }
+  const tpl = renderAdminTemplate(params.template, params.vars ?? {});
+  const html = emailLayout(tpl.html);
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: params.to,
+    cc: params.cc,
+    subject: params.subject || tpl.subject,
+    html,
+    replyTo: NOTIFICATION_EMAIL,
+  });
+}

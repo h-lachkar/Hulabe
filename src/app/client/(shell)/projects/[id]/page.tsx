@@ -54,6 +54,7 @@ const ALL_STATUSES: ProjectStatus[] = [
 ];
 
 const KIND_ICON: Record<DeliverableKind, React.ComponentType<{ className?: string }>> = {
+  TEXT: FileText,
   LINK: Link2,
   REPO: Code2,
   DEPLOYMENT: Rocket,
@@ -213,6 +214,17 @@ export default async function ClientProjectPage({
                               className="mt-2 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-lime"
                             >
                               {d.url} <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                          )}
+                          {d.fileKey && (
+                            <a
+                              href={`/client/deliverables/${d.id}/file`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-2 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-lime"
+                            >
+                              {d.fileName ?? "Download"}
+                              <ArrowUpRight className="h-3 w-3" />
                             </a>
                           )}
                         </div>

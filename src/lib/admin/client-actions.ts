@@ -56,22 +56,13 @@ export async function createClient(formData: FormData): Promise<ClientActionResu
 
   if (sendInvite) {
     try {
-      const siteOrigin = await getSiteOrigin();
-      const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
-      const supabaseAdmin = createSupabaseAdminClient();
-      const inv = await supabaseAdmin.auth.admin.generateLink({
-        type: "invite",
-        email,
-        options: { redirectTo },
+      const magicLink = await generateClientMagicLink(email);
+      await sendClientPortalInvitation({
+        to: email,
+        name: name ?? undefined,
+        projectName: company ?? "your project",
+        magicLink,
       });
-      if (!inv.error && inv.data?.properties?.action_link) {
-        await sendClientPortalInvitation({
-          to: email,
-          name: name ?? undefined,
-          projectName: company ?? "your project",
-          magicLink: inv.data.properties.action_link,
-        });
-      }
     } catch {
       /* non-fatal; admin can resend later */
     }
@@ -132,6 +123,38 @@ export async function toggleClientActive(formData: FormData): Promise<void> {
 
 /* ------------------------------ Resend invite -------------------------- */
 
+/**
+ * Generate a Supabase magic-link for a client portal user. Tries `invite`
+ * first (creates the auth user if missing), falls back to `recovery` if the
+ * user already exists in Supabase Auth — which is the common case on resend.
+ */
+async function generateClientMagicLink(email: string): Promise<string> {
+  const siteOrigin = await getSiteOrigin();
+  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
+  const supabaseAdmin = createSupabaseAdminClient();
+
+  const inv = await supabaseAdmin.auth.admin.generateLink({
+    type: "invite",
+    email,
+    options: { redirectTo },
+  });
+  if (!inv.error && inv.data?.properties?.action_link) {
+    return inv.data.properties.action_link as string;
+  }
+
+  const rec = await supabaseAdmin.auth.admin.generateLink({
+    type: "recovery",
+    email,
+    options: { redirectTo },
+  });
+  if (rec.error || !rec.data?.properties?.action_link) {
+    throw new Error(
+      rec.error?.message ?? inv.error?.message ?? "Impossible de générer le lien",
+    );
+  }
+  return rec.data.properties.action_link as string;
+}
+
 export async function resendClientInvite(formData: FormData): Promise<ClientActionResult> {
   await requireMutator();
   const clientId = String(formData.get("clientId") ?? "").trim();
@@ -139,33 +162,33 @@ export async function resendClientInvite(formData: FormData): Promise<ClientActi
   const client = await prisma.user.findUnique({ where: { id: clientId } });
   if (!client) return { ok: false, error: "Client not found" };
 
+  let magicLink: string;
   try {
-    const siteOrigin = await getSiteOrigin();
-    const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
-    const supabaseAdmin = createSupabaseAdminClient();
-    const link = await supabaseAdmin.auth.admin.generateLink({
-      type: client.passwordSetAt ? "recovery" : "invite",
-      email: client.email,
-      options: { redirectTo },
-    });
-    if (link.error || !link.data?.properties?.action_link) {
-      return { ok: false, error: link.error?.message ?? "Failed to generate link" };
-    }
+    magicLink = await generateClientMagicLink(client.email);
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Unknown error" };
+  }
+
+  try {
     await sendClientPortalInvitation({
       to: client.email,
       name: client.name ?? undefined,
       projectName: client.company ?? "your project",
-      magicLink: link.data.properties.action_link,
+      magicLink,
     });
-    await prisma.user.update({
-      where: { id: clientId },
-      data: { invitedAt: new Date() },
-    });
-    revalidatePath(`/admin/clients/${clientId}`);
-    return { ok: true, message: "Invite sent" };
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "Unknown error" };
+    return {
+      ok: false,
+      error: "Link generated but email failed to send. Try again or check Resend.",
+    };
   }
+
+  await prisma.user.update({
+    where: { id: clientId },
+    data: { invitedAt: new Date() },
+  });
+  revalidatePath(`/admin/clients/${clientId}`);
+  return { ok: true, message: "Invite sent" };
 }
 
 /* ------------------------------ Delete --------------------------------- */

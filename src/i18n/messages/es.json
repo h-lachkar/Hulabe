@@ -573,7 +573,17 @@
         "supportUntil": "Soporte hasta",
         "leadSource": "Lead source",
         "magicLinkHint": "Envía un magic link a {email}",
-        "archive": "Archivar proyecto"
+        "archive": "Archivar proyecto",
+        "clientsTitle": "Clientes del portal",
+        "addClient": "Añadir",
+        "addClientPlaceholder": "— Elige un cliente —",
+        "noClientsAssigned": "Ningún cliente vinculado a este proyecto.",
+        "removeClient": "Quitar",
+        "adminsTitle": "Admins asignados",
+        "addAdmin": "Asignar",
+        "addAdminPlaceholder": "— Elige un admin —",
+        "noAdminsAssigned": "Sin admin asignado. Los de scope ALL lo ven igual.",
+        "removeAdmin": "Quitar"
       }
     },
     "invoices": {
@@ -672,7 +682,15 @@
         "editTitle": "Información del cliente",
         "contact": "Contacto",
         "projects": "Proyectos vinculados",
-        "noProjects": "Aún no hay proyecto vinculado a este email."
+        "noProjects": "Aún no hay proyecto vinculado a este email.",
+        "projectsList": {
+          "title": "Proyectos accesibles",
+          "add": "Añadir",
+          "pickPlaceholder": "— Elige un proyecto —",
+          "added": "Añadido",
+          "remove": "Quitar",
+          "empty": "Sin proyecto. Añade el primero."
+        }
       },
       "form": {
         "email": "Email",
@@ -761,7 +779,11 @@
           "OWNER": "Owner",
           "ADMIN": "Admin",
           "VIEWER": "Viewer"
-        }
+        },
+        "scope": "Acceso a proyectos:",
+        "scopeAll": "Todos",
+        "scopeAssigned": "Solo asignados",
+        "scopeSaved": "Scope actualizado."
       }
     },
     "settings": {

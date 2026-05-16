@@ -11,7 +11,8 @@ export default async function AdminTeamPage() {
   const ctx = await requireOwner();
   const t = await getTranslations("admin.team");
 
-  const admins = await prisma.adminUser.findMany({
+  const admins = await prisma.user.findMany({
+    where: { role: { in: ["OWNER", "ADMIN", "VIEWER"] } },
     orderBy: [{ isActive: "desc" }, { createdAt: "asc" }],
     include: {
       invitedBy: { select: { email: true, name: true } },

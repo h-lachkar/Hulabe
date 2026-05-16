@@ -30,15 +30,22 @@ export async function createClient(formData: FormData): Promise<ClientActionResu
   if (!emailRaw) return { ok: false, error: "Email required" };
   const email = normalizeEmail(emailRaw);
 
-  const existing = await prisma.clientUser.findUnique({ where: { email } });
+  const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { ok: false, error: "Client with this email already exists." };
+    return {
+      ok: false,
+      error:
+        existing.role === "CLIENT"
+          ? "Client with this email already exists."
+          : "A user with this email already exists (different role).",
+    };
   }
 
-  const client = await prisma.clientUser.create({
+  const client = await prisma.user.create({
     data: {
       email,
       name,
+      role: "CLIENT",
       company,
       phone,
       notes,
@@ -98,7 +105,7 @@ export async function updateClient(formData: FormData): Promise<ClientActionResu
   if (formData.has("notes"))
     data.notes = String(formData.get("notes") ?? "").trim() || null;
 
-  await prisma.clientUser.update({
+  await prisma.user.update({
     where: { id: clientId },
     data,
   });
@@ -113,9 +120,9 @@ export async function toggleClientActive(formData: FormData): Promise<void> {
   await requireMutator();
   const clientId = String(formData.get("clientId") ?? "").trim();
   if (!clientId) return;
-  const c = await prisma.clientUser.findUnique({ where: { id: clientId } });
+  const c = await prisma.user.findUnique({ where: { id: clientId } });
   if (!c) return;
-  await prisma.clientUser.update({
+  await prisma.user.update({
     where: { id: clientId },
     data: { isActive: !c.isActive },
   });
@@ -129,7 +136,7 @@ export async function resendClientInvite(formData: FormData): Promise<ClientActi
   await requireMutator();
   const clientId = String(formData.get("clientId") ?? "").trim();
   if (!clientId) return { ok: false, error: "clientId required" };
-  const client = await prisma.clientUser.findUnique({ where: { id: clientId } });
+  const client = await prisma.user.findUnique({ where: { id: clientId } });
   if (!client) return { ok: false, error: "Client not found" };
 
   try {
@@ -150,7 +157,7 @@ export async function resendClientInvite(formData: FormData): Promise<ClientActi
       projectName: client.company ?? "your project",
       magicLink: link.data.properties.action_link,
     });
-    await prisma.clientUser.update({
+    await prisma.user.update({
       where: { id: clientId },
       data: { invitedAt: new Date() },
     });
@@ -170,7 +177,7 @@ export async function deleteClient(formData: FormData): Promise<void> {
   if (!clientId || confirm !== "DELETE") {
     throw new Error("Type DELETE to confirm.");
   }
-  await prisma.clientUser.delete({ where: { id: clientId } });
+  await prisma.user.delete({ where: { id: clientId } });
   revalidatePath("/admin/clients");
   redirect("/admin/clients");
 }

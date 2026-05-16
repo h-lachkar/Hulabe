@@ -17,7 +17,8 @@ export default async function SettingsPage() {
   const { formatDate } = getFormat(locale);
 
   const teamSnapshot = isOwner
-    ? await prisma.adminUser.findMany({
+    ? await prisma.user.findMany({
+        where: { role: { in: ["OWNER", "ADMIN", "VIEWER"] } },
         select: { id: true, email: true, role: true, isActive: true },
         orderBy: { createdAt: "asc" },
         take: 10,

@@ -15,6 +15,7 @@ import {
 import { DangerZone } from "@/components/admin/danger-zone";
 import { ClientEditForm } from "@/components/admin/client-edit-form";
 import { ResendInviteButton } from "@/components/admin/resend-invite-button";
+import { ClientProjectsList } from "@/components/admin/client-projects-list";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +31,36 @@ export default async function ClientDetailPage({
   const t = await getTranslations("admin.clients.detail");
   const { formatDate, timeAgo } = getFormat(locale);
 
-  const client = await prisma.clientUser.findUnique({ where: { id } });
+  const client = await prisma.user.findFirst({
+    where: { id, role: "CLIENT" },
+  });
   if (!client) notFound();
 
-  // Pull projects linked to this client's email
-  const projects = await prisma.project.findMany({
-    where: { lead: { email: client.email } },
-    orderBy: { updatedAt: "desc" },
-    include: { lead: { select: { name: true } } },
+  // Pull projects this client can access — either explicit link OR legacy
+  // lead.email match. Distinct on id.
+  const [linkedProjects, leadProjects, allProjects] = await Promise.all([
+    prisma.project.findMany({
+      where: { members: { some: { userId: client.id } } },
+      orderBy: { updatedAt: "desc" },
+      include: { lead: { select: { name: true } } },
+    }),
+    prisma.project.findMany({
+      where: { lead: { email: client.email } },
+      orderBy: { updatedAt: "desc" },
+      include: { lead: { select: { name: true } } },
+    }),
+    prisma.project.findMany({
+      where: { status: { not: "ARCHIVED" } },
+      orderBy: { updatedAt: "desc" },
+      take: 200,
+      select: { id: true, name: true, lead: { select: { name: true, email: true } } },
+    }),
+  ]);
+  const seenIds = new Set<string>();
+  const projects = [...linkedProjects, ...leadProjects].filter((p) => {
+    if (seenIds.has(p.id)) return false;
+    seenIds.add(p.id);
+    return true;
   });
 
   return (
@@ -144,28 +167,21 @@ export default async function ClientDetailPage({
             </ul>
           </div>
 
-          {/* Linked projects */}
+          {/* Linked projects + add picker */}
           <div className="rounded-xl border border-border bg-surface p-5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              {t("projects")}
-            </p>
-            {projects.length === 0 ? (
-              <p className="mt-2 text-sm text-muted-foreground">{t("noProjects")}</p>
-            ) : (
-              <ul className="mt-3 space-y-2">
-                {projects.map((p) => (
-                  <li key={p.id}>
-                    <Link
-                      href={`/admin/projects/${p.id}`}
-                      className="flex items-center justify-between rounded-md border border-border bg-surface-2 px-3 py-2 text-sm hover:border-lime/30"
-                    >
-                      <span className="truncate text-foreground">{p.name}</span>
-                      <ExternalLink className="h-3 w-3 text-muted-2" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ClientProjectsList
+              clientId={client.id}
+              assigned={projects.map((p) => ({
+                id: p.id,
+                name: p.name,
+                subtitle: p.lead?.name ?? null,
+              }))}
+              available={allProjects.map((p) => ({
+                id: p.id,
+                name: p.name,
+                subtitle: p.lead?.name ?? p.lead?.email ?? null,
+              }))}
+            />
           </div>
 
           {isOwner && (

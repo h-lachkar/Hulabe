@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
+import { projectAccessWhere } from "@/lib/admin/scope";
 import { PageHeader } from "@/components/admin/page-header";
 import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
 import { cn } from "@/lib/utils";
@@ -20,13 +21,16 @@ const COLUMNS: ProjectStatus[] = [
 ];
 
 export default async function ProjectsPage() {
-  await requireAdmin();
+  const { admin } = await requireAdmin();
   const locale = await getLocale();
   const t = await getTranslations("admin.projects");
   const { serviceLabel, projectStatusLabel, formatEUR, timeAgo } = getFormat(locale);
 
   const projects = await prisma.project.findMany({
-    where: { status: { not: "ARCHIVED" } },
+    where: {
+      ...projectAccessWhere(admin),
+      status: { not: "ARCHIVED" },
+    },
     orderBy: { updatedAt: "desc" },
     take: 100,
     include: { lead: { select: { name: true, email: true } } },

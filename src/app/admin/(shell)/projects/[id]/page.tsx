@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, Plus, Eye, EyeOff, Trash2 } from "lucide-react
 import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
+import { canAdminAccessProject } from "@/lib/admin/scope";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { getFormat, PROJECT_STATUS_COLOR } from "@/lib/admin/format";
@@ -26,6 +27,7 @@ import { Markdown } from "@/components/markdown";
 import { DangerZone } from "@/components/admin/danger-zone";
 import { DeliverableForm, DeliverableKindIcon } from "@/components/admin/deliverable-form";
 import { EmailSendButton } from "@/components/admin/email-send-button";
+import { AssignmentList } from "@/components/admin/assignment-list";
 import { formatBytes } from "@/lib/supabase/storage";
 
 export const dynamic = "force-dynamic";
@@ -51,6 +53,10 @@ export default async function ProjectDetailPage({
   const isOwner = admin.role === "OWNER";
   const canMutate = admin.role === "OWNER" || admin.role === "ADMIN";
   const { id } = await params;
+
+  // Defense in depth: even if a scoped admin guesses a project URL, refuse.
+  const hasAccess = await canAdminAccessProject(admin, id, prisma);
+  if (!hasAccess) notFound();
   const locale = await getLocale();
   const t = await getTranslations("admin.projects.detail");
   const {
@@ -62,7 +68,7 @@ export default async function ProjectDetailPage({
     timeAgo,
   } = getFormat(locale);
 
-  const [project, notes, activity, deliverables, supportRequests, invoices] = await Promise.all([
+  const [project, notes, activity, deliverables, supportRequests, invoices, members, allClients, allAdmins] = await Promise.all([
     prisma.project.findUnique({
       where: { id },
       include: { lead: { select: { id: true, name: true, email: true } } },
@@ -87,6 +93,24 @@ export default async function ProjectDetailPage({
     prisma.invoice.findMany({
       where: { projectId: id },
       orderBy: { createdAt: "desc" },
+    }),
+    prisma.projectMember.findMany({
+      where: { projectId: id },
+      include: {
+        user: {
+          select: { id: true, name: true, email: true, role: true, company: true },
+        },
+      },
+    }),
+    prisma.user.findMany({
+      where: { role: "CLIENT", isActive: true },
+      select: { id: true, name: true, email: true, company: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.user.findMany({
+      where: { role: { in: ["OWNER", "ADMIN", "VIEWER"] }, isActive: true },
+      select: { id: true, name: true, email: true, role: true },
+      orderBy: { name: "asc" },
     }),
   ]);
 
@@ -482,6 +506,62 @@ export default async function ProjectDetailPage({
               </div>
             </dl>
           </div>
+
+          {/* Clients with portal access */}
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <AssignmentList
+              variant="client"
+              projectId={project.id}
+              assigned={members
+                .filter((m) => m.user.role === "CLIENT")
+                .map((m) => ({
+                  id: m.user.id,
+                  label: m.user.name ?? m.user.email,
+                  sublabel: m.user.company ?? m.user.email,
+                }))}
+              available={allClients.map((c) => ({
+                id: c.id,
+                label: c.name ?? c.email,
+                sublabel: c.company ?? c.email,
+              }))}
+              labels={{
+                title: t("clientsTitle"),
+                addPlaceholder: t("addClientPlaceholder"),
+                add: t("addClient"),
+                empty: t("noClientsAssigned"),
+                remove: t("removeClient"),
+              }}
+            />
+          </div>
+
+          {/* Admins assigned (only relevant for scoped admins; visible to OWNER) */}
+          {isOwner && (
+            <div className="rounded-xl border border-border bg-surface p-5">
+              <AssignmentList
+                variant="admin"
+                projectId={project.id}
+                assigned={members
+                  .filter((m) => m.user.role !== "CLIENT")
+                  .map((m) => ({
+                    id: m.user.id,
+                    label: m.user.name ?? m.user.email,
+                    sublabel: m.user.role,
+                  }))}
+                available={allAdmins.map((a) => ({
+                  id: a.id,
+                  label: a.name ?? a.email,
+                  sublabel: a.role,
+                }))}
+                labels={{
+                  title: t("adminsTitle"),
+                  addPlaceholder: t("addAdminPlaceholder"),
+                  add: t("addAdmin"),
+                  empty: t("noAdminsAssigned"),
+                  remove: t("removeAdmin"),
+                }}
+              />
+            </div>
+          )}
 
           {project.lead && (
             <div className="rounded-xl border border-border bg-surface p-5">

@@ -67,8 +67,11 @@ export async function sendAdminSetupLink(formData: FormData): Promise<ActionResu
   const email = normalize(emailRaw);
 
   // Check admin exists & is active
-  const admin = await prisma.adminUser.findFirst({
-    where: { email: { equals: email, mode: "insensitive" } },
+  const admin = await prisma.user.findFirst({
+    where: {
+      email: { equals: email, mode: "insensitive" },
+      role: { in: ["OWNER", "ADMIN", "VIEWER"] },
+    },
   });
   if (!admin || !admin.isActive) {
     // Don't leak which emails are admins
@@ -163,7 +166,7 @@ export async function sendClientSetupLink(formData: FormData): Promise<ActionRes
 /**
  * Called after a user lands on /admin/setup-password or /client/setup-password
  * with a valid session (from invite or recovery link).
- * Marks the AdminUser.passwordSetAt if applicable.
+ * Marks the User.passwordSetAt if applicable.
  */
 export async function markPasswordSet(): Promise<ActionResult> {
   const supabase = await createSupabaseServerClient();
@@ -172,8 +175,8 @@ export async function markPasswordSet(): Promise<ActionResult> {
   } = await supabase.auth.getUser();
   if (!user?.email) return { ok: false, error: "Pas connecté" };
 
-  // Persist on AdminUser (for admins) — best effort
-  await prisma.adminUser
+  // Persist on User (for admins) — best effort
+  await prisma.user
     .updateMany({
       where: { email: { equals: user.email, mode: "insensitive" } },
       data: { passwordSetAt: new Date() },

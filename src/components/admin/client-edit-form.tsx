@@ -5,14 +5,14 @@ import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
-import type { ClientUser } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 
 export function ClientEditForm({
   client,
   action,
 }: {
-  client: ClientUser;
+  client: User;
   action: (formData: FormData) => Promise<{ ok: boolean; error?: string; message?: string }>;
 }) {
   const t = useTranslations("admin.clients.form");

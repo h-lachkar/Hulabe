@@ -573,7 +573,17 @@
         "supportUntil": "Support until",
         "leadSource": "Lead source",
         "magicLinkHint": "Sends a magic link to {email}",
-        "archive": "Archive project"
+        "archive": "Archive project",
+        "clientsTitle": "Portal clients",
+        "addClient": "Add",
+        "addClientPlaceholder": "— Pick a client —",
+        "noClientsAssigned": "No client explicitly linked to this project.",
+        "removeClient": "Remove",
+        "adminsTitle": "Assigned admins",
+        "addAdmin": "Assign",
+        "addAdminPlaceholder": "— Pick an admin —",
+        "noAdminsAssigned": "No admin assigned. ALL-scope admins still see this.",
+        "removeAdmin": "Remove"
       }
     },
     "invoices": {
@@ -672,7 +682,15 @@
         "editTitle": "Client information",
         "contact": "Contact",
         "projects": "Linked projects",
-        "noProjects": "No project linked to this email yet."
+        "noProjects": "No project linked to this email yet.",
+        "projectsList": {
+          "title": "Accessible projects",
+          "add": "Add",
+          "pickPlaceholder": "— Pick a project —",
+          "added": "Added",
+          "remove": "Remove",
+          "empty": "No project yet. Add the first one."
+        }
       },
       "form": {
         "email": "Email",
@@ -761,7 +779,11 @@
           "OWNER": "Owner",
           "ADMIN": "Admin",
           "VIEWER": "Viewer"
-        }
+        },
+        "scope": "Project access:",
+        "scopeAll": "All",
+        "scopeAssigned": "Assigned only",
+        "scopeSaved": "Scope updated."
       }
     },
     "settings": {

@@ -13,7 +13,7 @@ import {
   X,
   AlertCircle,
 } from "lucide-react";
-import type { AdminUser, AdminRole } from "@prisma/client";
+import type { User, UserRole } from "@prisma/client";
 import {
   deleteAdmin,
   resendAdminInvite,
@@ -25,15 +25,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useFormat } from "@/lib/admin/use-format";
+import { setAdminAccessScope } from "@/lib/admin/assignment-actions";
+import { toast } from "sonner";
 
-const ROLE_COLOR: Record<AdminRole, string> = {
+const ROLE_COLOR: Record<UserRole, string> = {
   OWNER: "border-lime/30 bg-lime/10 text-lime",
   ADMIN: "border-blue-500/30 bg-blue-500/10 text-blue-300",
   VIEWER: "border-border bg-surface-2 text-muted-foreground",
+  CLIENT: "border-border bg-surface-2 text-muted-foreground",
 };
 
 type Props = {
-  admin: AdminUser;
+  admin: User;
   isCurrent: boolean;
   invitedByLabel: string | null;
 };
@@ -46,7 +49,7 @@ export function AdminTeamRow({ admin, isCurrent, invitedByLabel }: Props) {
   const [pending, startTransition] = useTransition();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(admin.name ?? "");
-  const [role, setRole] = useState<AdminRole>(admin.role);
+  const [role, setRole] = useState<UserRole>(admin.role);
   const [result, setResult] = useState<TeamActionResult | null>(null);
 
   function runAction(action: () => Promise<TeamActionResult>) {
@@ -114,7 +117,7 @@ export function AdminTeamRow({ admin, isCurrent, invitedByLabel }: Props) {
             {editing ? (
               <select
                 value={role}
-                onChange={(e) => setRole(e.target.value as AdminRole)}
+                onChange={(e) => setRole(e.target.value as UserRole)}
                 className="h-7 rounded-md border border-border bg-surface-2 px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <option value="OWNER">{trRoles("OWNER")}</option>
@@ -155,6 +158,33 @@ export function AdminTeamRow({ admin, isCurrent, invitedByLabel }: Props) {
                 : tr("createdOn", { date: formatDate(admin.createdAt) })}
             {invitedByLabel && tr("invitedBy", { label: invitedByLabel })}
           </p>
+
+          {/* Access scope — OWNER always sees all, no toggle */}
+          {admin.role !== "OWNER" && (
+            <div className="mt-2 inline-flex items-center gap-2 text-[10px]">
+              <span className="font-mono uppercase tracking-wider text-muted-2">
+                {tr("scope")}
+              </span>
+              <select
+                defaultValue={admin.accessScope}
+                disabled={pending}
+                onChange={(e) => {
+                  const fd = new FormData();
+                  fd.set("adminId", admin.id);
+                  fd.set("scope", e.target.value);
+                  startTransition(async () => {
+                    const res = await setAdminAccessScope(fd);
+                    if (!res.ok) toast.error(res.error);
+                    else toast.success(tr("scopeSaved"));
+                  });
+                }}
+                className="rounded-md border border-border bg-surface-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <option value="ALL">{tr("scopeAll")}</option>
+                <option value="ASSIGNED">{tr("scopeAssigned")}</option>
+              </select>
+            </div>
+          )}
         </div>
 
         {/* Actions */}

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
+import { projectAccessWhere } from "@/lib/admin/scope";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatCard } from "@/components/admin/stat-card";
 import { getFormat, LEAD_STATUS_COLOR } from "@/lib/admin/format";
@@ -22,7 +23,8 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  await requireAdmin();
+  const { admin } = await requireAdmin();
+  const projectScope = projectAccessWhere(admin);
   const locale = await getLocale();
   const t = await getTranslations("admin.dashboard");
   const {
@@ -51,10 +53,14 @@ export default async function AdminDashboard() {
     prisma.lead.count({ where: { createdAt: { gte: weekAgo } } }),
     prisma.lead.count({ where: { status: "NEW" } }),
     prisma.project.count({
-      where: { status: { in: ["SIGNED", "IN_PROGRESS", "IN_REVIEW"] } },
+      where: {
+        ...projectScope,
+        status: { in: ["SIGNED", "IN_PROGRESS", "IN_REVIEW"] },
+      },
     }),
     prisma.project.aggregate({
       where: {
+        ...projectScope,
         status: "SHIPPED",
         shippedAt: { gte: monthStart },
       },

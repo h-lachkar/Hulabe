@@ -65,7 +65,7 @@ export async function getDashboardKpis() {
       _sum: { amountCents: true },
       where: { status: InvoiceStatus.OVERDUE },
     }),
-    prisma.clientUser.count({ where: { isActive: true } }),
+    prisma.user.count({ where: { isActive: true, role: "CLIENT" } }),
   ]);
 
   // Velocity: avg days from project SIGNED → SHIPPED (last 30 days)

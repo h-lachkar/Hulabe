@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { AdminRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireOwner } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -62,14 +62,14 @@ export async function inviteAdmin(formData: FormData): Promise<TeamActionResult>
     return { ok: false, error: "Email invalide" };
   }
 
-  const role: AdminRole = (
+  const role: UserRole = (
     roleRaw === "OWNER" || roleRaw === "ADMIN" || roleRaw === "VIEWER"
       ? roleRaw
       : "ADMIN"
-  ) as AdminRole;
+  ) as UserRole;
 
   // Check if admin already exists with this email
-  const existing = await prisma.adminUser.findFirst({
+  const existing = await prisma.user.findFirst({
     where: { email: { equals: email, mode: "insensitive" } },
   });
   if (existing) {
@@ -88,7 +88,7 @@ export async function inviteAdmin(formData: FormData): Promise<TeamActionResult>
     return { ok: false, error: err instanceof Error ? err.message : "Erreur Supabase" };
   }
 
-  await prisma.adminUser.create({
+  await prisma.user.create({
     data: {
       email,
       name,
@@ -127,7 +127,7 @@ export async function resendAdminInvite(formData: FormData): Promise<TeamActionR
   const id = formData.get("id") as string;
   if (!id) return { ok: false, error: "Missing id" };
 
-  const admin = await prisma.adminUser.findUnique({ where: { id } });
+  const admin = await prisma.user.findUnique({ where: { id } });
   if (!admin) return { ok: false, error: "Admin introuvable" };
   if (!admin.isActive) return { ok: false, error: "Admin désactivé — réactive-le d'abord" };
 
@@ -151,7 +151,7 @@ export async function resendAdminInvite(formData: FormData): Promise<TeamActionR
     return { ok: false, error: "L'envoi email a échoué." };
   }
 
-  await prisma.adminUser.update({
+  await prisma.user.update({
     where: { id },
     data: { invitedAt: new Date() },
   });
@@ -174,9 +174,9 @@ export async function setAdminActive(formData: FormData): Promise<TeamActionResu
 
   // Last-owner protection
   if (!active) {
-    const target = await prisma.adminUser.findUnique({ where: { id } });
+    const target = await prisma.user.findUnique({ where: { id } });
     if (target?.role === "OWNER") {
-      const otherActiveOwners = await prisma.adminUser.count({
+      const otherActiveOwners = await prisma.user.count({
         where: { role: "OWNER", isActive: true, id: { not: id } },
       });
       if (otherActiveOwners === 0) {
@@ -185,7 +185,7 @@ export async function setAdminActive(formData: FormData): Promise<TeamActionResu
     }
   }
 
-  await prisma.adminUser.update({ where: { id }, data: { isActive: active } });
+  await prisma.user.update({ where: { id }, data: { isActive: active } });
   revalidatePath("/admin/team");
   return {
     ok: true,
@@ -204,11 +204,11 @@ export async function deleteAdmin(formData: FormData): Promise<TeamActionResult>
     return { ok: false, error: "Tu ne peux pas te supprimer toi-même" };
   }
 
-  const target = await prisma.adminUser.findUnique({ where: { id } });
+  const target = await prisma.user.findUnique({ where: { id } });
   if (!target) return { ok: false, error: "Admin introuvable" };
 
   if (target.role === "OWNER") {
-    const otherOwners = await prisma.adminUser.count({
+    const otherOwners = await prisma.user.count({
       where: { role: "OWNER", id: { not: id } },
     });
     if (otherOwners === 0) {
@@ -216,7 +216,7 @@ export async function deleteAdmin(formData: FormData): Promise<TeamActionResult>
     }
   }
 
-  await prisma.adminUser.delete({ where: { id } });
+  await prisma.user.delete({ where: { id } });
   revalidatePath("/admin/team");
   return { ok: true, message: `${target.email} supprimé` };
 }
@@ -232,17 +232,17 @@ export async function updateAdminProfile(
   const roleRaw = formData.get("role") as string | null;
   if (!id) return { ok: false, error: "Missing id" };
 
-  const role: AdminRole | undefined =
+  const role: UserRole | undefined =
     roleRaw === "OWNER" || roleRaw === "ADMIN" || roleRaw === "VIEWER"
-      ? (roleRaw as AdminRole)
+      ? (roleRaw as UserRole)
       : undefined;
 
-  const target = await prisma.adminUser.findUnique({ where: { id } });
+  const target = await prisma.user.findUnique({ where: { id } });
   if (!target) return { ok: false, error: "Admin introuvable" };
 
   // Last-owner protection on demotion
   if (role && target.role === "OWNER" && role !== "OWNER") {
-    const otherOwners = await prisma.adminUser.count({
+    const otherOwners = await prisma.user.count({
       where: { role: "OWNER", isActive: true, id: { not: id } },
     });
     if (otherOwners === 0) {
@@ -250,7 +250,7 @@ export async function updateAdminProfile(
     }
   }
 
-  await prisma.adminUser.update({
+  await prisma.user.update({
     where: { id },
     data: {
       name,

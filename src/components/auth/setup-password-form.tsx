@@ -41,7 +41,7 @@ export function SetupPasswordForm({
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
 
-      // Flip passwordSetAt on AdminUser if applicable (no-op for clients)
+      // Flip passwordSetAt on User if applicable (no-op for clients)
       await markPasswordSet().catch(() => {});
 
       router.push(successRedirect);

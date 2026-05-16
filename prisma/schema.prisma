@@ -75,12 +75,36 @@ model Project {
   deliverables    Deliverable[]
   supportRequests SupportRequest[]
 
+  /// Unified project membership.
+  /// A member can be either an internal admin assigned to the project (used
+  /// when their `accessScope = ASSIGNED` to scope what they see) or a client
+  /// who can view this project in the client portal.
+  members         ProjectMember[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([status])
   @@index([leadId])
   @@index([createdAt])
+}
+
+/// Project ↔ User join table. Replaces the older Admin-only and Client-only
+/// join tables. The role of the member is determined by `user.role`:
+///   - CLIENT user → has portal access to this project
+///   - ADMIN/VIEWER user → scoped admin assignment (used when accessScope=ASSIGNED)
+///   - OWNER user → assignment is ignored (OWNERs always see everything)
+model ProjectMember {
+  projectId String
+  userId    String
+  addedAt   DateTime @default(now())
+  /// User.id of the admin who created the link (null = legacy / seeded).
+  addedById String?
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, userId])
+  @@index([userId])
 }
 
 model Note {
@@ -308,19 +332,38 @@ enum AiNextAction {
   DECLINE_POLITELY
 }
 
-/// Admin users who can access /admin. Authentication is done via Supabase
-/// magic-link, but the source of truth for "who is admin" is THIS table —
-/// not an env var. The first OWNER is seeded manually via SQL (see SETUP.md).
-model AdminUser {
-  id          String     @id @default(cuid())
-  email       String     @unique
+/// Unified user table for both internal team members (OWNER / ADMIN / VIEWER)
+/// AND client portal users (CLIENT). Authentication is done via Supabase
+/// magic-link / password, but the source of truth for who exists and what
+/// they can do is THIS table.
+///
+/// The first OWNER is seeded manually via SQL (see SETUP.md).
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
   name        String?
-  role        AdminRole  @default(ADMIN)
-  isActive    Boolean    @default(true)
-  /// AdminUser.id of the admin who created this account (null = seeded manually).
+  role        UserRole @default(CLIENT)
+  isActive    Boolean  @default(true)
+
+  /// Admin-only: whether this user sees every project (ALL, default) or only
+  /// the ones explicitly assigned via ProjectMember (ASSIGNED). Ignored for
+  /// CLIENT users (they always need an explicit ProjectMember). OWNER always
+  /// sees all regardless of this flag.
+  accessScope AdminScope @default(ALL)
+
+  /// Client-only metadata (nullable; ignored for non-CLIENT roles)
+  company     String?
+  phone       String?
+  notes       String?  @db.Text  // internal admin notes about this user
+
+  /// User.id of the user who invited this account (null = seeded manually).
   invitedById String?
-  invitedBy   AdminUser? @relation("AdminInvites", fields: [invitedById], references: [id], onDelete: SetNull)
-  invitees    AdminUser[] @relation("AdminInvites")
+  invitedBy   User?    @relation("UserInvites", fields: [invitedById], references: [id], onDelete: SetNull)
+  invitees    User[]   @relation("UserInvites")
+
+  /// Projects this user is a member of (admin assignment OR client access).
+  projects    ProjectMember[]
+
   /// When the magic-link invitation was sent.
   invitedAt   DateTime?
   /// Set when the user successfully sets their password for the first time
@@ -328,39 +371,21 @@ model AdminUser {
   passwordSetAt DateTime?
   /// Set on every successful login.
   lastLoginAt DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([isActive])
   @@index([role])
 }
 
-enum AdminRole {
+enum UserRole {
   OWNER
   ADMIN
   VIEWER
+  CLIENT
 }
 
-/// Client portal users. Authentication is done via Supabase magic-link, but
-/// the source of truth for "who can log into /client" is THIS table.
-/// A ClientUser is identified by their email and may have access to one or
-/// more projects (matched on lead.email == clientUser.email).
-model ClientUser {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String?
-  company     String?
-  phone       String?
-  isActive    Boolean  @default(true)
-  /// AdminUser.id of the admin who created/invited this client.
-  invitedById String?
-  invitedAt   DateTime?
-  /// Set when the user successfully sets their password for the first time.
-  passwordSetAt DateTime?
-  lastLoginAt DateTime?
-  notes       String?  @db.Text  // internal admin notes about this client
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([isActive])
+enum AdminScope {
+  ALL
+  ASSIGNED
 }

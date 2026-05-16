@@ -16,7 +16,8 @@ export default async function ClientsPage() {
   const t = await getTranslations("admin.clients");
   const { formatDate, timeAgo } = getFormat(locale);
 
-  const clients = await prisma.clientUser.findMany({
+  const clients = await prisma.user.findMany({
+    where: { role: "CLIENT" },
     orderBy: { createdAt: "desc" },
     take: 200,
   });

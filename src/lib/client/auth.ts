@@ -14,7 +14,7 @@ const resolveClientUser = cache(async () => {
 
 /**
  * Use inside any /client server component or server action.
- * Redirects to /client/login if not authenticated. Returns the user.
+ * Redirects to /client/login if not authenticated. Returns the Supabase user.
  *
  * Note: this does NOT enforce per-project ownership.
  * Use `getClientProject(id, email)` to fetch a project safely.
@@ -24,8 +24,7 @@ export async function requireClient() {
   if (!user || !user.email) redirect("/client/login");
 
   // Force the user to set a real password if they only have an OTP session
-  // (from invite or recovery email). We track this in user metadata, flipped
-  // by markPasswordSet() inside the setup-password form.
+  // (from invite or recovery email).
   const passwordSetAt = user.user_metadata?.passwordSetAt;
   if (!passwordSetAt) {
     redirect("/client/setup-password");
@@ -41,13 +40,26 @@ export async function getClientUser() {
 }
 
 /**
- * Returns all projects owned by leads whose email matches the client's email.
- * (Case-insensitive on email.)
+ * Returns all projects this client can access via the portal. A project is
+ * accessible when EITHER:
+ *   1. The User has an explicit ProjectMember row (preferred), OR
+ *   2. The project's lead.email matches the client's email (legacy fallback
+ *      for projects created before the explicit-link feature shipped).
+ *
+ * Case-insensitive on email.
  */
 export async function getClientProjects(email: string) {
+  const lower = email.toLowerCase();
+  const user = await prisma.user.findFirst({
+    where: { email: { equals: lower, mode: "insensitive" }, role: "CLIENT" },
+    select: { id: true },
+  });
   return prisma.project.findMany({
     where: {
-      lead: { email: email.toLowerCase() },
+      OR: [
+        ...(user ? [{ members: { some: { userId: user.id } } }] : []),
+        { lead: { email: lower } },
+      ],
     },
     orderBy: { updatedAt: "desc" },
     include: {
@@ -63,14 +75,23 @@ export async function getClientProjects(email: string) {
 }
 
 /**
- * Fetch a project AND verify it belongs to the given client email.
- * Returns null if not found / not owned by this client.
+ * Fetch a project AND verify the client has access to it. Access via either
+ * the explicit ProjectMember link OR the legacy lead.email match.
+ * Returns null if not found / not accessible.
  */
 export async function getClientProject(projectId: string, email: string) {
+  const lower = email.toLowerCase();
+  const user = await prisma.user.findFirst({
+    where: { email: { equals: lower, mode: "insensitive" }, role: "CLIENT" },
+    select: { id: true },
+  });
   const project = await prisma.project.findFirst({
     where: {
       id: projectId,
-      lead: { email: email.toLowerCase() },
+      OR: [
+        ...(user ? [{ members: { some: { userId: user.id } } }] : []),
+        { lead: { email: lower } },
+      ],
     },
     include: {
       lead: { select: { id: true, name: true, email: true } },
@@ -86,7 +107,6 @@ export async function getClientProject(projectId: string, email: string) {
         orderBy: { createdAt: "desc" },
       },
       activities: {
-        // Only client-visible activity kinds
         where: {
           kind: {
             in: [

@@ -16,11 +16,21 @@ export async function GET(
 ) {
   const user = await requireClient();
   const { id } = await params;
+  const lower = user.email!.toLowerCase();
+  const dbUser = await prisma.user.findFirst({
+    where: { email: { equals: lower, mode: "insensitive" }, role: "CLIENT" },
+    select: { id: true },
+  });
   const d = await prisma.deliverable.findFirst({
     where: {
       id,
       visibleToClient: true,
-      project: { lead: { email: user.email!.toLowerCase() } },
+      project: {
+        OR: [
+          ...(dbUser ? [{ members: { some: { userId: dbUser.id } } }] : []),
+          { lead: { email: lower } },
+        ],
+      },
     },
   });
   if (!d || !d.fileKey) {

@@ -268,13 +268,14 @@ type AdminInvitationProps = {
   inviterName?: string | null;
   inviterEmail?: string | null;
   magicLink: string;
-  role: "OWNER" | "ADMIN" | "VIEWER";
+  role: "OWNER" | "ADMIN" | "VIEWER" | "CLIENT";
 };
 
-const ROLE_LABEL = {
+const ROLE_LABEL: Record<"OWNER" | "ADMIN" | "VIEWER" | "CLIENT", string> = {
   OWNER: "Owner",
   ADMIN: "Admin",
   VIEWER: "Viewer (lecture seule)",
+  CLIENT: "Client",
 };
 
 export async function sendAdminInvitation({

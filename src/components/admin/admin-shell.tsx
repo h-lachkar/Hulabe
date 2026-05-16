@@ -15,16 +15,17 @@ import {
   Users,
   UserCircle,
 } from "lucide-react";
-import type { AdminRole } from "@prisma/client";
+import type { UserRole } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-const ROLE_COLOR: Record<AdminRole, string> = {
+const ROLE_COLOR: Record<UserRole, string> = {
   OWNER: "border-lime/30 bg-lime/10 text-lime",
   ADMIN: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300",
   VIEWER: "border-border bg-surface-2 text-muted-foreground",
+  CLIENT: "border-border bg-surface-2 text-muted-foreground",
 };
 
 export function AdminShell({
@@ -36,7 +37,7 @@ export function AdminShell({
   children: React.ReactNode;
   userEmail: string;
   userName?: string | null;
-  userRole: AdminRole;
+  userRole: UserRole;
 }) {
   const pathname = usePathname();
   const tn = useTranslations("admin.nav");

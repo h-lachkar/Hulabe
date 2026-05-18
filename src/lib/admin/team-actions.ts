@@ -5,7 +5,7 @@ import { UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireOwner } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { getSiteOrigin } from "@/lib/auth/site-origin";
+import { getAdminOrigin } from "@/lib/auth/site-origin";
 import { sendAdminInvitation } from "@/lib/resend";
 
 export type TeamActionResult =
@@ -15,8 +15,8 @@ export type TeamActionResult =
 /* ------------------------------ Helpers --------------------------------- */
 
 async function generateAdminMagicLink(email: string) {
-  const siteOrigin = await getSiteOrigin();
-  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/admin/setup-password")}`;
+  const adminOrigin = getAdminOrigin();
+  const redirectTo = `${adminOrigin}/auth/callback?next=${encodeURIComponent("/admin/setup-password")}`;
 
   const supabaseAdmin = createSupabaseAdminClient();
 

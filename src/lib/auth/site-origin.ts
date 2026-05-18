@@ -9,6 +9,29 @@ import { headers } from "next/headers";
  * the host the user is actually on, otherwise localhost users get redirected
  * to production and vice versa.
  */
+/**
+ * Returns the origin used for the **client portal**, e.g.
+ * `https://client.hulabe.com`. Always points at the client subdomain even
+ * when called from `admin.hulabe.com` — needed because magic-link callbacks
+ * for /client routes must land on the client subdomain, otherwise the
+ * /client/setup-password route won't exist on the current host.
+ *
+ * Falls back to `${siteOrigin replacing leading www.}/client` only as a last
+ * resort if no NEXT_PUBLIC_CLIENT_URL is set.
+ */
+export function getClientPortalOrigin(): string {
+  return process.env.NEXT_PUBLIC_CLIENT_URL ?? "https://client.hulabe.com";
+}
+
+/**
+ * Returns the origin used for the **admin** UI, e.g. `https://admin.hulabe.com`.
+ * Use for magic-link callbacks targeting /admin routes when the user is
+ * currently on a different subdomain.
+ */
+export function getAdminOrigin(): string {
+  return process.env.NEXT_PUBLIC_ADMIN_URL ?? "https://admin.hulabe.com";
+}
+
 export async function getSiteOrigin(): Promise<string> {
   try {
     const h = await headers();

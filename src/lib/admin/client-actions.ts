@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireMutator, requireOwner } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { getSiteOrigin } from "@/lib/auth/site-origin";
+import { getClientPortalOrigin } from "@/lib/auth/site-origin";
 import { sendClientPortalInvitation } from "@/lib/resend";
 
 export type ClientActionResult =
@@ -129,8 +129,11 @@ export async function toggleClientActive(formData: FormData): Promise<void> {
  * user already exists in Supabase Auth — which is the common case on resend.
  */
 async function generateClientMagicLink(email: string): Promise<string> {
-  const siteOrigin = await getSiteOrigin();
-  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
+  // Always target the client subdomain — otherwise an admin generating the
+  // link from admin.hulabe.com would send the user to admin.hulabe.com/auth/...
+  // and end up on admin.hulabe.com/client/setup-password (404).
+  const clientOrigin = getClientPortalOrigin();
+  const redirectTo = `${clientOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
   const supabaseAdmin = createSupabaseAdminClient();
 
   const inv = await supabaseAdmin.auth.admin.generateLink({

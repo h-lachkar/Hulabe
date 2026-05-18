@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireMutator, requireOwner } from "@/lib/admin/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { getSiteOrigin } from "@/lib/auth/site-origin";
+import { getSiteOrigin, getClientPortalOrigin } from "@/lib/auth/site-origin";
 import {
   sendClientPortalInvitation,
   sendProjectStatusUpdate,
@@ -406,13 +406,11 @@ export async function inviteClientToPortal(formData: FormData): Promise<InviteRe
     return { ok: false, error: "Ce projet n'a pas de lead associé avec un email" };
   }
 
-  // The site origin (parent app) is where /auth/callback lives — link must hit
-  // the parent origin's callback to set Supabase cookies for both
-  // hulabe.com and client.hulabe.com (cross-subdomain).
-  const siteOrigin = await getSiteOrigin();
-  // After password set, we land them on the setup-password page; once they've
-  // set a password they can navigate to their project from /client.
-  const redirectTo = `${siteOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
+  // Force the client subdomain — the admin is invoking this from
+  // admin.hulabe.com but /client/setup-password only exists on the client
+  // subdomain. Sending them there avoids a 404 after password set.
+  const clientOrigin = getClientPortalOrigin();
+  const redirectTo = `${clientOrigin}/auth/callback?next=${encodeURIComponent("/client/setup-password")}`;
 
   let magicLink: string;
   try {

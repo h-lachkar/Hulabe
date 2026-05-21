@@ -29,6 +29,8 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
+    // `host` directive removed — Google ignores it since 2020 and other
+    // crawlers don't use it consistently. The canonical host is already
+    // enforced via metadataBase and per-page canonicals.
   };
 }

@@ -210,8 +210,21 @@ export function HomeJsonLd({ locale }: { locale: Locale }) {
     },
     image: `${SITE_URL}/opengraph-image`,
     email: "support@hulabe.com",
-    priceRange: "€500 – €15 000",
+    priceRange: "€500 – €15000",
     foundingDate: "2026",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Paris",
+      addressRegion: "Île-de-France",
+      addressCountry: "FR",
+    },
+    areaServed: [
+      { "@type": "Country", name: "France" },
+      { "@type": "Country", name: "Spain" },
+      { "@type": "Country", name: "United States" },
+      { "@type": "Country", name: "United Kingdom" },
+      { "@type": "Country", name: "Germany" },
+    ],
     knowsAbout: [
       "Next.js",
       "TypeScript",
@@ -233,7 +246,11 @@ export function HomeJsonLd({ locale }: { locale: Locale }) {
       availableLanguage: ["French", "English", "Spanish"],
       areaServed: "Worldwide",
     },
-    sameAs: [],
+    // Populate as profiles go live (LinkedIn, GitHub org, X/Twitter…).
+    // Empty array is fine; Google ignores it gracefully.
+    sameAs: [
+      "https://www.linkedin.com/company/hulabe",
+    ],
     description:
       locale === "fr"
         ? "Studio de développement web et mobile. Sites vitrines, e-commerce, SaaS et applications mobiles livrés rapidement avec un code propre. Devis sous 24h, démarrage rapide."

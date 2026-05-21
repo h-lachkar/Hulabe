@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FadeIn } from "@/components/section-heading";
@@ -193,14 +194,13 @@ function PreviewImage({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   if (failed) return null;
   return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
+    <Image
       src={src}
       alt={alt}
-      loading="lazy"
-      decoding="async"
+      fill
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
       onError={() => setFailed(true)}
-      className="absolute inset-0 h-full w-full object-cover object-top motion-safe:animate-[fadeIn_400ms_ease-out_both]"
+      className="object-cover object-top motion-safe:animate-[fadeIn_400ms_ease-out_both]"
     />
   );
 }

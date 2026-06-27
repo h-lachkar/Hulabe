@@ -75,11 +75,7 @@ export function Footer() {
                   {tn("process")}
                 </a>
               </li>
-              <li>
-                <a href="#cases" className="rounded text-foreground hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                  {tn("cases")}
-                </a>
-              </li>
+              {/* Cases hidden — re-enable when CaseStudies section is back */}
               <li>
                 <a href="#faq" className="rounded text-foreground hover:text-lime focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
                   {tn("faq")}

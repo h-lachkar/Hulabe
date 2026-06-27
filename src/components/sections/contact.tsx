@@ -63,7 +63,7 @@ export function Contact() {
       <div className="container-page">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <SectionMarker
-            number="06"
+            number="05"
             label={t("kicker")}
             title={t("title")}
             subtitle={t("subtitle")}

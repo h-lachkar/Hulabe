@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "#services", key: "services" as const },
   { href: "#process", key: "process" as const },
-  { href: "#cases", key: "cases" as const },
+  // { href: "#cases", key: "cases" as const }, // re-enable when CaseStudies is shown again
   { href: "#faq", key: "faq" as const },
   { href: "#contact", key: "contact" as const },
 ];

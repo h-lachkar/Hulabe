@@ -3,7 +3,10 @@ import { Hero } from "@/components/sections/hero";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Simulator } from "@/components/sections/simulator";
-import { CaseStudies } from "@/components/sections/case-studies";
+// Cases section hidden for now — no public case studies ready to show.
+// Re-enable by restoring the import + <CaseStudies /> below + the nav link
+// in src/components/layout/header.tsx.
+// import { CaseStudies } from "@/components/sections/case-studies";
 import { Faq } from "@/components/sections/faq";
 import { Contact } from "@/components/sections/contact";
 import { StackTicker } from "@/components/stack-ticker";
@@ -21,7 +24,7 @@ export default async function HomePage() {
       <Simulator />
       <Process />
       <StackTicker />
-      <CaseStudies />
+      {/* <CaseStudies /> — hidden, no public cases ready yet */}
       <Faq />
       <Contact />
     </>

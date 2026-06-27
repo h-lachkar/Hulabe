@@ -18,7 +18,7 @@ export function Faq() {
   return (
     <section id="faq" className="relative scroll-mt-20 border-t border-border py-14 sm:py-20">
       <div className="container-page max-w-3xl">
-        <SectionMarker number="05" label={t("kicker")} title={t("title")} />
+        <SectionMarker number="04" label={t("kicker")} title={t("title")} />
 
         <Accordion type="single" collapsible className="w-full">
           {KEYS.map((k, idx) => (
